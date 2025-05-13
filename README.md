@@ -2,7 +2,7 @@
 
 [![React](https://img.shields.io/badge/react-18-blue)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/typescript-4.9%2B-blue)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/tailwindcss-3.x-38b2ac)](https://tailwindcss.com/)
+[![Tailwind CSS](https://img.shields.io/badge/tailwindcss-4.x-38b2ac)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ---
