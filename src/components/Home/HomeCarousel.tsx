@@ -6,6 +6,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline"; //I
 const HomeCarousel: React.FC = () => {
 	const [currentTile, setCurrentTile] = useState(0); //CurrentTile variable to determine which tiles to display
 	const tilesArray = TilesArray; //TilesArray fetched tiles to display in this carousel (right now imported from file)
+
 	//CarouselTiles variable that contains vurrently visible Tiles
 	const carouselTiles = [
 		tilesArray[(currentTile - 1 + tilesArray.length) % tilesArray.length],
