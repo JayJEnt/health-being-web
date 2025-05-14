@@ -1,8 +1,8 @@
-import * as Icons from "../../assets/icons.ts";
-import HomeCarousel from "./HomeCarousel.tsx";
+import * as Icons from "../../assets/icons.ts"; //Icons List
+import HomeCarousel from "./HomeCarousel.tsx"; //Carousel Component
 
 const Home: React.FC = () => {
-	const user = "Jan";
+	const user = "Jan"; //Username variable (static for a moment, will be fetech from api later)
 	return (
 		<div
 			className="flex flex-col p-8

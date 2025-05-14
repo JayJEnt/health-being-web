@@ -1,5 +1,5 @@
-import * as Icons from "../../assets/icons.ts";
-import NavButton from "./NavButton.tsx";
+import * as Icons from "../../assets/icons.ts"; //Icons List
+import NavButton from "./NavButton.tsx"; //NavBarButton Component
 
 const NavBar: React.FC = () => {
 	return (

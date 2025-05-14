@@ -1,22 +1,25 @@
-import HomeCarouselTile from "./HomeCarouselTile";
-import TilesArray from "./TilesArray.ts";
+import HomeCarouselTile from "./HomeCarouselTile"; //Carousel tile Component
+import TilesArray from "./TilesArray.ts"; //Static possible tiles to display imported from file
 import { useState } from "react";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline"; //Imported Icons
+
 const HomeCarousel: React.FC = () => {
-	const [currentTile, setCurrentTile] = useState(0);
-	const tilesArray = TilesArray;
+	const [currentTile, setCurrentTile] = useState(0); //CurrentTile variable to determine which tiles to display
+	const tilesArray = TilesArray; //TilesArray fetched tiles to display in this carousel (right now imported from file)
+	//CarouselTiles variable that contains vurrently visible Tiles
 	const carouselTiles = [
 		tilesArray[(currentTile - 1 + tilesArray.length) % tilesArray.length],
 		tilesArray[currentTile],
 		tilesArray[(currentTile + 1) % tilesArray.length],
 	];
 
+	//Function to rotate carousel to the left
 	const handleCarouselLeft = () => {
 		setCurrentTile(
 			(prev) => (prev - 1 + tilesArray.length) % tilesArray.length
 		);
 	};
-
+	//Function to rotate carousel to the right
 	const handleCarouselRight = () => {
 		setCurrentTile((prev) => (prev + 1) % tilesArray.length);
 	};

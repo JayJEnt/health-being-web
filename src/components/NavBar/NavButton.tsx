@@ -1,5 +1,6 @@
 import React from "react";
-import { usePage } from "../../hooks/PageContext.tsx";
+import { usePage } from "../../hooks/PageContext.tsx"; //usePage Hook to change displayed pages
+
 type NavButtonProps = {
 	icon: React.ElementType;
 	label: string;
