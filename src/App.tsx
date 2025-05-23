@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar/NavBar.tsx"; // NavBar Component
 import Home from "./components/Home/Home.tsx"; // HomePageComponent
 
 function App() {
+	//@ts-ignore
 	const [theme, setTheme] = useState("light"); //variable to change theme from light to dark mode
 	return (
 		<PageProvider>
