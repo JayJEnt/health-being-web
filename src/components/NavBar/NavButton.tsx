@@ -1,5 +1,4 @@
 import React from "react";
-import { usePage } from "../../hooks/PageContext.tsx"; //usePage Hook to change displayed pages
 
 type NavButtonProps = {
 	icon: React.ElementType;
@@ -7,10 +6,8 @@ type NavButtonProps = {
 };
 
 const NavButton: React.FC<NavButtonProps> = ({ icon: Icon, label }) => {
-	const { setPage } = usePage();
 	return (
 		<button
-			onClick={() => setPage(label)}
 			className="flex gap-6 w-[80%] cursor-pointer 
             lg:text-2xl mt-5
             text-light-navbar-text dark:text-light-navbar-text"
