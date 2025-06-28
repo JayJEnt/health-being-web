@@ -18,6 +18,7 @@ const RecipeSubmitPage: React.FC = () => {
 
   const [steps, setSteps] = useState<string[]>([]);
   const [newStep, setNewStep] = useState("");
+  //@ts-expect-error post request not implemented yet
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
