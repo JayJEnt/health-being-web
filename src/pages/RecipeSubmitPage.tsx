@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { Recipe, Ingredient } from "../../types/Recipe";
+import type { Recipe, Ingredient } from "../types/Recipe";
 
 const RecipeSubmitPage: React.FC = () => {
   const [recipe, setRecipe] = useState<Recipe>({
