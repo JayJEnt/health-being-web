@@ -7,6 +7,9 @@ const RecipePageAdmin: React.FC = () => {
     const { id } = useParams();
     const [recipe, setRecipe] = useState<Recipe | null>(null);
     const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [ingredientsResponse, setIngredientsResponse] = useState<
+        string[] | null
+    >(null);
     const [newRecipe, setNewRecipe] = useState<Recipe>({
         id: 0,
         name: "",
@@ -39,6 +42,29 @@ const RecipePageAdmin: React.FC = () => {
             .catch((error) => console.error("Error while fetching data!", error));
     }, [id]);
 
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            axios
+                .get(
+                    `https://fhreuwkryd.execute-api.eu-north-1.amazonaws.com/dev/ingredients/${newIngredient.name}`,
+                )
+                .then((response) => setIngredientsResponse(response.data))
+                .catch((error) => console.error("Error while fetching data!", error));
+        }, 1000);
+
+        return () => clearTimeout(timeoutId);
+    }, [newIngredient.name]);
+
+    const handleSave = () => {
+        axios
+            .post(
+                `https://fhreuwkryd.execute-api.eu-north-1.amazonaws.com/dev/recipes`,
+                newRecipe,
+            )
+            .then((response) => console.log(response))
+            .catch((error) => console.error("Error while fetching data!", error));
+    };
+
     if (!recipe) return <p className="p-8 text-lg">Loading...</p>;
 
     const handleEdit = () => {
@@ -61,7 +87,6 @@ const RecipePageAdmin: React.FC = () => {
         return (
             <div className="min-h-screen p-6 bg-light-main-bg dark:bg-dark-main-bg">
                 <div className="grid lg:grid-cols-3 gap-10">
-                    {/* LEWA KOLUMNA */}
                     <div className="lg:col-span-2 flex flex-col gap-6">
                         <img
                             src="/PlaceHolder.png"
@@ -69,7 +94,6 @@ const RecipePageAdmin: React.FC = () => {
                             className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow border"
                         />
 
-                        {/* Tytuł + Save/Cancel */}
                         <div className="flex justify-between items-center">
                             <input
                                 className="text-3xl font-bold bg-transparent border-none focus:outline-none w-full"
@@ -84,7 +108,7 @@ const RecipePageAdmin: React.FC = () => {
                             <div className="flex gap-2">
                                 <button
                                     className="text-md bg-blue-700 p-4 py-2 rounded-2xl text-white hover:bg-blue-600"
-                                    onClick={() => setIsEditing(false)}
+                                    onClick={() => handleSave()}
                                 >
                                     Save
                                 </button>
@@ -97,7 +121,6 @@ const RecipePageAdmin: React.FC = () => {
                             </div>
                         </div>
 
-                        {/* Opis */}
                         <textarea
                             className="text-gray-700 dark:text-gray-300 leading-relaxed bg-transparent border-none focus:outline-none resize-none"
                             rows={3}
@@ -110,7 +133,6 @@ const RecipePageAdmin: React.FC = () => {
                             }
                         />
 
-                        {/* Diet types */}
                         <div>
                             <h2 className="text-xl font-semibold mb-2">Diet types:</h2>
                             <ul className="flex flex-wrap gap-2 mb-2">
@@ -164,7 +186,6 @@ const RecipePageAdmin: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* PRAWA KOLUMNA – składniki */}
                     <div className="flex flex-col gap-4">
                         <h2 className="text-xl font-semibold">Ingredients:</h2>
 
@@ -202,6 +223,22 @@ const RecipePageAdmin: React.FC = () => {
                                     setNewIngredient({ ...newIngredient, name: e.target.value })
                                 }
                             />
+
+                            {ingredientsResponse && ingredientsResponse.length > 0 && (
+                                <ul className="mt-1 bg-white dark:bg-gray-700 rounded shadow p-2 text-sm text-gray-800 dark:text-gray-200">
+                                    {ingredientsResponse.map((suggestion, index) => (
+                                        <li
+                                            key={index}
+                                            className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 px-2 py-1 rounded"
+                                            onClick={() =>
+                                                setNewIngredient({ ...newIngredient, name: suggestion })
+                                            }
+                                        >
+                                            {suggestion}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
                             <input
                                 type="number"
                                 className="border-b p-2 bg-transparent focus:outline-none w-full md:w-1/6"
