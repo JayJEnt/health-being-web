@@ -1,71 +1,77 @@
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import type { Recipe } from "../types/Recipe";
+import type { RecipePageResponse } from "../types/recipe";
+import { api } from "../api/api";
 
 const RecipePage: React.FC = () => {
-  const { id } = useParams();
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
+    const { id } = useParams();
+    const [recipe, setRecipe] = useState<RecipePageResponse | null>(null);
 
-  useEffect(() => {
-    axios
-      .get(
-        `https://fhreuwkryd.execute-api.eu-north-1.amazonaws.com/dev/recipes/${id}`,
-      )
-      .then((response) => setRecipe(response.data))
-      .catch((error) => console.error("Error while fetching data!", error));
-  }, [id]);
+    async function loadRecipe() {
+        try {
+            const fetchedRecipe = await api.get<RecipePageResponse>(`/recipes/${id}`);
+            setRecipe(fetchedRecipe);
+        } catch (err) {
+            console.error("Nie udało się pobrać przepisu:", err);
+        }
+    }
 
-  if (!recipe) return <p className="p-8 text-lg">Loading...</p>;
+    useEffect(() => {
+        if (id) {
+            loadRecipe();
+        }
+    }, [id]);
 
-  return (
-    <div className="min-h-screen p-6 bg-light-main-bg dark:bg-dark-main-bg">
-      <div className="grid lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 flex flex-col gap-6">
-          <img
-            src="/PlaceHolder.png"
-            alt="Zdjęcie przepisu"
-            className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow border"
-          />
+    if (!recipe) return <p className="p-8 text-lg">Loading...</p>;
 
-          <h1 className="text-3xl font-bold">{recipe.name}</h1>
+    return (
+        <div className="min-h-screen p-6 bg-light-main-bg dark:bg-dark-main-bg">
+            <div className="grid lg:grid-cols-3 gap-10">
+                <div className="lg:col-span-2 flex flex-col gap-6">
+                    <img
+                        src="/PlaceHolder.png"
+                        alt="Zdjęcie przepisu"
+                        className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow border"
+                    />
 
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            {recipe.description}
-          </p>
+                    <h1 className="text-3xl font-bold">{recipe.title}</h1>
 
-          <div>
-            <h2 className="text-xl font-semibold mb-2">Diet types:</h2>
-            <ul className="flex flex-wrap gap-2">
-              {recipe.diet_type.map((type, index) => (
-                <li
-                  key={index}
-                  className="px-3 py-1 bg-green-100 dark:bg-green-800 text-sm rounded-full"
-                >
-                  {type}
-                </li>
-              ))}
-            </ul>
-          </div>
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                        {recipe.description}
+                    </p>
+
+                    <div>
+                        <h2 className="text-xl font-semibold mb-2">Diet types:</h2>
+                        <ul className="flex flex-wrap gap-2">
+                            {recipe.diet_type?.map((diet, index) => (
+                                <li
+                                    key={index}
+                                    className="px-3 py-1 bg-green-100 dark:bg-green-800 text-sm rounded-full"
+                                >
+                                    {diet.diet_name}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-4">
+                    <h2 className="text-xl font-semibold">Ingredients:</h2>
+                    <ul className="space-y-3">
+                        {recipe.ingredients?.map((ingredient) => (
+                            <li
+                                key={ingredient.name}
+                                className="p-4 bg-white dark:bg-gray-800 rounded-xl shadow"
+                            >
+                                <span className="font-medium">{ingredient.name}</span> –{" "}
+                                {ingredient.amount} {ingredient.measure_unit}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
         </div>
-
-        <div className="flex flex-col gap-4">
-          <h2 className="text-xl font-semibold">Ingredients:</h2>
-          <ul className="space-y-3">
-            {recipe.ingredients.map((ingredient) => (
-              <li
-                key={ingredient.id}
-                className="p-4 bg-white dark:bg-gray-800 rounded-xl shadow"
-              >
-                <span className="font-medium">{ingredient.name}</span> –{" "}
-                {ingredient.amount} {ingredient.unit}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default RecipePage;

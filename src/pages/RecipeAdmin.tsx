@@ -1,119 +1,137 @@
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import { useEffect, useState } from "react";
-import type { Recipe, Ingredient } from "../types/Recipe";
+import type { RecipePageResponse } from "../types/recipe";
+import type { IngredientQuantity } from "../types/ingredient";
+import { api } from "../api/api";
+
+type RecipeEditPayload = Omit<RecipePageResponse, "id">;
 
 const RecipePageAdmin: React.FC = () => {
     const { id } = useParams();
-    const [recipe, setRecipe] = useState<Recipe | null>(null);
-    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [recipe, setRecipe] = useState<RecipePageResponse | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
     const [ingredientsResponse, setIngredientsResponse] = useState<
         string[] | null
     >(null);
-    const [newRecipe, setNewRecipe] = useState<Recipe>({
-        id: 0,
-        name: "",
+
+    const [newRecipe, setNewRecipe] = useState<RecipeEditPayload>({
+        title: "",
+        image_url: "",
         description: "",
+        instructions: [],
         diet_type: [],
         ingredients: [],
     });
-    const [newDietType, setNewDietType] = useState<string>("");
-    const [newIngredient, setNewIngredient] = useState<Ingredient>({
-        id: 0,
+
+    const [newDietType, setNewDietType] = useState("");
+    const [newIngredient, setNewIngredient] = useState<IngredientQuantity>({
         name: "",
-        unit: "",
         amount: 0,
-        calories_per_100: 0,
-        protein_per_100: 0,
-        fat_per_100: 0,
-        carbs_per_100: 0,
-        fiber_per_100: 0,
-        sugar_per_100: 0,
-        salt_per_100: 0,
-        vitamins: [],
+        measure_unit: "",
     });
 
     useEffect(() => {
-        axios
-            .get(
-                `https://fhreuwkryd.execute-api.eu-north-1.amazonaws.com/dev/recipes/${id}`,
-            )
-            .then((response) => setRecipe(response.data))
-            .catch((error) => console.error("Error while fetching data!", error));
+        if (!id) return;
+        api
+            .get<RecipePageResponse>(`/recipes/${id}`)
+            .then((res) => setRecipe(res))
+            .catch((err) => console.error("Error loading recipe", err));
     }, [id]);
-
+    //TODO
+    //Fix adding ingredients
     useEffect(() => {
-        const timeoutId = setTimeout(() => {
-            axios
-                .get(
-                    `https://fhreuwkryd.execute-api.eu-north-1.amazonaws.com/dev/ingredients/${newIngredient.name}`,
-                )
-                .then((response) => setIngredientsResponse(response.data))
-                .catch((error) => console.error("Error while fetching data!", error));
+        const timeout = setTimeout(() => {
+            if (newIngredient.name) {
+                api
+                    .get<string[]>(`/ingredients/name/${newIngredient.name}`)
+                    .then((res) => setIngredientsResponse(res))
+                    .catch((err) =>
+                        console.error("Error loading ingredient suggestions", err),
+                    );
+            }
         }, 1000);
-
-        return () => clearTimeout(timeoutId);
+        return () => clearTimeout(timeout);
     }, [newIngredient.name]);
 
-    const handleSave = () => {
-        axios
-            .post(
-                `https://fhreuwkryd.execute-api.eu-north-1.amazonaws.com/dev/recipes`,
-                newRecipe,
-            )
-            .then((response) => console.log(response))
-            .catch((error) => console.error("Error while fetching data!", error));
-    };
-
-    if (!recipe) return <p className="p-8 text-lg">Loading...</p>;
-
     const handleEdit = () => {
-        setNewRecipe(recipe);
+        if (!recipe) return;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id: _, ...editable } = recipe;
+        setNewRecipe(editable);
         setIsEditing(true);
     };
 
     const handleCancel = () => {
         setNewRecipe({
-            id: 0,
-            name: "",
+            title: "",
+            image_url: "",
             description: "",
+            instructions: [],
             diet_type: [],
             ingredients: [],
         });
         setIsEditing(false);
     };
 
-    if (isEditing)
+    const handleSave = () => {
+        if (!id) return;
+        api
+            .put(`/recipes/${id}`, newRecipe)
+            .then((res) => {
+                console.log("Saved!", res);
+                setRecipe(() => ({
+                    ...newRecipe,
+                    id: Number(id),
+                }));
+                setIsEditing(false);
+            })
+            .catch((err) => console.error("Error saving recipe", err));
+    };
+
+    const handleAddDietType = () => {
+        const trimmed = newDietType.trim();
+        if (
+            !trimmed ||
+            newRecipe.diet_type?.some(
+                (d) => d.diet_name.toLowerCase() === trimmed.toLowerCase(),
+            )
+        )
+            return;
+        setNewRecipe({
+            ...newRecipe,
+            diet_type: [...(newRecipe.diet_type ?? []), { diet_name: trimmed }],
+        });
+        setNewDietType("");
+    };
+
+    if (!recipe) return <p className="p-8 text-lg">Loading...</p>;
+    if (isEditing) {
         return (
             <div className="min-h-screen p-6 bg-light-main-bg dark:bg-dark-main-bg">
                 <div className="grid lg:grid-cols-3 gap-10">
                     <div className="lg:col-span-2 flex flex-col gap-6">
                         <img
-                            src="/PlaceHolder.png"
-                            alt="Zdjęcie przepisu"
+                            src={newRecipe.image_url || "/PlaceHolder.png"}
+                            alt="Recipe"
                             className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow border"
                         />
-
                         <div className="flex justify-between items-center">
                             <input
                                 className="text-3xl font-bold bg-transparent border-none focus:outline-none w-full"
-                                value={newRecipe.name}
+                                value={newRecipe.title}
                                 onChange={(e) =>
-                                    setNewRecipe({
-                                        ...newRecipe,
-                                        name: e.target.value,
-                                    })
+                                    setNewRecipe({ ...newRecipe, title: e.target.value })
                                 }
                             />
                             <div className="flex gap-2">
                                 <button
-                                    className="text-md bg-blue-700 p-4 py-2 rounded-2xl text-white hover:bg-blue-600"
-                                    onClick={() => handleSave()}
+                                    className="bg-blue-700 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                                    onClick={handleSave}
                                 >
                                     Save
                                 </button>
                                 <button
-                                    className="text-md bg-red-700 p-4 py-2 rounded-2xl text-white hover:bg-red-600"
+                                    className="bg-red-700 text-white px-4 py-2 rounded-xl hover:bg-red-600"
                                     onClick={handleCancel}
                                 >
                                     Cancel
@@ -122,36 +140,26 @@ const RecipePageAdmin: React.FC = () => {
                         </div>
 
                         <textarea
-                            className="text-gray-700 dark:text-gray-300 leading-relaxed bg-transparent border-none focus:outline-none resize-none"
+                            className="text-gray-700 dark:text-gray-300 bg-transparent border-none focus:outline-none resize-none"
                             rows={3}
                             value={newRecipe.description}
                             onChange={(e) =>
-                                setNewRecipe({
-                                    ...newRecipe,
-                                    description: e.target.value,
-                                })
+                                setNewRecipe({ ...newRecipe, description: e.target.value })
                             }
                         />
 
                         <div>
                             <h2 className="text-xl font-semibold mb-2">Diet types:</h2>
                             <ul className="flex flex-wrap gap-2 mb-2">
-                                {newRecipe.diet_type.map((type, index) => (
+                                {newRecipe.diet_type?.map((diet, index) => (
                                     <li
                                         key={index}
                                         className="px-3 py-1 bg-green-100 dark:bg-green-800 text-sm rounded-full flex items-center gap-2"
                                     >
-                                        {type}
+                                        {diet.diet_name}
                                         <button
-                                            className="rounded-full bg-green-400 w-4 h-4 text-xs"
-                                            onClick={() =>
-                                                setNewRecipe({
-                                                    ...newRecipe,
-                                                    diet_type: newRecipe.diet_type.filter(
-                                                        (_, i) => i !== index,
-                                                    ),
-                                                })
-                                            }
+                                            className="bg-green-400 text-white rounded-full w-4 h-4 text-xs"
+                                            onClick={handleAddDietType}
                                         >
                                             ×
                                         </button>
@@ -173,8 +181,8 @@ const RecipePageAdmin: React.FC = () => {
                                         setNewRecipe({
                                             ...newRecipe,
                                             diet_type: [
-                                                ...(newRecipe.diet_type || []),
-                                                newDietType.trim(),
+                                                ...(newRecipe.diet_type ?? []),
+                                                { diet_name: newDietType.trim() },
                                             ],
                                         });
                                         setNewDietType("");
@@ -188,19 +196,17 @@ const RecipePageAdmin: React.FC = () => {
 
                     <div className="flex flex-col gap-4">
                         <h2 className="text-xl font-semibold">Ingredients:</h2>
-
                         <ul className="space-y-2">
-                            {newRecipe.ingredients.map((ingredient, index) => (
+                            {newRecipe.ingredients.map((ing, index) => (
                                 <li
                                     key={index}
                                     className="p-3 bg-white dark:bg-gray-800 rounded-xl shadow flex justify-between items-center"
                                 >
                                     <span className="text-sm">
-                                        <strong>{ingredient.name}</strong> – {ingredient.amount}{" "}
-                                        {ingredient.unit}
+                                        <strong>{ing.name}</strong> – {ing.amount}{" "}
+                                        {ing.measure_unit}
                                     </span>
                                     <button
-                                        type="button"
                                         className="bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
                                         onClick={() => {
                                             const updated = [...newRecipe.ingredients];
@@ -223,12 +229,11 @@ const RecipePageAdmin: React.FC = () => {
                                     setNewIngredient({ ...newIngredient, name: e.target.value })
                                 }
                             />
-
-                            {ingredientsResponse && ingredientsResponse.length > 0 && (
-                                <ul className="mt-1 bg-white dark:bg-gray-700 rounded shadow p-2 text-sm text-gray-800 dark:text-gray-200">
-                                    {ingredientsResponse.map((suggestion, index) => (
+                            {ingredientsResponse && (
+                                <ul className="bg-white dark:bg-gray-700 rounded shadow p-2 text-sm text-gray-800 dark:text-gray-200">
+                                    {ingredientsResponse.map((suggestion, i) => (
                                         <li
-                                            key={index}
+                                            key={i}
                                             className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 px-2 py-1 rounded"
                                             onClick={() =>
                                                 setNewIngredient({ ...newIngredient, name: suggestion })
@@ -253,9 +258,12 @@ const RecipePageAdmin: React.FC = () => {
                             />
                             <select
                                 className="border-b p-2 bg-transparent focus:outline-none w-full md:w-1/6"
-                                value={newIngredient.unit}
+                                value={newIngredient.measure_unit}
                                 onChange={(e) =>
-                                    setNewIngredient({ ...newIngredient, unit: e.target.value })
+                                    setNewIngredient({
+                                        ...newIngredient,
+                                        measure_unit: e.target.value,
+                                    })
                                 }
                             >
                                 <option value="">Unit</option>
@@ -268,7 +276,7 @@ const RecipePageAdmin: React.FC = () => {
                                 onClick={() => {
                                     if (
                                         !newIngredient.name ||
-                                        !newIngredient.unit ||
+                                        !newIngredient.measure_unit ||
                                         !newIngredient.amount
                                     )
                                         return;
@@ -276,20 +284,7 @@ const RecipePageAdmin: React.FC = () => {
                                         ...newRecipe,
                                         ingredients: [...newRecipe.ingredients, newIngredient],
                                     });
-                                    setNewIngredient({
-                                        id: 0,
-                                        name: "",
-                                        unit: "",
-                                        amount: 0,
-                                        calories_per_100: 0,
-                                        protein_per_100: 0,
-                                        fat_per_100: 0,
-                                        carbs_per_100: 0,
-                                        fiber_per_100: 0,
-                                        sugar_per_100: 0,
-                                        salt_per_100: 0,
-                                        vitamins: [],
-                                    });
+                                    setNewIngredient({ name: "", amount: 0, measure_unit: "" });
                                 }}
                             >
                                 Add
@@ -299,39 +294,39 @@ const RecipePageAdmin: React.FC = () => {
                 </div>
             </div>
         );
+    }
 
     return (
         <div className="min-h-screen p-6 bg-light-main-bg dark:bg-dark-main-bg">
             <div className="grid lg:grid-cols-3 gap-10">
                 <div className="lg:col-span-2 flex flex-col gap-6">
                     <img
-                        src="/PlaceHolder.png"
-                        alt="Zdjęcie przepisu"
+                        src={recipe.image_url || "/PlaceHolder.png"}
+                        alt="Recipe"
                         className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow border"
                     />
                     <div className="flex justify-between">
-                        <h1 className="text-3xl font-bold">{recipe.name}</h1>
+                        <h1 className="text-3xl font-bold">{recipe.title}</h1>
                         <button
-                            className="px-4 py-2 text-sm font-medium bg-blue-700 text-white rounded-xl hover:bg-blue-600 transition-colors"
-                            onClick={() => handleEdit()}
+                            className="bg-blue-700 text-white px-4 py-2 rounded-xl hover:bg-blue-600"
+                            onClick={handleEdit}
                         >
                             Edit
                         </button>
                     </div>
-
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <p className="text-gray-700 dark:text-gray-300">
                         {recipe.description}
                     </p>
 
                     <div>
                         <h2 className="text-xl font-semibold mb-2">Diet types:</h2>
                         <ul className="flex flex-wrap gap-2">
-                            {recipe.diet_type.map((type, index) => (
+                            {recipe.diet_type?.map((diet, index) => (
                                 <li
                                     key={index}
                                     className="px-3 py-1 bg-green-100 dark:bg-green-800 text-sm rounded-full"
                                 >
-                                    {type}
+                                    {diet.diet_name}
                                 </li>
                             ))}
                         </ul>
@@ -341,13 +336,13 @@ const RecipePageAdmin: React.FC = () => {
                 <div className="flex flex-col gap-4">
                     <h2 className="text-xl font-semibold">Ingredients:</h2>
                     <ul className="space-y-3">
-                        {recipe.ingredients.map((ingredient) => (
+                        {recipe.ingredients.map((ingredient, index) => (
                             <li
-                                key={ingredient.id}
+                                key={index}
                                 className="p-4 bg-white dark:bg-gray-800 rounded-xl shadow"
                             >
                                 <span className="font-medium">{ingredient.name}</span> –{" "}
-                                {ingredient.amount} {ingredient.unit}
+                                {ingredient.amount} {ingredient.measure_unit}
                             </li>
                         ))}
                     </ul>
