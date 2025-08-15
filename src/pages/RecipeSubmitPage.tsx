@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { RecipePage } from "../types/recipe";
 import type { IngredientQuantity } from "../types/ingredient";
 import { api } from "../api/api";
-import type { UploadImageResponse } from "../api/image";
+import type { UploadImageResponse } from "../types/image";
 const RecipeSubmitPage: React.FC = () => {
     const [recipe, setRecipe] = useState<RecipePage>({
         title: "",
