@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { RecipePage } from "../types/recipe";
 import type { IngredientQuantity } from "../types/ingredient";
 import { api } from "../api/api";
-
+import type { UploadImageResponse } from "../api/image";
 const RecipeSubmitPage: React.FC = () => {
     const [recipe, setRecipe] = useState<RecipePage>({
         title: "",
@@ -19,7 +19,6 @@ const RecipeSubmitPage: React.FC = () => {
     const [newIngredientUnit, setNewIngredientUnit] = useState("sztuka");
     const [steps, setSteps] = useState<string[]>([]);
     const [newStep, setNewStep] = useState("");
-    //@ts-expect-error post request not implemented yet
     const [image, setImage] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -38,21 +37,34 @@ const RecipeSubmitPage: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const fullRecipe = {
-            ...recipe,
-            instructions: steps,
-        };
-
         try {
-            const res = await api.post("/recipes", fullRecipe);
+            let imageUrl = recipe.image_url;
+
+            if (image) {
+                const formData = new FormData();
+                formData.append("file", image);
+
+                const uploadRes = await api.postMultipart<UploadImageResponse>(
+                    "/images/upload",
+                    formData,
+                );
+
+                imageUrl = uploadRes.url;
+            }
+
+            const fullRecipe: RecipePage = {
+                ...recipe,
+                image_url: imageUrl,
+                instructions: steps,
+            };
+
+            await api.postJson("/recipes", fullRecipe);
             alert("Recipe submitted successfully!");
-            console.log("Submitted recipe:", res);
         } catch (err) {
             console.error("Error submitting recipe:", err);
             alert("Failed to submit recipe.");
         }
     };
-
     return (
         <div className="max-w-3xl mx-auto p-6">
             <h1 className="text-3xl font-bold mb-6">Submit a Recipe</h1>

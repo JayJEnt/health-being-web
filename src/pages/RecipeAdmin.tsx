@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { RecipePageResponse } from "../types/recipe";
-import type { IngredientQuantity } from "../types/ingredient";
+import type { Ingredient, IngredientQuantity } from "../types/ingredient";
 import { api } from "../api/api";
 
 type RecipeEditPayload = Omit<RecipePageResponse, "id">;
@@ -10,9 +10,8 @@ const RecipePageAdmin: React.FC = () => {
     const { id } = useParams();
     const [recipe, setRecipe] = useState<RecipePageResponse | null>(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [ingredientsResponse, setIngredientsResponse] = useState<
-        string[] | null
-    >(null);
+    const [ingredientsResponse, setIngredientsResponse] =
+        useState<Ingredient | null>(null);
 
     const [newRecipe, setNewRecipe] = useState<RecipeEditPayload>({
         title: "",
@@ -43,7 +42,7 @@ const RecipePageAdmin: React.FC = () => {
         const timeout = setTimeout(() => {
             if (newIngredient.name) {
                 api
-                    .get<string[]>(`/ingredients/name/${newIngredient.name}`)
+                    .get<Ingredient>(`/ingredients/name/${newIngredient.name}`)
                     .then((res) => setIngredientsResponse(res))
                     .catch((err) =>
                         console.error("Error loading ingredient suggestions", err),
@@ -221,29 +220,38 @@ const RecipePageAdmin: React.FC = () => {
                         </ul>
 
                         <div className="flex flex-col gap-2 md:flex-row md:items-end">
-                            <input
-                                className="border-b p-2 bg-transparent focus:outline-none w-full md:w-1/3"
-                                placeholder="Name"
-                                value={newIngredient.name}
-                                onChange={(e) =>
-                                    setNewIngredient({ ...newIngredient, name: e.target.value })
-                                }
-                            />
-                            {ingredientsResponse && (
-                                <ul className="bg-white dark:bg-gray-700 rounded shadow p-2 text-sm text-gray-800 dark:text-gray-200">
-                                    {ingredientsResponse.map((suggestion, i) => (
+                            <div className="relative w-full md:w-1/3">
+                                <input
+                                    className="border-b p-2 bg-transparent focus:outline-none w-full"
+                                    placeholder="Name"
+                                    value={newIngredient.name}
+                                    onChange={(e) =>
+                                        setNewIngredient({ ...newIngredient, name: e.target.value })
+                                    }
+                                    onFocus={() => { }}
+                                    onBlur={() => {
+                                        setTimeout(() => setIngredientsResponse(null), 100);
+                                    }}
+                                />
+                                {ingredientsResponse && (
+                                    <ul className="absolute left-0 top-full mt-1 bg-white dark:bg-gray-700 rounded shadow p-2 text-sm text-gray-800 dark:text-gray-200 z-20 w-full">
                                         <li
-                                            key={i}
                                             className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 px-2 py-1 rounded"
-                                            onClick={() =>
-                                                setNewIngredient({ ...newIngredient, name: suggestion })
-                                            }
+                                            onMouseDown={(e) => e.preventDefault()} // żeby blur inputa nie schował listy przed kliknięciem
+                                            onClick={() => {
+                                                setNewIngredient({
+                                                    ...newIngredient,
+                                                    name: ingredientsResponse.name,
+                                                });
+                                                setIngredientsResponse(null);
+                                            }}
                                         >
-                                            {suggestion}
+                                            {ingredientsResponse.name}
                                         </li>
-                                    ))}
-                                </ul>
-                            )}
+                                    </ul>
+                                )}
+                            </div>
+
                             <input
                                 type="number"
                                 className="border-b p-2 bg-transparent focus:outline-none w-full md:w-1/6"
@@ -285,6 +293,7 @@ const RecipePageAdmin: React.FC = () => {
                                         ingredients: [...newRecipe.ingredients, newIngredient],
                                     });
                                     setNewIngredient({ name: "", amount: 0, measure_unit: "" });
+                                    setIngredientsResponse(null);
                                 }}
                             >
                                 Add

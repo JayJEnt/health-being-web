@@ -1,7 +1,10 @@
 import * as Icons from "../../assets/icons.ts";
 import NavButton from "./NavButton.tsx";
 
-const NavBar: React.FC = () => {
+type Props = {
+    loggedIn: boolean;
+};
+const NavBar: React.FC<Props> = ({ loggedIn }) => {
     return (
         <nav className="flex flex-col items-start h-full p-6 bg-light-navbar-bg lg:w-[15vw] min-w-[180px]">
             <h1 className="text-xl font-bold mb-6 text-light-navbar-text">Menu</h1>
@@ -33,12 +36,20 @@ const NavBar: React.FC = () => {
             </h2>
             <div className="flex flex-col gap-2 w-full">
                 <NavButton icon={Icons.UserIcon} label="My Profile" to="/user" />
-                <NavButton
-                    icon={Icons.ArrowRightOnRectangleIcon}
-                    label="Login"
-                    to="/login"
-                />
-                <NavButton icon={Icons.UserPlusIcon} label="Register" to="/register" />
+                {!loggedIn && (
+                    <>
+                        <NavButton
+                            icon={Icons.ArrowRightOnRectangleIcon}
+                            label="Login"
+                            to="/login"
+                        />
+                        <NavButton
+                            icon={Icons.UserPlusIcon}
+                            label="Register"
+                            to="/register"
+                        />
+                    </>
+                )}
             </div>
         </nav>
     );

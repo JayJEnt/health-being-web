@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../api/api";
-import type { UserCreate } from "../types/user";
+import type { User, UserCreate } from "../types/user";
 const LoginPage: React.FC = () => {
     const [user, setUser] = useState<UserCreate>({
         username: "",
@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
         }
 
         try {
-            const res = await api.post("/oauth2_our/register", user);
+            const res = await api.postJson<User>("/oauth2_our/register", user);
             console.log(res);
             setError("");
             alert("Registered successfully!");
