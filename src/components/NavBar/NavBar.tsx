@@ -3,8 +3,9 @@ import NavButton from "./NavButton.tsx";
 
 type Props = {
     loggedIn: boolean;
+    isAdmin: boolean;
 };
-const NavBar: React.FC<Props> = ({ loggedIn }) => {
+const NavBar: React.FC<Props> = ({ loggedIn, isAdmin }) => {
     return (
         <nav className="flex flex-col items-start h-full p-6 bg-light-navbar-bg lg:w-[15vw] min-w-[180px]">
             <h1 className="text-xl font-bold mb-6 text-light-navbar-text">Menu</h1>
@@ -51,6 +52,16 @@ const NavBar: React.FC<Props> = ({ loggedIn }) => {
                     </>
                 )}
             </div>
+            {isAdmin && (
+                <>
+                    <h2 className="text-sm font-semibold mt-8 mb-2 text-light-navbar-text uppercase tracking-wide">
+                        Admin
+                    </h2>
+                    <div className="flex flex-col gap-2 w-full ">
+                        <NavButton icon={Icons.UserIcon} label="Users" to="/users_list" />
+                    </div>
+                </>
+            )}
         </nav>
     );
 };

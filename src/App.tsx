@@ -9,6 +9,7 @@ import LoginPage from "./pages/Login.tsx";
 import RegisterPage from "./pages/Register.tsx";
 import { useIsAdmin } from "./hooks/useIsAdmin";
 import { isLoggedIn } from "./utils";
+import UsersList from "./pages/UsersList.tsx";
 
 function App() {
     const { isAdmin, loading } = useIsAdmin();
@@ -20,7 +21,7 @@ function App() {
 
     return (
         <div className={`grid grid-cols-[auto_1fr] gap-4 min-h-screen`}>
-            <NavBar loggedIn={loggedIn} />
+            <NavBar loggedIn={loggedIn} isAdmin={isAdmin} />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route
@@ -38,6 +39,7 @@ function App() {
 
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/users_list" element={<UsersList />} />
             </Routes>
         </div>
     );
