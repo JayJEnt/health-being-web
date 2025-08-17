@@ -2,6 +2,9 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../api/api";
 import type { Token } from "../types/token";
+import { settings } from "../config";
+
+
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -16,7 +19,7 @@ const LoginPage: React.FC = () => {
         }
 
         try {
-            const res = await api.postForm<Token>("/oauth2_our/login", {
+            const res = await api.postForm<Token>(`${settings.API_BASE_URL}${settings.OAUTH2_OUR_LOGIN_ENDPOINT}`, {
                 username: email,
                 password: password,
             });

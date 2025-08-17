@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { RecipePageResponse } from "../types/recipe";
 import { api } from "../api/api";
+import { settings } from "../config";
+
 
 const RecipePage: React.FC = () => {
     const { id } = useParams();
@@ -9,7 +11,7 @@ const RecipePage: React.FC = () => {
 
     async function loadRecipe() {
         try {
-            const fetchedRecipe = await api.get<RecipePageResponse>(`/recipes/${id}`);
+            const fetchedRecipe = await api.get<RecipePageResponse>(`${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`);
             setRecipe(fetchedRecipe);
         } catch (err) {
             console.error("Nie udało się pobrać przepisu:", err);

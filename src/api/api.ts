@@ -53,6 +53,7 @@ export const api = {
                     ...(config?.headers ?? {}),
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
+                withCredentials: true,
             });
             return res.data;
         } catch (err) {

@@ -3,6 +3,9 @@ import type { RecipePage } from "../types/recipe";
 import type { IngredientQuantity } from "../types/ingredient";
 import { api } from "../api/api";
 import type { UploadImageResponse } from "../types/image";
+import { settings } from "../config";
+
+
 const RecipeSubmitPage: React.FC = () => {
     const [recipe, setRecipe] = useState<RecipePage>({
         title: "",
@@ -45,7 +48,7 @@ const RecipeSubmitPage: React.FC = () => {
                 formData.append("file", image);
 
                 const uploadRes = await api.postMultipart<UploadImageResponse>(
-                    "/images/upload",
+                    `${settings.API_BASE_URL}${settings.IMAGES_UPLOAD_ENDPOINT}`,
                     formData,
                 );
 
@@ -58,7 +61,7 @@ const RecipeSubmitPage: React.FC = () => {
                 instructions: steps,
             };
 
-            await api.postJson("/recipes", fullRecipe);
+            await api.postJson(`${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}`, fullRecipe);
             alert("Recipe submitted successfully!");
         } catch (err) {
             console.error("Error submitting recipe:", err);
