@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import type { RecipePageResponse } from "../types/recipe";
 import type { Ingredient, IngredientQuantity } from "../types/ingredient";
 import { api } from "../api/api";
+import { settings } from "../config";
+
 
 type RecipeEditPayload = Omit<RecipePageResponse, "id">;
 
@@ -32,7 +34,7 @@ const RecipePageAdmin: React.FC = () => {
     useEffect(() => {
         if (!id) return;
         api
-            .get<RecipePageResponse>(`/recipes/${id}`)
+            .get<RecipePageResponse>(`${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`)
             .then((res) => setRecipe(res))
             .catch((err) => console.error("Error loading recipe", err));
     }, [id]);
@@ -42,7 +44,7 @@ const RecipePageAdmin: React.FC = () => {
         const timeout = setTimeout(() => {
             if (newIngredient.name) {
                 api
-                    .get<Ingredient>(`/ingredients/name/${newIngredient.name}`)
+                    .get<Ingredient>(`${settings.API_BASE_URL}${settings.INGREDIENTS_NAME_ENDPOINT}${newIngredient.name}`)
                     .then((res) => setIngredientsResponse(res))
                     .catch((err) =>
                         console.error("Error loading ingredient suggestions", err),
@@ -75,7 +77,7 @@ const RecipePageAdmin: React.FC = () => {
     const handleSave = () => {
         if (!id) return;
         api
-            .put(`/recipes/${id}`, newRecipe)
+            .put(`${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`, newRecipe)
             .then((res) => {
                 console.log("Saved!", res);
                 setRecipe(() => ({

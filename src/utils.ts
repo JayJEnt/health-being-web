@@ -1,12 +1,14 @@
 import { api } from "./api/api";
+import { settings } from "./config";
+
 
 export async function getUser() {
-    const res = await api.get("token_data/owner");
+    const res = await api.get(settings.API_BASE_URL+settings.TOKEN_DATA_USER_ENDPOINT);
     return res;
 }
 
 export function getAdmin() {
-    const res = api.get("token_data/owner/admin_role");
+    const res = api.get(settings.API_BASE_URL+settings.TOKEN_DATA_ADMIN_ROLE_ENDPOINT);
     return res;
 }
 
