@@ -7,21 +7,20 @@ import RecipeSubmitPage from "./pages/RecipeSubmitPage.tsx";
 import UserProfile from "./pages/UserProfile.tsx";
 import LoginPage from "./pages/Login.tsx";
 import RegisterPage from "./pages/Register.tsx";
-import { useIsAdmin } from "./hooks/useIsAdmin";
-import { isLoggedIn } from "./utils";
 import UsersList from "./pages/UsersList.tsx";
-
+import { useAuth } from "./auth/useAuth.ts";
 function App() {
-    const { isAdmin, loading } = useIsAdmin();
-    const loggedIn = isLoggedIn();
+    const { user, status } = useAuth();
+    const isAuthenticated = status === "authenticated";
+    const isAdmin = user?.role === "admin";
 
-    if (loading) {
+    if (status === "loading") {
         return <div>Loading...</div>;
     }
 
     return (
         <div className={`grid grid-cols-[auto_1fr] gap-4 min-h-screen`}>
-            <NavBar loggedIn={loggedIn} isAdmin={isAdmin} />
+            <NavBar />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route
@@ -30,11 +29,11 @@ function App() {
                 />
                 <Route
                     path="/recipe/submit"
-                    element={loggedIn ? <RecipeSubmitPage /> : <LoginPage />}
+                    element={isAuthenticated ? <RecipeSubmitPage /> : <LoginPage />}
                 />
                 <Route
                     path="/user"
-                    element={loggedIn ? <UserProfile /> : <LoginPage />}
+                    element={isAuthenticated ? <UserProfile /> : <LoginPage />}
                 />
 
                 <Route path="/login" element={<LoginPage />} />

@@ -5,7 +5,6 @@ import type { Ingredient, IngredientQuantity } from "../types/ingredient";
 import { api } from "../api/api";
 import { settings } from "../config";
 
-
 type RecipeEditPayload = Omit<RecipePageResponse, "id">;
 
 const RecipePageAdmin: React.FC = () => {
@@ -34,7 +33,9 @@ const RecipePageAdmin: React.FC = () => {
     useEffect(() => {
         if (!id) return;
         api
-            .get<RecipePageResponse>(`${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`)
+            .get<RecipePageResponse>(
+                `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
+            )
             .then((res) => setRecipe(res))
             .catch((err) => console.error("Error loading recipe", err));
     }, [id]);
@@ -44,7 +45,9 @@ const RecipePageAdmin: React.FC = () => {
         const timeout = setTimeout(() => {
             if (newIngredient.name) {
                 api
-                    .get<Ingredient>(`${settings.API_BASE_URL}${settings.INGREDIENTS_NAME_ENDPOINT}${newIngredient.name}`)
+                    .get<Ingredient>(
+                        `${settings.API_BASE_URL}${settings.INGREDIENTS_NAME_ENDPOINT}${newIngredient.name}`,
+                    )
                     .then((res) => setIngredientsResponse(res))
                     .catch((err) =>
                         console.error("Error loading ingredient suggestions", err),
@@ -77,7 +80,10 @@ const RecipePageAdmin: React.FC = () => {
     const handleSave = () => {
         if (!id) return;
         api
-            .put(`${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`, newRecipe)
+            .put(
+                `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
+                newRecipe,
+            )
             .then((res) => {
                 console.log("Saved!", res);
                 setRecipe(() => ({
@@ -239,7 +245,7 @@ const RecipePageAdmin: React.FC = () => {
                                     <ul className="absolute left-0 top-full mt-1 bg-white dark:bg-gray-700 rounded shadow p-2 text-sm text-gray-800 dark:text-gray-200 z-20 w-full">
                                         <li
                                             className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 px-2 py-1 rounded"
-                                            onMouseDown={(e) => e.preventDefault()} // żeby blur inputa nie schował listy przed kliknięciem
+                                            onMouseDown={(e) => e.preventDefault()}
                                             onClick={() => {
                                                 setNewIngredient({
                                                     ...newIngredient,
