@@ -1,10 +1,13 @@
-import * as Icons from "../../assets/icons.ts";
-import NavButton from "./NavButton.tsx";
+import * as Icons from "../../assets/icons";
+import { useAuth } from "../../auth/useAuth";
+import NavButton from "./NavButton";
+import { useNavigate } from "react-router-dom";
+const NavBar: React.FC = () => {
+    const { status, user, logout } = useAuth();
+    const navigate = useNavigate();
+    const isAuthenticated = status === "authenticated";
+    const isAdmin = user?.role === "admin";
 
-type Props = {
-    loggedIn: boolean;
-};
-const NavBar: React.FC<Props> = ({ loggedIn }) => {
     return (
         <nav className="flex flex-col items-start h-full p-6 bg-light-navbar-bg lg:w-[15vw] min-w-[180px]">
             <h1 className="text-xl font-bold mb-6 text-light-navbar-text">Menu</h1>
@@ -36,7 +39,8 @@ const NavBar: React.FC<Props> = ({ loggedIn }) => {
             </h2>
             <div className="flex flex-col gap-2 w-full">
                 <NavButton icon={Icons.UserIcon} label="My Profile" to="/user" />
-                {!loggedIn && (
+
+                {!isAuthenticated && (
                     <>
                         <NavButton
                             icon={Icons.ArrowRightOnRectangleIcon}
@@ -50,7 +54,31 @@ const NavBar: React.FC<Props> = ({ loggedIn }) => {
                         />
                     </>
                 )}
+
+                {isAuthenticated && (
+                    <button
+                        className="flex cursor-pointer items-center gap-4 w-full px-4 py-3 rounded-xl transition-colors text-light-navbar-text hover:bg-light-navbar-hover"
+                        onClick={() => {
+                            logout();
+                            navigate("/");
+                        }}
+                    >
+                        <Icons.ArrowRightOnRectangleIcon className="w-6 h-6 lg:w-8 lg:h-8" />
+                        <span className="text-base lg:text-lg font-medium">Logout</span>
+                    </button>
+                )}
             </div>
+
+            {isAdmin && (
+                <>
+                    <h2 className="text-sm font-semibold mt-8 mb-2 text-light-navbar-text uppercase tracking-wide">
+                        Admin
+                    </h2>
+                    <div className="flex flex-col gap-2 w-full ">
+                        <NavButton icon={Icons.UserIcon} label="Users" to="/users_list" />
+                    </div>
+                </>
+            )}
         </nav>
     );
 };

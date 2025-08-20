@@ -1,8 +1,8 @@
+// LoginPage.tsx (wycinek)
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { api } from "../api/api";
-import type { Token } from "../types/token";
-import { settings } from "../config";
+
+import { useAuth } from "../auth/useAuth";
 
 
 const LoginPage: React.FC = () => {
@@ -10,25 +10,23 @@ const LoginPage: React.FC = () => {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
+    const { login } = useAuth();
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError("");
 
         if (!email || !password) {
-            setError("Please enter username, email and password.");
+            setError("Please enter email and password.");
             return;
         }
 
-        try {
-            const res = await api.postForm<Token>(`${settings.API_BASE_URL}${settings.OAUTH2_OUR_LOGIN_ENDPOINT}`, {
-                username: email,
-                password: password,
-            });
-            console.log(res);
-            localStorage.setItem("token", res.access_token);
+        const ok = await login({ username: email, password });
+        if (ok) {
+
             navigate("/");
-        } catch (err) {
-            console.error("Login error:", err);
-            setError("Login failed.");
+        } else {
+            setError("Login failed. Check your credentials.");
         }
     };
 
