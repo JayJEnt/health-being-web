@@ -1,7 +1,9 @@
 // LoginPage.tsx (wycinek)
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
 import { useAuth } from "../auth/useAuth";
+
 
 const LoginPage: React.FC = () => {
     const [email, setEmail] = useState("");
@@ -21,6 +23,7 @@ const LoginPage: React.FC = () => {
 
         const ok = await login({ username: email, password });
         if (ok) {
+
             navigate("/");
         } else {
             setError("Login failed. Check your credentials.");
