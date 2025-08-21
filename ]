@@ -16,10 +16,16 @@ const goalOptions = ["utrata masy", "utrzymanie", "przyrost masy"];
 
 const UserProfile: React.FC = () => {
     const { user } = useAuth();
-
+    const INITIAL: PersonalData = {
+        user_id: 0,
+        weight: null,
+        height: null,
+        age: null,
+        activity_level: null,
+        sillouette: null,
+    };
     // Dane z modeli
-    const [personalData, setPersonalData] = useState<PersonalData | null>(null);
-    // Dane do ustalenia ktorych nie ma w bazie
+    const [personalData, setPersonalData] = useState<PersonalData>(INITIAL);
     const [gender, setGender] = useState<string>("");
     const [dietType, setDietType] = useState<string[]>([]);
     const [allergies, setAllergies] = useState<string[]>([]);
@@ -28,28 +34,36 @@ const UserProfile: React.FC = () => {
     useEffect(() => {
         if (!user?.id) return;
 
-        let cancelled = false;
+        let alive = true;
 
         (async () => {
             try {
                 const url = `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}${user.id}`;
                 const data = await api.get<PersonalData>(url);
-                if (!cancelled) setPersonalData(data);
+
+                if (!alive) return;
+
+                setPersonalData(data);
             } catch (e) {
-                if (!cancelled) console.error(e);
+                if (!alive) return;
+                console.error(e);
+                setPersonalData((prev) => ({ ...prev, user_id: user.id }));
             }
         })();
 
         return () => {
-            cancelled = true;
+            alive = false;
         };
-    }, [user?.id]);
+    }, []);
 
     const setData = <K extends keyof PersonalData>(
         name: K,
         value: PersonalData[K],
     ) => {
-        setPersonalData((prev) => (prev ? { ...prev, [name]: value } : prev));
+        setPersonalData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
     const toNumOrNull = (v: string): number | null =>
@@ -86,7 +100,7 @@ const UserProfile: React.FC = () => {
                     <label className="block font-medium mb-1">Wiek</label>
                     <input
                         type="number"
-                        value={personalData?.age ?? ""}
+                        value={personalData.age ?? ""}
                         onChange={(e) => setData("age", toNumOrNull(e.target.value))}
                         className="w-full border px-3 py-2 rounded"
                     />
@@ -96,7 +110,7 @@ const UserProfile: React.FC = () => {
                     <label className="block font-medium mb-1">Wzrost (cm)</label>
                     <input
                         type="number"
-                        value={personalData?.height ?? ""}
+                        value={personalData.height ?? ""}
                         onChange={(e) => setData("height", toNumOrNull(e.target.value))}
                         className="w-full border px-3 py-2 rounded"
                     />
@@ -106,7 +120,7 @@ const UserProfile: React.FC = () => {
                     <label className="block font-medium mb-1">Waga (kg)</label>
                     <input
                         type="number"
-                        value={personalData?.weight ?? ""}
+                        value={personalData.weight ?? ""}
                         onChange={(e) => setData("weight", toNumOrNull(e.target.value))}
                         className="w-full border px-3 py-2 rounded"
                     />
