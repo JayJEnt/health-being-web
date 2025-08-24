@@ -64,17 +64,16 @@ const UserProfile: React.FC = () => {
         );
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const data = {
-            personalData,
-            gender,
-            dietType,
-            allergies,
-            goal,
-        };
-        console.log("Wysłane dane użytkownika:", data);
-        // TODO: fetch/axios PUT/POST tutaj
+        try {
+            const res = await api.put<PersonalData>(
+                `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}${personalData?.user_id}`,
+            );
+            console.log(res);
+        } catch (err) {
+            console.log(err);
+        }
     };
 
     return (
