@@ -1,29 +1,13 @@
 import { useEffect, useState } from "react";
-import type { PersonalData } from "../types/personal_data";
+import type { PersonalData, PersonalDataCreate } from "../types/personal_data";
 import { useAuth } from "../auth/useAuth";
 import { api } from "../api/api";
 import { settings } from "../config";
-const dietOptions = [
-    "wegetariańska",
-    "wegańska",
-    "niskowęglowodanowa",
-    "keto",
-    "standardowa",
-];
-const allergyOptions = ["orzechy", "laktoza", "gluten", "jaja", "ryby"];
-const genderOptions = ["mężczyzna", "kobieta", "inne"];
-const goalOptions = ["utrata masy", "utrzymanie", "przyrost masy"];
-
 const UserProfile: React.FC = () => {
     const { user } = useAuth();
 
     // Dane z modeli
     const [personalData, setPersonalData] = useState<PersonalData | null>(null);
-    // Dane do ustalenia ktorych nie ma w bazie
-    const [gender, setGender] = useState<string>("");
-    const [dietType, setDietType] = useState<string[]>([]);
-    const [allergies, setAllergies] = useState<string[]>([]);
-    const [goal, setGoal] = useState<string>("");
 
     useEffect(() => {
         if (!user?.id) return;
@@ -55,20 +39,14 @@ const UserProfile: React.FC = () => {
     const toNumOrNull = (v: string): number | null =>
         v.trim() === "" ? null : Number(v);
 
-    const toggleSelection = (
-        value: string,
-        setList: (updater: (prev: string[]) => string[]) => void,
-    ) => {
-        setList((prev) =>
-            prev.includes(value) ? prev.filter((x) => x !== value) : [...prev, value],
-        );
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!personalData) return;
         try {
+            const changedData: PersonalDataCreate = personalData;
             const res = await api.put<PersonalData>(
                 `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}${personalData?.user_id}`,
+                changedData,
             );
             console.log(res);
         } catch (err) {
@@ -78,11 +56,11 @@ const UserProfile: React.FC = () => {
 
     return (
         <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-6 space-y-6">
-            <h2 className="text-2xl font-bold">Ustawienia użytkownika</h2>
+            <h2 className="text-2xl font-bold">User Settings</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                    <label className="block font-medium mb-1">Wiek</label>
+                    <label className="block font-medium mb-1">Age</label>
                     <input
                         type="number"
                         value={personalData?.age ?? ""}
@@ -92,7 +70,7 @@ const UserProfile: React.FC = () => {
                 </div>
 
                 <div>
-                    <label className="block font-medium mb-1">Wzrost (cm)</label>
+                    <label className="block font-medium mb-1">Height (cm)</label>
                     <input
                         type="number"
                         value={personalData?.height ?? ""}
@@ -102,7 +80,7 @@ const UserProfile: React.FC = () => {
                 </div>
 
                 <div>
-                    <label className="block font-medium mb-1">Waga (kg)</label>
+                    <label className="block font-medium mb-1">Weight (kg)</label>
                     <input
                         type="number"
                         value={personalData?.weight ?? ""}
@@ -113,75 +91,32 @@ const UserProfile: React.FC = () => {
             </div>
 
             <div>
-                <label className="block font-medium mb-1">Płeć</label>
+                <label className="block font-medium mb-1">Activity Level</label>
                 <select
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
+                    value={personalData?.activity_level ?? ""}
+                    onChange={(e) => setData("activity_level", e.target.value || null)}
                     className="w-full border px-3 py-2 rounded"
                 >
-                    <option value="">-- Wybierz --</option>
-                    {genderOptions.map((g) => (
-                        <option key={g} value={g}>
-                            {g}
-                        </option>
-                    ))}
+                    <option value="Inactive">Inactive</option>
+                    <option value="lightly active">Lightly Active</option>
+                    <option value="moderately active">Moderately Active</option>
+                    <option value="very active">Very Active</option>
+                    <option value="super active">Super Active</option>
                 </select>
             </div>
 
             <div>
-                <label className="block font-medium mb-1">
-                    Preferencje dietetyczne
-                </label>
-                <div className="flex flex-wrap gap-2">
-                    {dietOptions.map((option) => (
-                        <button
-                            type="button"
-                            key={option}
-                            onClick={() => toggleSelection(option, setDietType)}
-                            className={`px-3 py-1 rounded-full text-sm border ${dietType.includes(option)
-                                    ? "bg-green-500 text-white"
-                                    : "bg-gray-100 text-gray-800"
-                                }`}
-                        >
-                            {option}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <div>
-                <label className="block font-medium mb-1">Alergie</label>
-                <div className="flex flex-wrap gap-2">
-                    {allergyOptions.map((option) => (
-                        <button
-                            type="button"
-                            key={option}
-                            onClick={() => toggleSelection(option, setAllergies)}
-                            className={`px-3 py-1 rounded-full text-sm border ${allergies.includes(option)
-                                    ? "bg-red-500 text-white"
-                                    : "bg-gray-100 text-gray-800"
-                                }`}
-                        >
-                            {option}
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            <div>
-                <label className="block font-medium mb-1">Cel</label>
+                <label className="block font-medium mb-1">Body Type</label>
                 <select
-                    value={goal}
-                    onChange={(e) => setGoal(e.target.value)}
+                    value={personalData?.silhouette ?? ""}
+                    onChange={(e) => setData("silhouette", e.target.value || null)}
                     className="w-full border px-3 py-2 rounded"
                 >
-                    <option value="">-- Wybierz --</option>
-                    {goalOptions.map((g) => (
-                        <option key={g} value={g}>
-                            {g}
-                        </option>
-                    ))}
+                    <option value="ectomorph">Ectomorph</option>
+                    <option value="mesomorph">Mesomorph</option>
+                    <option value="endomorph">Endomorph</option>
                 </select>
+                {personalData?.silhouette ?? "null"}
             </div>
 
             <div>
@@ -189,7 +124,7 @@ const UserProfile: React.FC = () => {
                     type="submit"
                     className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded"
                 >
-                    Zapisz ustawienia
+                    Save Settings
                 </button>
             </div>
         </form>

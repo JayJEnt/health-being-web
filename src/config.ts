@@ -16,9 +16,9 @@ class Settings {
     INGREDIENTS_NAME_ENDPOINT: string = "/ingredients/name/"; // {ingredient_name}
 
     // OAUTH2 ROUTER
-    OAUTH2_GOOGLE_LOGIN_ENDPOINT: string = "/oauth2/google/login";
-    OAUTH2_OUR_LOGIN_ENDPOINT: string = "/oauth2/our/login";
-    OAUTH2_OUR_REGISTER_ENDPOINT: string = "/oauth2/our/register";
+    OAUTH2_GOOGLE_LOGIN_ENDPOINT: string = "/oauth2_google/login";
+    OAUTH2_OUR_LOGIN_ENDPOINT: string = "/oauth2_our/login";
+    OAUTH2_OUR_REGISTER_ENDPOINT: string = "/oauth2_our/register";
 
     // RECIPES ROUTER
     RECIPES_BASE_ENDPOINT: string = "/recipes"; // or /{recipe_id}

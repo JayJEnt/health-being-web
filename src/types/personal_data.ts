@@ -3,7 +3,7 @@ export interface PersonalDataCreate {
     height?: number | null;
     age?: number | null;
     activity_level?: string | null; // e.g. sedentary, lightly active, etc.
-    sillouette?: string | null; // e.g. ectomorph, mesomorph, endomorph
+    silhouette?: string | null; // e.g. ectomorph, mesomorph, endomorph
 }
 
 export interface PersonalData extends PersonalDataCreate {
