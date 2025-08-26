@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { RecipeCreate } from "../types/recipe";
 import type { IngredientQuantity } from "../types/ingredient";
 import DietTypeInput from "../components/Recipe/DietTypeInput";
+import IngredientsInput from "../components/Recipe/IngredientsInput";
 
 const RecipeSubmitPage: React.FC = () => {
     const [recipe, setRecipe] = useState<RecipeCreate>({
@@ -85,70 +86,7 @@ const RecipeSubmitPage: React.FC = () => {
                     />
                 </div>
                 <DietTypeInput recipe={recipe} setRecipe={setRecipe} />
-                <div>
-                    <h2 className="text-xl font-semibold mb-2">Ingredients</h2>
-                    <div className="space-y-2 mb-3">
-                        {recipe.ingredients.map((ingredient, index) => (
-                            <div key={index} className="flex gap-3 text-sm">
-                                <span className="font-medium">{ingredient.name}</span>
-                                <span>{ingredient.amount}</span>
-                                <span>{ingredient.measure_unit}</span>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                        <input
-                            type="text"
-                            placeholder="Name"
-                            value={newIngredientName}
-                            onChange={(e) => setNewIngredientName(e.target.value)}
-                            className="border rounded px-3 py-2 flex-1"
-                        />
-                        <input
-                            type="number"
-                            placeholder="Amount"
-                            value={newIngredientAmount}
-                            onChange={(e) => setNewIngredientAmount(Number(e.target.value))}
-                            className="border rounded px-3 py-2 w-28"
-                        />
-                        <select
-                            value={newIngredientUnit}
-                            onChange={(e) => setNewIngredientUnit(e.target.value)}
-                            className="border rounded px-3 py-2"
-                        >
-                            <option value="pieces">pieces</option>
-                            <option value="grams">grams</option>
-                            <option value="mililiters">mililitres</option>
-                        </select>
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (newIngredientName.trim() === "" || newIngredientAmount <= 0)
-                                    return;
-
-                                const newIngredient: IngredientQuantity = {
-                                    name: newIngredientName,
-                                    measure_unit: newIngredientUnit,
-                                    amount: newIngredientAmount,
-                                };
-
-                                setRecipe({
-                                    ...recipe,
-                                    ingredients: [...recipe.ingredients, newIngredient],
-                                });
-
-                                setNewIngredientName("");
-                                setNewIngredientAmount(0);
-                                setNewIngredientUnit("pieces");
-                            }}
-                            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                        >
-                            Add
-                        </button>
-                    </div>
-                </div>
-
+                <IngredientsInput recipe={recipe} setRecipe={setRecipe} />
                 <div>
                     <h2 className="text-xl font-semibold mb-2">Recipe Steps</h2>
                     <ol className="list-decimal list-inside space-y-1 mb-3 text-sm">
