@@ -1,0 +1,169 @@
+import { useState, useCallback } from "react";
+import { settings } from "../../config";
+import { api } from "../../api/api";
+import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
+import type { RecipeCreate } from "../../types/recipe";
+import type { Dispatch, SetStateAction } from "react";
+import type { IngredientQuantity, Ingredient } from "../../types/ingredient";
+
+type Props = {
+    recipe: RecipeCreate;
+    setRecipe: Dispatch<SetStateAction<RecipeCreate>>;
+};
+
+const IngredientsInput: React.FC<Props> = ({ recipe, setRecipe }) => {
+    const [newIngredient, setNewIngredient] = useState<IngredientQuantity>({
+        name: "",
+        amount: 0,
+        measure_unit: "pieces",
+    });
+    const [selected, setSelected] = useState<Ingredient | null>(null);
+
+    const fetchIngredient = useCallback(
+        async (q: string, signal: AbortSignal) => {
+            const url = `${settings.API_BASE_URL}${settings.INGREDIENTS_NAME_ENDPOINT}${encodeURIComponent(q)}`;
+            return api.get<Ingredient>(url, { signal });
+        },
+        [],
+    );
+
+    const { data, loading, error } = useDebouncedSearch<Ingredient>({
+        query: newIngredient.name,
+        fetcher: fetchIngredient,
+        delay: 300,
+        minLength: 1,
+    });
+
+    const onSelect = (ing: Ingredient) => {
+        setSelected(ing);
+        setNewIngredient((prev) => ({ ...prev, name: ing.name })); // pokaż nazwę
+    };
+
+    const onNameChange = (val: string) => {
+        setNewIngredient((prev) => ({ ...prev, name: val }));
+        if (selected) setSelected(null);
+    };
+
+    const canAdd = !!selected && newIngredient.amount > 0;
+
+    const onAdd = () => {
+        if (!selected) return;
+        setRecipe((prev) => ({
+            ...prev,
+            ingredients: [
+                ...prev.ingredients,
+                {
+                    name: selected.name,
+                    amount: newIngredient.amount,
+                    measure_unit: newIngredient.measure_unit,
+                },
+            ],
+        }));
+
+        setSelected(null);
+        setNewIngredient({ name: "", amount: 0, measure_unit: "pieces" });
+    };
+
+    const clearSelection = () => {
+        setSelected(null);
+    };
+
+    return (
+        <div>
+            <h2 className="text-xl font-semibold mb-2">Ingredients</h2>
+
+            <div className="space-y-2 mb-3">
+                {recipe.ingredients.map((ingredient, index) => (
+                    <div key={index} className="flex gap-3 text-sm">
+                        <span className="font-medium">{ingredient.name}</span>
+                        <span>{ingredient.amount}</span>
+                        <span>{ingredient.measure_unit}</span>
+                    </div>
+                ))}
+            </div>
+
+            <div className="flex flex-wrap gap-2 items-center">
+                <div className="relative flex-1 min-w-[200px]">
+                    <input
+                        type="text"
+                        placeholder="Search ingredient"
+                        value={newIngredient.name}
+                        onChange={(e) => onNameChange(e.target.value)}
+                        readOnly={!!selected} // lock po wyborze
+                        className={`border rounded px-3 py-2 w-full ${selected ? "bg-gray-100 cursor-default" : ""}`}
+                    />
+                    {selected && (
+                        <button
+                            type="button"
+                            onClick={clearSelection}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-blue-700 hover:underline"
+                        >
+                            Change
+                        </button>
+                    )}
+                </div>
+
+                <input
+                    type="number"
+                    placeholder="Amount"
+                    value={newIngredient.amount}
+                    onChange={(e) =>
+                        setNewIngredient((prev) => ({
+                            ...prev,
+                            amount: e.target.value === "" ? 0 : e.target.valueAsNumber,
+                        }))
+                    }
+                    className="border rounded px-3 py-2 w-28"
+                />
+
+                <select
+                    value={newIngredient.measure_unit}
+                    onChange={(e) =>
+                        setNewIngredient((prev) => ({
+                            ...prev,
+                            measure_unit: e.target.value,
+                        }))
+                    }
+                    className="border rounded px-3 py-2"
+                >
+                    <option value="pieces">pieces</option>
+                    <option value="grams">grams</option>
+                    <option value="mililiters">mililitres</option>
+                </select>
+
+                <button
+                    type="button"
+                    disabled={!canAdd}
+                    onClick={onAdd}
+                    className={`px-4 py-2 rounded text-white ${canAdd ? "bg-green-600 hover:bg-green-700" : "bg-gray-400 cursor-not-allowed"}`}
+                >
+                    Add
+                </button>
+            </div>
+
+            {!selected && newIngredient.name.trim() !== "" && (
+                <div className="mt-2 border rounded shadow-sm max-h-60 overflow-auto bg-white">
+                    {loading && (
+                        <div className="px-3 py-2 text-sm text-gray-500">Loading...</div>
+                    )}
+                    {error && (
+                        <div className="px-3 py-2 text-sm text-red-500">
+                            {error.message}
+                        </div>
+                    )}
+                    {data && (
+                        <button
+                            type="button"
+                            onClick={() => onSelect(data)}
+                            className="block w-full text-left px-3 py-2 hover:bg-gray-100"
+                        >
+                            {data.name}
+                        </button>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default IngredientsInput;
