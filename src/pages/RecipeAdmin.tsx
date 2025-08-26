@@ -46,7 +46,6 @@ const RecipePageAdmin: React.FC = () => {
         const timeout = setTimeout(() => {
             if (newIngredient.name) {
                 api
-
                     .get<Ingredient>(
                         `${settings.API_BASE_URL}${settings.INGREDIENTS_NAME_ENDPOINT}${newIngredient.name}`,
                     )
