@@ -1,22 +1,17 @@
 import { useState } from "react";
-import type { RecipePage } from "../types/recipe";
+import type { RecipeCreate } from "../types/recipe";
 import type { IngredientQuantity } from "../types/ingredient";
-import { api } from "../api/api";
-import type { UploadImageResponse } from "../types/image";
-import { settings } from "../config";
-
+import DietTypeInput from "../components/Recipe/DietTypeInput";
 
 const RecipeSubmitPage: React.FC = () => {
-    const [recipe, setRecipe] = useState<RecipePage>({
+    const [recipe, setRecipe] = useState<RecipeCreate>({
         title: "",
-        image_url: "",
         description: "",
         instructions: [],
         diet_type: [],
         ingredients: [],
     });
 
-    const [newDietType, setNewDietType] = useState("");
     const [newIngredientName, setNewIngredientName] = useState("");
     const [newIngredientAmount, setNewIngredientAmount] = useState<number>(0);
     const [newIngredientUnit, setNewIngredientUnit] = useState("sztuka");
@@ -37,42 +32,11 @@ const RecipeSubmitPage: React.FC = () => {
         reader.readAsDataURL(file);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        try {
-            let imageUrl = recipe.image_url;
-
-            if (image) {
-                const formData = new FormData();
-                formData.append("file", image);
-
-                const uploadRes = await api.postMultipart<UploadImageResponse>(
-                    `${settings.API_BASE_URL}${settings.IMAGES_UPLOAD_ENDPOINT}`,
-                    formData,
-                );
-
-                imageUrl = uploadRes.url;
-            }
-
-            const fullRecipe: RecipePage = {
-                ...recipe,
-                image_url: imageUrl,
-                instructions: steps,
-            };
-
-            await api.postJson(`${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}`, fullRecipe);
-            alert("Recipe submitted successfully!");
-        } catch (err) {
-            console.error("Error submitting recipe:", err);
-            alert("Failed to submit recipe.");
-        }
-    };
     return (
         <div className="max-w-3xl mx-auto p-6">
             <h1 className="text-3xl font-bold mb-6">Submit a Recipe</h1>
 
-            <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+            <form className="flex flex-col gap-8">
                 <div>
                     <label className="block text-lg font-semibold mb-2">
                         Recipe Image
@@ -120,48 +84,7 @@ const RecipeSubmitPage: React.FC = () => {
                         placeholder="Write a short description..."
                     />
                 </div>
-
-                <div>
-                    <h2 className="text-xl font-semibold mb-2">Diet Types</h2>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                        {recipe.diet_type?.map((diet, index) => (
-                            <span
-                                key={index}
-                                className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
-                            >
-                                {diet.diet_name}
-                            </span>
-                        ))}
-                    </div>
-                    <div className="flex gap-2">
-                        <input
-                            type="text"
-                            placeholder="Add diet type"
-                            value={newDietType}
-                            onChange={(e) => setNewDietType(e.target.value)}
-                            className="flex-1 border rounded px-3 py-2"
-                        />
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (newDietType.trim() === "") return;
-                                setRecipe({
-                                    ...recipe,
-                                    diet_type: [
-                                        ...(recipe.diet_type ?? []),
-                                        { diet_name: newDietType },
-                                    ],
-                                });
-                                setNewDietType("");
-                            }}
-                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                        >
-                            Add
-                        </button>
-                    </div>
-                </div>
-
+                <DietTypeInput recipe={recipe} setRecipe={setRecipe} />
                 <div>
                     <h2 className="text-xl font-semibold mb-2">Ingredients</h2>
                     <div className="space-y-2 mb-3">
