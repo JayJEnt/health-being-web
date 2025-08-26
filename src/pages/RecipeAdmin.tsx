@@ -33,7 +33,6 @@ const RecipePageAdmin: React.FC = () => {
     useEffect(() => {
         if (!id) return;
         api
-
             .get<RecipePageResponse>(
                 `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
             )
