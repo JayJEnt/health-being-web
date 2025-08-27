@@ -81,11 +81,17 @@ const IngredientsInput: React.FC<Props> = ({ recipe, setRecipe }) => {
 
             <div className="space-y-2 mb-3">
                 {recipe.ingredients.map((ingredient, index) => (
-                    <div key={index} className="flex gap-3 text-sm">
+                    <div key={index} className="flex gap-3 items-center text-sm">
                         <span className="font-medium">{ingredient.name}</span>
                         <span>{ingredient.amount}</span>
                         <span>{ingredient.measure_unit}</span>
-                        <button onClick={() => deleteIngredient(index)}>x</button>
+                        <button
+                            type="button"
+                            onClick={() => deleteIngredient(index)}
+                            className="ml-2 text-red-600 hover:text-red-800 font-bold px-2 rounded"
+                        >
+                            ×
+                        </button>
                     </div>
                 ))}
             </div>
