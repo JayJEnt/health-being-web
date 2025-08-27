@@ -1,8 +1,11 @@
-import { useState } from "react";
-import type { RecipeCreate } from "../types/recipe";
+import type { RecipeCreate, RecipeResponse } from "../types/recipe";
 import DietTypeInput from "../components/Recipe/DietTypeInput";
 import IngredientsInput from "../components/Recipe/IngredientsInput";
 import RecipeSteps from "../components/Recipe/RecipeSteps";
+import ImageInput from "../components/Recipe/ImageInput";
+import { useState } from "react";
+import { settings } from "../config";
+import { api } from "../api/api";
 
 const RecipeSubmitPage: React.FC = () => {
     const [recipe, setRecipe] = useState<RecipeCreate>({
@@ -12,49 +15,40 @@ const RecipeSubmitPage: React.FC = () => {
         diet_type: [],
         ingredients: [],
     });
-
-    const [steps, setSteps] = useState<string[]>([]);
-    const [newStep, setNewStep] = useState("");
     const [image, setImage] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
 
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!recipe) return;
 
-        setImage(file);
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setImagePreview(reader.result as string);
-        };
-        reader.readAsDataURL(file);
+        try {
+            const recipeApiUrl = `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}`;
+            const recipeResponse = await api.postJson<RecipeResponse>(
+                recipeApiUrl,
+                recipe,
+            );
+
+            if (!recipeResponse) return;
+            if (image) {
+                const imageApiUrl = `${settings.API_BASE_URL}${settings.IMAGES_UPLOAD_ENDPOINT}`;
+                const formData = new FormData();
+                formData.append("recipe_id", recipeResponse.id.toString());
+                formData.append("file", image);
+                const imageResponse = await api.postMultipart(imageApiUrl, formData);
+                console.log("Image uploaded", imageResponse);
+            }
+
+            console.log("Recipe uploaded", recipeResponse);
+        } catch (err) {
+            console.log(err);
+        }
     };
-
     return (
         <div className="max-w-3xl mx-auto p-6">
             <h1 className="text-3xl font-bold mb-6">Submit a Recipe</h1>
 
-            <form className="flex flex-col gap-8">
-                <div>
-                    <label className="block text-lg font-semibold mb-2">
-                        Recipe Image
-                    </label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                    />
-                    {imagePreview && (
-                        <div className="mt-4">
-                            <img
-                                src={imagePreview}
-                                alt="Preview"
-                                className="max-w-xs max-h-48 object-cover rounded shadow-md"
-                            />
-                        </div>
-                    )}
-                </div>
+            <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+                <ImageInput setImage={setImage} />
                 <div>
                     <label className="block text-lg font-semibold mb-1">
                         Recipe Name
