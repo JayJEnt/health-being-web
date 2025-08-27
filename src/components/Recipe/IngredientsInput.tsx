@@ -68,6 +68,13 @@ const IngredientsInput: React.FC<Props> = ({ recipe, setRecipe }) => {
         setSelected(null);
     };
 
+    const deleteIngredient = (index: number) => {
+        const filteredIngredients = recipe.ingredients.filter(
+            (_, i) => index !== i,
+        );
+        setRecipe((prev) => ({ ...prev, ingredients: filteredIngredients }));
+    };
+
     return (
         <div>
             <h2 className="text-xl font-semibold mb-2">Ingredients</h2>
@@ -78,6 +85,7 @@ const IngredientsInput: React.FC<Props> = ({ recipe, setRecipe }) => {
                         <span className="font-medium">{ingredient.name}</span>
                         <span>{ingredient.amount}</span>
                         <span>{ingredient.measure_unit}</span>
+                        <button onClick={() => deleteIngredient(index)}>x</button>
                     </div>
                 ))}
             </div>
@@ -89,7 +97,7 @@ const IngredientsInput: React.FC<Props> = ({ recipe, setRecipe }) => {
                         placeholder="Search ingredient"
                         value={newIngredient.name}
                         onChange={(e) => onNameChange(e.target.value)}
-                        readOnly={!!selected} // lock po wyborze
+                        readOnly={!!selected}
                         className={`border rounded px-3 py-2 w-full ${selected ? "bg-gray-100 cursor-default" : ""}`}
                     />
                     {selected && (
