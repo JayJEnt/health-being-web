@@ -1,8 +1,8 @@
 import { useState } from "react";
 import type { RecipeCreate } from "../types/recipe";
-import type { IngredientQuantity } from "../types/ingredient";
 import DietTypeInput from "../components/Recipe/DietTypeInput";
 import IngredientsInput from "../components/Recipe/IngredientsInput";
+import RecipeSteps from "../components/Recipe/RecipeSteps";
 
 const RecipeSubmitPage: React.FC = () => {
     const [recipe, setRecipe] = useState<RecipeCreate>({
@@ -13,9 +13,6 @@ const RecipeSubmitPage: React.FC = () => {
         ingredients: [],
     });
 
-    const [newIngredientName, setNewIngredientName] = useState("");
-    const [newIngredientAmount, setNewIngredientAmount] = useState<number>(0);
-    const [newIngredientUnit, setNewIngredientUnit] = useState("sztuka");
     const [steps, setSteps] = useState<string[]>([]);
     const [newStep, setNewStep] = useState("");
     const [image, setImage] = useState<File | null>(null);
@@ -87,35 +84,7 @@ const RecipeSubmitPage: React.FC = () => {
                 </div>
                 <DietTypeInput recipe={recipe} setRecipe={setRecipe} />
                 <IngredientsInput recipe={recipe} setRecipe={setRecipe} />
-                <div>
-                    <h2 className="text-xl font-semibold mb-2">Recipe Steps</h2>
-                    <ol className="list-decimal list-inside space-y-1 mb-3 text-sm">
-                        {steps.map((step, index) => (
-                            <li key={index}>{step}</li>
-                        ))}
-                    </ol>
-                    <div className="flex gap-2">
-                        <input
-                            type="text"
-                            placeholder="Add step"
-                            value={newStep}
-                            onChange={(e) => setNewStep(e.target.value)}
-                            className="flex-1 border rounded px-3 py-2"
-                        />
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                if (newStep.trim() === "") return;
-                                setSteps([...steps, newStep]);
-                                setNewStep("");
-                            }}
-                            className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
-                        >
-                            Add
-                        </button>
-                    </div>
-                </div>
+                <RecipeSteps recipe={recipe} setRecipe={setRecipe} />
 
                 <button
                     type="submit"
