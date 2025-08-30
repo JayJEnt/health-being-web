@@ -30,9 +30,8 @@ const RecipeSubmitPage: React.FC = () => {
 
             if (!recipeResponse) return;
             if (image) {
-                const imageApiUrl = `${settings.API_BASE_URL}${settings.IMAGES_UPLOAD_ENDPOINT}`;
+                const imageApiUrl = `${settings.API_BASE_URL}${settings.IMAGES_UPLOAD_ENDPOINT}/${recipeResponse.id.toString()}`;
                 const formData = new FormData();
-                formData.append("recipe_id", recipeResponse.id.toString());
                 formData.append("file", image);
                 const imageResponse = await api.postMultipart(imageApiUrl, formData);
                 console.log("Image uploaded", imageResponse);
