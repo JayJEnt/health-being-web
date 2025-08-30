@@ -1,18 +1,24 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import type { RecipePageResponse } from "../types/recipe";
+import type { RecipeResponse } from "../types/recipe";
 import { api } from "../api/api";
 import { settings } from "../config";
 
-
 const RecipePage: React.FC = () => {
     const { id } = useParams();
-    const [recipe, setRecipe] = useState<RecipePageResponse | null>(null);
+    const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
+    const [image, setImage] = useState<File | null>(null);
 
     async function loadRecipe() {
         try {
-            const fetchedRecipe = await api.get<RecipePageResponse>(`${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`);
+            const fetchedRecipe = await api.get<RecipeResponse>(
+                `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
+            );
             setRecipe(fetchedRecipe);
+            const fetchedImage = await api.get<File>(
+                `${settings.API_BASE_URL}${settings.IMAGES_DOWNLOAD_ENDPOINT}${id}`,
+            );
+            setImage(fetchedImage);
         } catch (err) {
             console.error("Nie udało się pobrać przepisu:", err);
         }
