@@ -5,13 +5,17 @@ import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { RecipeCreate } from "../../types/recipe";
 import type { Dispatch, SetStateAction } from "react";
 import type { IngredientQuantity, Ingredient } from "../../types/ingredient";
+import type { RecipeEditPayload } from "../../pages/RecipeAdmin";
 
-type Props = {
-    recipe: RecipeCreate;
-    setRecipe: Dispatch<SetStateAction<RecipeCreate>>;
+type Props<T extends RecipeCreate | RecipeEditPayload> = {
+    recipe: T;
+    setRecipe: Dispatch<SetStateAction<T>>;
 };
 
-const IngredientsInput: React.FC<Props> = ({ recipe, setRecipe }) => {
+const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
+    recipe,
+    setRecipe,
+}: Props<T>) => {
     const [newIngredient, setNewIngredient] = useState<IngredientQuantity>({
         name: "",
         amount: 0,
@@ -36,7 +40,7 @@ const IngredientsInput: React.FC<Props> = ({ recipe, setRecipe }) => {
 
     const onSelect = (ing: Ingredient) => {
         setSelected(ing);
-        setNewIngredient((prev) => ({ ...prev, name: ing.name })); // pokaż nazwę
+        setNewIngredient((prev) => ({ ...prev, name: ing.name }));
     };
 
     const onNameChange = (val: string) => {
@@ -48,17 +52,22 @@ const IngredientsInput: React.FC<Props> = ({ recipe, setRecipe }) => {
 
     const onAdd = () => {
         if (!selected) return;
-        setRecipe((prev) => ({
-            ...prev,
-            ingredients: [
-                ...prev.ingredients,
-                {
-                    name: selected.name,
-                    amount: newIngredient.amount,
-                    measure_unit: newIngredient.measure_unit,
-                },
-            ],
-        }));
+
+        setRecipe((prev) => {
+            if (!prev) return prev;
+
+            return {
+                ...prev,
+                ingredients: [
+                    ...prev.ingredients,
+                    {
+                        name: selected.name,
+                        amount: newIngredient.amount,
+                        measure_unit: newIngredient.measure_unit,
+                    },
+                ],
+            };
+        });
 
         setSelected(null);
         setNewIngredient({ name: "", amount: 0, measure_unit: "pieces" });
@@ -69,11 +78,21 @@ const IngredientsInput: React.FC<Props> = ({ recipe, setRecipe }) => {
     };
 
     const deleteIngredient = (index: number) => {
-        const filteredIngredients = recipe.ingredients.filter(
-            (_, i) => index !== i,
-        );
-        setRecipe((prev) => ({ ...prev, ingredients: filteredIngredients }));
+        setRecipe((prev) => {
+            if (!prev) return prev;
+
+            const filteredIngredients = prev.ingredients.filter(
+                (_, i) => index !== i,
+            );
+
+            return {
+                ...prev,
+                ingredients: filteredIngredients,
+            };
+        });
     };
+
+    if (!recipe) return null;
 
     return (
         <div>

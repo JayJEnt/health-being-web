@@ -5,13 +5,17 @@ import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { Dispatch, SetStateAction } from "react";
 import type { RecipeCreate } from "../../types/recipe";
 import type { DietType } from "../../types/diet_type";
+import type { RecipeEditPayload } from "../../pages/RecipeAdmin";
 
-type Props = {
-    recipe: RecipeCreate;
-    setRecipe: Dispatch<SetStateAction<RecipeCreate>>;
+type Props<T extends RecipeCreate | RecipeEditPayload> = {
+    recipe: T;
+    setRecipe: Dispatch<SetStateAction<T>>;
 };
 
-const DietTypeInput: React.FC<Props> = ({ recipe, setRecipe }) => {
+const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
+    recipe,
+    setRecipe,
+}: Props<T>) => {
     const [newDietType, setNewDietType] = useState<string>("");
 
     const fetchDiet = useCallback(async (q: string, signal: AbortSignal) => {
@@ -35,10 +39,13 @@ const DietTypeInput: React.FC<Props> = ({ recipe, setRecipe }) => {
     };
 
     const removeDietType = (index: number) => {
-        setRecipe((prev) => ({
-            ...prev,
-            diet_type: prev.diet_type?.filter((_, i) => i !== index) ?? [],
-        }));
+        setRecipe((prev) => {
+            if (!prev) return prev;
+            return {
+                ...prev,
+                diet_type: prev.diet_type?.filter((_, i) => i !== index) ?? [],
+            };
+        });
     };
 
     return (
