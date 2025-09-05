@@ -17,7 +17,7 @@ const RecipePage: React.FC = () => {
                     `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
                 );
                 setRecipe(fetchedRecipe);
-                const fetchedImage = await api.get<File>(
+                const fetchedImage = await api.downloadBlob(
                     `${settings.API_BASE_URL}${settings.IMAGES_DOWNLOAD_ENDPOINT}${id}`,
                 );
                 const url = URL.createObjectURL(fetchedImage);

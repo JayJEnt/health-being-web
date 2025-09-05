@@ -64,7 +64,7 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, handleEdit }) => {
                                         className="flex-none w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-semibold
                        grid place-items-center mt-0.5"
                                     >
-                                        aria-label={`Krok ${index + 1}`}v{index + 1}
+                                        {index + 1}
                                     </span>
                                     <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
                                         {step}
