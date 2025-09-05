@@ -3,10 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import type { RecipeResponse } from "../types/recipe";
 import { api } from "../api/api";
 import { settings } from "../config";
+
 import RecipeOverview from "../components/Recipe/RecipeOverview";
 import IngredientsInput from "../components/Recipe/IngredientsInput";
 import DietTypeInput from "../components/Recipe/DietTypeInput";
 import RecipeSteps from "../components/Recipe/RecipeSteps";
+import ImageInput from "../components/Recipe/ImageInput";
 
 export type RecipeEditPayload = Omit<RecipeResponse, "id">;
 
@@ -22,16 +24,27 @@ const EMPTY_EDIT: RecipeEditPayload = {
 const RecipePageAdmin: React.FC = () => {
     const { id } = useParams();
     const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
+
     const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+    const [newImageFile, setNewImageFile] = useState<File | null>(null);
+    const [newImagePreviewUrl, setNewImagePreviewUrl] = useState<string | null>(
+        null,
+    );
 
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
 
     const [newRecipe, setNewRecipe] = useState<RecipeEditPayload>(EMPTY_EDIT);
 
-    const originalRef = useRef<RecipeResponse | null>(null);
+    const originalRecipeRef = useRef<RecipeResponse | null>(null);
+    const originalImageUrlRef = useRef<string | null>(null);
 
     useEffect(() => {
+        if (!id) return;
+
+        let objectUrlToRevoke: string | null = null;
+
         const fetchRecipe = async () => {
             try {
                 const fetchedRecipe = await api.get<RecipeResponse>(
@@ -39,53 +52,86 @@ const RecipePageAdmin: React.FC = () => {
                 );
                 setRecipe(fetchedRecipe);
 
-                const fetchedImage = await api.get<File>(
+                const blob = await api.downloadBlob(
                     `${settings.API_BASE_URL}${settings.IMAGES_DOWNLOAD_ENDPOINT}${id}`,
                 );
-                const url = URL.createObjectURL(fetchedImage);
+                const url = URL.createObjectURL(blob);
                 setImageUrl(url);
-                return () => URL.revokeObjectURL(url);
+                objectUrlToRevoke = url;
             } catch (err) {
                 console.error("Nie udało się pobrać przepisu:", err);
             }
         };
-        if (id) fetchRecipe();
+
+        fetchRecipe();
+
+        return () => {
+            if (objectUrlToRevoke) URL.revokeObjectURL(objectUrlToRevoke);
+        };
     }, [id]);
+
+    useEffect(() => {
+        if (!newImageFile) {
+            setNewImagePreviewUrl(null);
+            return;
+        }
+        const url = URL.createObjectURL(newImageFile);
+        setNewImagePreviewUrl(url);
+        return () => URL.revokeObjectURL(url);
+    }, [newImageFile]);
 
     const handleEdit = () => {
         if (!recipe) return;
-        originalRef.current = recipe;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { id: _, ...editable } = recipe;
-        setNewRecipe(editable);
+        originalRecipeRef.current = recipe;
+        originalImageUrlRef.current = imageUrl;
+
+        setNewRecipe(recipe as RecipeEditPayload);
+
+        setNewImageFile(null);
         setIsEditing(true);
     };
 
     const handleCancel = () => {
-        if (originalRef.current) {
-            setRecipe(originalRef.current);
-        }
+        if (originalRecipeRef.current) setRecipe(originalRecipeRef.current);
+        if (originalImageUrlRef.current) setImageUrl(originalImageUrlRef.current);
+
         setNewRecipe(EMPTY_EDIT);
+        setNewImageFile(null);
         setIsEditing(false);
-        originalRef.current = null;
+        originalRecipeRef.current = null;
+        originalImageUrlRef.current = null;
     };
 
     const handleSave = async () => {
-        if (!id || !originalRef.current) return;
+        if (!id || !originalRecipeRef.current) return;
         setIsSaving(true);
         try {
-            const editResponse = await api.put<RecipeResponse>(
+            const saved = await api.put<RecipeResponse>(
                 `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
                 newRecipe,
             );
-            if (!editResponse) return;
-            setRecipe(editResponse);
+            if (!saved) throw new Error("Brak odpowiedzi z PUT");
 
+            if (newImageFile) {
+                const form = new FormData();
+                form.append("file", newImageFile);
+                await api.postMultipart(
+                    `${settings.API_BASE_URL}${settings.IMAGES_UPLOAD_ENDPOINT}/${id}`,
+                    form,
+                );
+
+                if (newImagePreviewUrl) setImageUrl(newImagePreviewUrl);
+            }
+
+            setRecipe(saved);
             setIsEditing(false);
-            originalRef.current = null;
+            originalRecipeRef.current = null;
+            originalImageUrlRef.current = null;
+            setNewImageFile(null);
         } catch (err) {
             console.error("Error saving recipe", err);
-            setRecipe(originalRef.current);
+            if (originalRecipeRef.current) setRecipe(originalRecipeRef.current);
+            if (originalImageUrlRef.current) setImageUrl(originalImageUrlRef.current);
         } finally {
             setIsSaving(false);
         }
@@ -99,7 +145,7 @@ const RecipePageAdmin: React.FC = () => {
                 <div className="grid lg:grid-cols-3 gap-10">
                     <div className="lg:col-span-2 flex flex-col gap-6">
                         <img
-                            src={imageUrl ?? "/PlaceHolder.png"}
+                            src={newImagePreviewUrl ?? imageUrl ?? "/PlaceHolder.png"}
                             alt="Recipe"
                             className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow border"
                         />
@@ -145,7 +191,11 @@ const RecipePageAdmin: React.FC = () => {
                         <RecipeSteps recipe={newRecipe} setRecipe={setNewRecipe} />
                     </div>
 
-                    <IngredientsInput recipe={newRecipe} setRecipe={setNewRecipe} />
+                    <div className="flex flex-col gap-6">
+                        <IngredientsInput recipe={newRecipe} setRecipe={setNewRecipe} />
+
+                        <ImageInput setImage={setNewImageFile} />
+                    </div>
                 </div>
             </div>
         );

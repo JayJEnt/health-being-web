@@ -76,6 +76,22 @@ export const api = {
             handleError(err);
         }
     },
+    // Images download
+    downloadBlob: async (
+        url: string,
+        config?: AxiosRequestConfig,
+    ): Promise<Blob> => {
+        try {
+            const res = await axiosInstance.post(url, null, {
+                responseType: "blob",
+                ...(config ?? {}),
+            });
+            return res.data;
+        } catch (err) {
+            handleError(err);
+            throw err;
+        }
+    },
 
     put: async <T>(url: string, data?: unknown): Promise<T> => {
         try {

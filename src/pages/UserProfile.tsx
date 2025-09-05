@@ -116,7 +116,6 @@ const UserProfile: React.FC = () => {
                     <option value="mesomorph">Mesomorph</option>
                     <option value="endomorph">Endomorph</option>
                 </select>
-                {personalData?.silhouette ?? "null"}
             </div>
 
             <div>
