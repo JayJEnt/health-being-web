@@ -3,30 +3,38 @@ import type { PersonalData, PersonalDataCreate } from "../types/personal_data";
 import { useAuth } from "../auth/useAuth";
 import { api } from "../api/api";
 import { settings } from "../config";
+import type { PreferedIngredients } from "../types/prefered_ingredients";
+import PreferedIngredientInput from "../components/User/PreferedIngredientInput";
 const UserProfile: React.FC = () => {
     const { user } = useAuth();
 
     // Dane z modeli
     const [personalData, setPersonalData] = useState<PersonalData | null>(null);
-
+    const [preferedIngredients, setPreferedIngredients] = useState<
+        PreferedIngredients[]
+    >([]);
     useEffect(() => {
         if (!user?.id) return;
 
-        let cancelled = false;
-
         (async () => {
             try {
-                const url = `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}${user.id}`;
-                const data = await api.get<PersonalData>(url);
-                if (!cancelled) setPersonalData(data);
+                const personalDataUrl = `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}${user.id}`;
+                const personalDataResponse =
+                    await api.get<PersonalData>(personalDataUrl);
+
+                if (personalDataResponse) setPersonalData(personalDataResponse);
+
+                const preferedIngredientsUrl = `${settings.API_BASE_URL}${settings.PREFERED_INGREDIENTS_ENDPOINT}`;
+                const preferedIngredientsReponse = await api.get<PreferedIngredients[]>(
+                    preferedIngredientsUrl,
+                );
+                if (preferedIngredientsReponse) {
+                    setPreferedIngredients(preferedIngredientsReponse);
+                }
             } catch (e) {
-                if (!cancelled) console.error(e);
+                console.error(e);
             }
         })();
-
-        return () => {
-            cancelled = true;
-        };
     }, [user?.id]);
 
     const setData = <K extends keyof PersonalData>(
@@ -118,6 +126,12 @@ const UserProfile: React.FC = () => {
                 </select>
             </div>
 
+            <div>
+                <PreferedIngredientInput
+                    preferedIngredients={preferedIngredients}
+                    setPreferedIngredients={setPreferedIngredients}
+                />
+            </div>
             <div>
                 <button
                     type="submit"

@@ -41,6 +41,8 @@ class Settings {
     // USERS DATA
     USERSDATA_BASE_ENDPOINT: string = "/users_data/"; // or /{user_id}
     USERSDATA_OWNER_ENDPOINT: string = "/users_data/owner/"; // {user_id}
+
+    PREFERED_INGREDIENTS_ENDPOINT: string = "/prefered_ingredients"; // or /{ingredient_id}
 }
 
 class LocalSettings extends Settings {
