@@ -75,6 +75,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
     };
     return (
         <div>
+            Prefred Ingredients
             {preferedIngredients && (
                 <div>
                     {preferedIngredients?.map((ingredient) => (
@@ -92,24 +93,25 @@ const PreferedIngredientInput: React.FC<Props> = ({
                     ))}
                 </div>
             )}
-            <input
-                className="border"
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-            />
-
-            <select
-                value={preference}
-                onChange={(e) => setPreference(e.target.value as Preference)}
-            >
-                {options.map((opt) => (
-                    <option key={opt} value={opt}>
-                        {opt[0].toUpperCase() + opt.slice(1)}
-                    </option>
-                ))}
-            </select>
-
+            <div className="gap-4 flex">
+                <input
+                    className="border"
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                />
+                <select
+                    className="border"
+                    value={preference}
+                    onChange={(e) => setPreference(e.target.value as Preference)}
+                >
+                    {options.map((opt) => (
+                        <option key={opt} value={opt}>
+                            {opt[0].toUpperCase() + opt.slice(1)}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <div className="mt-2 text-sm">
                 {loading && <div>Ładowanie…</div>}
                 {error && <div className="text-red-600">{error.message}</div>}
