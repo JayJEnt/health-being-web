@@ -9,6 +9,7 @@ import IngredientsInput from "../components/Recipe/IngredientsInput";
 import DietTypeInput from "../components/Recipe/DietTypeInput";
 import RecipeSteps from "../components/Recipe/RecipeSteps";
 import ImageInput from "../components/Recipe/ImageInput";
+import { useAuth } from "../auth/useAuth";
 
 export type RecipeEditPayload = Omit<RecipeResponse, "id">;
 
@@ -22,6 +23,7 @@ const EMPTY_EDIT: RecipeEditPayload = {
 };
 
 const RecipePageAdmin: React.FC = () => {
+    const { user } = useAuth();
     const { id } = useParams();
     const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
 
@@ -205,7 +207,7 @@ const RecipePageAdmin: React.FC = () => {
         <RecipeOverview
             recipe={recipe}
             imageUrl={imageUrl}
-            handleEdit={handleEdit}
+            handleEdit={user?.id === recipe.owner_id ? handleEdit : undefined}
         />
     );
 };
