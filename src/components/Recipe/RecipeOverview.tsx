@@ -1,12 +1,57 @@
+import type { Dispatch, SetStateAction } from "react";
+import { api } from "../../api/api";
+import { settings } from "../../config";
 import type { RecipeResponse } from "../../types/recipe";
+import type { CreateRecipeFavourite } from "../../types/recipe_favourite";
+import { useAuth } from "../../auth/useAuth";
 
 type Props = {
     recipe: RecipeResponse;
     imageUrl: string | null;
+    isLiked: boolean;
+    setIsLiked: Dispatch<SetStateAction<boolean>>;
     handleEdit?: () => void;
 };
 
-const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, handleEdit }) => {
+const RecipeOverview: React.FC<Props> = ({
+    recipe,
+    imageUrl,
+    isLiked,
+    setIsLiked,
+    handleEdit,
+}) => {
+    const { user } = useAuth();
+    const likeRecipe = async () => {
+        const requestData: CreateRecipeFavourite = { title: recipe.title };
+        try {
+            const res = await api.postJson(
+                `${settings.API_BASE_URL}${settings.RECIPE_FAVOURITE_ENDPOINT}`,
+                requestData,
+            );
+            if (res) setIsLiked(true);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const unLikeRecipe = async () => {
+        try {
+            const res = await api.delete(
+                `${settings.API_BASE_URL}${settings.RECIPE_FAVOURITE_ENDPOINT}/${recipe.id}`,
+            );
+            if (res) setIsLiked(false);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    const toggleLiked = () => {
+        if (isLiked) {
+            unLikeRecipe();
+        } else {
+            likeRecipe();
+        }
+    };
     return (
         <div className="min-h-screen p-6 bg-light-main-bg dark:bg-dark-main-bg">
             <div className="grid lg:grid-cols-3 gap-10">
@@ -18,14 +63,27 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, handleEdit }) => {
                     />
                     <div className="flex justify-between">
                         <h1 className="text-3xl font-bold">{recipe.title}</h1>
-                        {handleEdit && (
-                            <button
-                                onClick={handleEdit}
-                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                            >
-                                Edit
-                            </button>
-                        )}
+                        <div>
+                            {handleEdit && (
+                                <button
+                                    onClick={handleEdit}
+                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                                >
+                                    Edit
+                                </button>
+                            )}
+                            {user && user.id !== recipe.owner_id && (
+                                <button
+                                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                                    onClick={toggleLiked}
+                                >
+                                    <span className={isLiked ? "text-red-600" : "text-white"}>
+                                        {isLiked ? "❤️" : "🤍"}
+                                    </span>
+                                    Like
+                                </button>
+                            )}
+                        </div>
                     </div>
                     <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                         {recipe.description}

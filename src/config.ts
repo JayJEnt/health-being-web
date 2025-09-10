@@ -45,6 +45,8 @@ class Settings {
     // PREFERED DATA
     PREFERED_INGREDIENTS_ENDPOINT: string = "/prefered_ingredients"; // or /{ingredient_id}
     PREFERED_DIET_TYPES_ENDPOINT: string = "/prefered_recipe_type"; // or /{diet_type_id}
+
+    RECIPE_FAVOURITE_ENDPOINT: string = "/recipe_favourite"; // or /{recipe_id}
 }
 
 class LocalSettings extends Settings {

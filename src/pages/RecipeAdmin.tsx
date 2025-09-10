@@ -26,7 +26,7 @@ const RecipePageAdmin: React.FC = () => {
     const { user } = useAuth();
     const { id } = useParams();
     const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
-
+    const [isLiked, setIsLiked] = useState<boolean>(false);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
 
     const [newImageFile, setNewImageFile] = useState<File | null>(null);
@@ -53,6 +53,11 @@ const RecipePageAdmin: React.FC = () => {
                     `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
                 );
                 setRecipe(fetchedRecipe);
+
+                const fetchedLiked = await api.get(
+                    `${settings.API_BASE_URL}${settings.RECIPE_FAVOURITE_ENDPOINT}/${id}`,
+                );
+                if (fetchedLiked) setIsLiked(true);
 
                 const blob = await api.downloadBlob(
                     `${settings.API_BASE_URL}${settings.IMAGES_DOWNLOAD_ENDPOINT}${id}`,
@@ -207,6 +212,8 @@ const RecipePageAdmin: React.FC = () => {
         <RecipeOverview
             recipe={recipe}
             imageUrl={imageUrl}
+            isLiked={isLiked}
+            setIsLiked={setIsLiked}
             handleEdit={user?.id === recipe.owner_id ? handleEdit : undefined}
         />
     );
