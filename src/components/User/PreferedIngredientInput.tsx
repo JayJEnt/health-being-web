@@ -113,7 +113,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
                 </select>
             </div>
             <div className="mt-2 text-sm">
-                {loading && <div>Ładowanie…</div>}
+                {loading && <div>Loading...</div>}
                 {error && <div className="text-red-600">{error.message}</div>}
                 {!loading && !error && data && (
                     <button

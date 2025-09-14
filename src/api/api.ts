@@ -89,7 +89,6 @@ export const api = {
             return res.data;
         } catch (err) {
             handleError(err);
-            throw err;
         }
     },
 

@@ -16,7 +16,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         status: "idle",
     });
 
-    // Inicjalizacja: odczyt tokena z localStorage
+    // Inicjalization: Get token from localStorage
     useEffect(() => {
         let cancelled = false;
 
@@ -66,7 +66,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         };
     }, []);
 
-    // login: ustaw stan -> zapisz token -> pobierz usera
+    // login: set state -> save token -> get user
     const login = useCallback<AuthContextValue["login"]>(
         async (credentials: Omit<UserCreate, "email">) => {
             setState((s) => ({ ...s, status: "loading" }));
@@ -98,7 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         [],
     );
 
-    // logout: wyczyść stan -> wyczyść localStorage
+    // logout: clear state -> clear localStorage
     const logout = useCallback(() => {
         localStorage.removeItem(AUTH_TOKEN_KEY);
         setState((s) => ({
@@ -110,7 +110,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }));
     }, []);
 
-    // Synchronizacja między kartami
+    // Synchronization between tabs
     useEffect(() => {
         const onStorage = (e: StorageEvent) => {
             if (e.key !== AUTH_TOKEN_KEY) return;
