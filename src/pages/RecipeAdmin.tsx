@@ -22,7 +22,7 @@ const EMPTY_EDIT: RecipeEditPayload = {
     ingredients: [],
 };
 
-const RecipePageAdmin: React.FC = () => {
+const RecipePage: React.FC = () => {
     const { user } = useAuth();
     const { id } = useParams();
     const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
@@ -49,27 +49,27 @@ const RecipePageAdmin: React.FC = () => {
 
         const fetchRecipe = async () => {
             try {
-                const fetchedRecipe = await api.get<RecipeResponse>(
+                const recipePromise = api.get<RecipeResponse>(
                     `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
+                    { timeout: 9000 },
                 );
-                setRecipe(fetchedRecipe);
-
-                const fetchedLiked = await api.get(
-                    `${settings.API_BASE_URL}${settings.RECIPE_FAVOURITE_ENDPOINT}/${id}`,
-                );
-                if (fetchedLiked) setIsLiked(true);
-
-                const blob = await api.downloadBlob(
+                const imagePromise = api.downloadBlob(
                     `${settings.API_BASE_URL}${settings.IMAGES_DOWNLOAD_ENDPOINT}${id}`,
+                    { timeout: 9000 },
                 );
-                const url = URL.createObjectURL(blob);
-                setImageUrl(url);
+
+                const [fetchedRecipe, fetchedImage] = await Promise.all([
+                    recipePromise,
+                    imagePromise,
+                ]);
+                setRecipe(fetchedRecipe);
+                const url = URL.createObjectURL(fetchedImage);
                 objectUrlToRevoke = url;
+                setImageUrl(url);
             } catch (err) {
-                console.error("Nie udało się pobrać przepisu:", err);
+                console.error("Couldn't fetch recipe or image:", err);
             }
         };
-
         fetchRecipe();
 
         return () => {
@@ -219,4 +219,4 @@ const RecipePageAdmin: React.FC = () => {
     );
 };
 
-export default RecipePageAdmin;
+export default RecipePage;

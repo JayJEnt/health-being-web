@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar/NavBar.tsx";
 import Home from "./pages/Home.tsx";
-import RecipePageAdmin from "./pages/RecipeAdmin.tsx";
+import RecipePage from "./pages/Recipe.tsx";
 import RecipeSubmitPage from "./pages/RecipeSubmitPage.tsx";
 import UserProfile from "./pages/UserProfile.tsx";
 import LoginPage from "./pages/Login.tsx";
@@ -22,7 +22,7 @@ function App() {
             <NavBar />
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/recipe/:id" element={<RecipePageAdmin />} />
+                <Route path="/recipe/:id" element={<RecipePage />} />
                 <Route
                     path="/recipe/submit"
                     element={isAuthenticated ? <RecipeSubmitPage /> : <LoginPage />}

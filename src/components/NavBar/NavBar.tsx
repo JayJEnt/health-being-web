@@ -17,7 +17,7 @@ const NavBar: React.FC = () => {
                 <NavButton
                     icon={Icons.MagnifyingGlassIcon}
                     label="Search"
-                    to="/recipe/36"
+                    to="/recipe/1"
                 />
                 <NavButton icon={Icons.HeartIcon} label="Favourite" to="/favourites" />
                 <NavButton icon={Icons.Cog6ToothIcon} label="Settings" to="/settings" />
