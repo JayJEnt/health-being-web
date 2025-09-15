@@ -1,22 +1,37 @@
 import { useEffect, useState } from "react";
-import type { PersonalData, PersonalDataCreate } from "../types/personal_data";
 import { useAuth } from "../auth/useAuth";
 import { api } from "../api/api";
 import { settings } from "../config";
-import type { PreferedIngredients } from "../types/prefered_ingredients";
+import type { PreferedIngredientsGet } from "../types/prefered_ingredients";
 import PreferedIngredientInput from "../components/User/PreferedIngredientInput";
 import type { PreferedRecipeTypeGet } from "../types/prefered_diet_type";
 import PreferedDietTypesInput from "../components/User/PreferedDietTypesInput";
+import type { ActivityLevel, Silhouette } from "../types/enum_utils";
+import {
+    Silhouette as SilhouetteTypes,
+    ActivityLevel as ActivityLevelValues,
+} from "../types/enum_utils";
+import type { UserData, UserDataCreate } from "../types/user_data";
+
 const UserProfile: React.FC = () => {
     const { user } = useAuth();
 
-    const [personalData, setPersonalData] = useState<PersonalData | null>(null);
+    const [personalData, setPersonalData] = useState<UserData | null>(null);
     const [preferedIngredients, setPreferedIngredients] = useState<
-        PreferedIngredients[]
+        PreferedIngredientsGet[]
     >([]);
     const [preferedDietTypes, setPreferedDietTypes] = useState<
         PreferedRecipeTypeGet[]
     >([]);
+
+    const makeDefaultPersonalData = (uid: number): UserData => ({
+        user_id: uid,
+        age: null,
+        height: null,
+        weight: null,
+        silhouette: SilhouetteTypes.ectomorph as Silhouette,
+        activity_level: ActivityLevelValues.light as ActivityLevel,
+    });
 
     useEffect(() => {
         if (!user?.id) return;
@@ -27,39 +42,33 @@ const UserProfile: React.FC = () => {
                 const preferedIngredientsUrl = `${settings.API_BASE_URL}${settings.PREFERED_INGREDIENTS_ENDPOINT}`;
                 const preferedDietTypesUrl = `${settings.API_BASE_URL}${settings.PREFERED_DIET_TYPES_ENDPOINT}`;
 
-                const [
-                    personalDataResponse,
-                    preferedIngredientsResponse,
-                    preferedDietTypesResponse,
-                ] = await Promise.all([
-                    api.get<PersonalData>(personalDataUrl),
-                    api.get<PreferedIngredients[]>(preferedIngredientsUrl),
-                    api.get<PreferedRecipeTypeGet[]>(preferedDietTypesUrl),
+                // jeżeli któryś request padnie, nie wysyp całego zestawu
+                const [pd, pi, dt] = await Promise.all([
+                    api.get<UserData>(personalDataUrl).catch(() => null),
+                    api
+                        .get<PreferedIngredientsGet[]>(preferedIngredientsUrl)
+                        .catch(() => []),
+                    api
+                        .get<PreferedRecipeTypeGet[]>(preferedDietTypesUrl)
+                        .catch(() => []),
                 ]);
 
-                if (personalDataResponse) {
-                    setPersonalData(personalDataResponse);
+                if (pd) {
+                    setPersonalData(pd);
+                } else {
+                    setPersonalData(makeDefaultPersonalData(user.id));
                 }
 
-                if (preferedIngredientsResponse) {
-                    setPreferedIngredients(preferedIngredientsResponse);
-                }
-
-                if (preferedDietTypesResponse) {
-                    console.log(preferedDietTypesResponse);
-                    console.log("Got diet types");
-                    setPreferedDietTypes(preferedDietTypesResponse);
-                }
+                setPreferedIngredients(pi ?? []);
+                setPreferedDietTypes(dt ?? []);
             } catch (e) {
                 console.error(e);
+                setPersonalData(makeDefaultPersonalData(user.id));
             }
         })();
     }, [user?.id]);
 
-    const setData = <K extends keyof PersonalData>(
-        name: K,
-        value: PersonalData[K],
-    ) => {
+    const setData = <K extends keyof UserData>(name: K, value: UserData[K]) => {
         setPersonalData((prev) => (prev ? { ...prev, [name]: value } : prev));
     };
 
@@ -70,15 +79,18 @@ const UserProfile: React.FC = () => {
         e.preventDefault();
         if (!personalData) return;
         try {
-            const changedData: PersonalDataCreate = personalData;
-            await api.put<PersonalData>(
-                `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}${personalData?.user_id}`,
+            const changedData: UserDataCreate = personalData;
+            await api.put<UserData>(
+                `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}`,
                 changedData,
             );
         } catch (err) {
             console.log(err);
         }
     };
+
+    const activityOptions = Object.values(ActivityLevelValues);
+    const silhouetteOptions = Object.values(SilhouetteTypes);
 
     return (
         <form onSubmit={handleSubmit} className="max-w-2xl mx-auto p-6 space-y-6">
@@ -120,27 +132,46 @@ const UserProfile: React.FC = () => {
                 <label className="block font-medium mb-1">Activity Level</label>
                 <select
                     value={personalData?.activity_level ?? ""}
-                    onChange={(e) => setData("activity_level", e.target.value || null)}
+                    onChange={(e) =>
+                        setData(
+                            "activity_level",
+                            (e.target.value
+                                ? (e.target.value as ActivityLevel)
+                                : null) as ActivityLevel | null,
+                        )
+                    }
                     className="w-full border px-3 py-2 rounded"
                 >
-                    <option value="Inactive">Inactive</option>
-                    <option value="lightly active">Lightly Active</option>
-                    <option value="moderately active">Moderately Active</option>
-                    <option value="very active">Very Active</option>
-                    <option value="super active">Super Active</option>
+                    <option value="">— select —</option>
+                    {activityOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                            {opt}
+                        </option>
+                    ))}
                 </select>
             </div>
 
+            {/* Silhouette */}
             <div>
                 <label className="block font-medium mb-1">Body Type</label>
                 <select
                     value={personalData?.silhouette ?? ""}
-                    onChange={(e) => setData("silhouette", e.target.value || null)}
+                    onChange={(e) =>
+                        setData(
+                            "silhouette",
+                            (e.target.value
+                                ? (e.target.value as Silhouette)
+                                : null) as Silhouette | null,
+                        )
+                    }
                     className="w-full border px-3 py-2 rounded"
                 >
-                    <option value="ectomorph">Ectomorph</option>
-                    <option value="mesomorph">Mesomorph</option>
-                    <option value="endomorph">Endomorph</option>
+                    <option value="">— select —</option>
+                    {silhouetteOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                            {opt}
+                        </option>
+                    ))}
                 </select>
             </div>
 
@@ -154,6 +185,7 @@ const UserProfile: React.FC = () => {
                     setPreferedDietTypes={setPreferedDietTypes}
                 />
             </div>
+
             <div>
                 <button
                     type="submit"
