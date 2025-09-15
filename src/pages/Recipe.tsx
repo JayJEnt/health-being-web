@@ -49,21 +49,27 @@ const RecipePage: React.FC = () => {
 
         const fetchRecipe = async () => {
             try {
-                const fetchedRecipe = await api.get<RecipeResponse>(
+                const recipePromise = api.get<RecipeResponse>(
                     `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
+                    { timeout: 9000 },
                 );
-                setRecipe(fetchedRecipe);
-                const fetchedImage = await api.downloadBlob(
+                const imagePromise = api.downloadBlob(
                     `${settings.API_BASE_URL}${settings.IMAGES_DOWNLOAD_ENDPOINT}${id}`,
+                    { timeout: 9000 },
                 );
+
+                const [fetchedRecipe, fetchedImage] = await Promise.all([
+                    recipePromise,
+                    imagePromise,
+                ]);
+                setRecipe(fetchedRecipe);
                 const url = URL.createObjectURL(fetchedImage);
-                setImageUrl(url);
                 objectUrlToRevoke = url;
+                setImageUrl(url);
             } catch (err) {
-                console.error("Nie udało się pobrać przepisu:", err);
+                console.error("Couldn't fetch recipe or image:", err);
             }
         };
-
         fetchRecipe();
 
         return () => {

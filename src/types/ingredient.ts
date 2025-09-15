@@ -1,12 +1,18 @@
-// Zakładamy, że masz te interfejsy w innym pliku:
-import type { Vitamin, VitaminCreate } from "./vitamin";
+import type { MeasureUnit } from "./enum_utils";
+import type { VitaminCreate, Vitamin } from "./vitamin";
 
-export interface IngredientBaseModel {
+/** Ingredient base models */
+export interface IngredientName {
     name: string;
 }
 
-export interface IngredientDetailedModel extends IngredientBaseModel {
-    calories_per_100?: number; // = 0.0 in Python default
+export interface IngredientIndex {
+    id: number;
+}
+
+/** Ingredient data models */
+export interface IngredientDataCreate {
+    calories_per_100?: number; // default 0.0
     protein_per_100?: number;
     fat_per_100?: number;
     carbon_per_100?: number;
@@ -15,21 +21,32 @@ export interface IngredientDetailedModel extends IngredientBaseModel {
     salt_per_100?: number;
 }
 
-export interface IngredientCreate extends IngredientDetailedModel {
+export interface IngredientDataResponse extends IngredientDataCreate {
+    ingredient_id: number;
+}
+
+/** Ingredient models */
+export interface Ingredient extends IngredientName, IngredientIndex { }
+
+export interface IngredientCreate extends IngredientName {
     vitamins?: VitaminCreate[] | null;
+    ingredients_data?: IngredientDataCreate | null;
 }
 
-export interface Ingredient extends IngredientDetailedModel {
-    id: number;
-}
-
-export interface IngredientResponse extends Ingredient {
+export interface IngredientResponse extends Ingredient, IngredientDataCreate {
     vitamins?: Vitamin[] | null;
 }
 
-// Models used by other models/endpoints
+export interface IngredientUpdate extends IngredientName {
+    vitamins?: VitaminCreate[] | null;
+}
 
-export interface IngredientQuantity extends IngredientBaseModel {
-    amount: number; // e.g. 100g, 1l, 2szt.
-    measure_unit: string; // e.g. "g", "ml", "szt."
+export interface IngredientUpdateResponse extends Ingredient {
+    vitamins?: Vitamin[] | null;
+}
+
+/** Ingredient included models */
+export interface IngredientQuantity extends IngredientName {
+    amount: number;
+    measure_unit: MeasureUnit;
 }

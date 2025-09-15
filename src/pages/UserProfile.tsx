@@ -5,7 +5,7 @@ import { api } from "../api/api";
 import { settings } from "../config";
 import type { PreferedIngredients } from "../types/prefered_ingredients";
 import PreferedIngredientInput from "../components/User/PreferedIngredientInput";
-import type { PreferedDietType } from "../types/prefered_diet_type";
+import type { PreferedRecipeTypeGet } from "../types/prefered_diet_type";
 import PreferedDietTypesInput from "../components/User/PreferedDietTypesInput";
 const UserProfile: React.FC = () => {
     const { user } = useAuth();
@@ -15,31 +15,39 @@ const UserProfile: React.FC = () => {
         PreferedIngredients[]
     >([]);
     const [preferedDietTypes, setPreferedDietTypes] = useState<
-        PreferedDietType[]
+        PreferedRecipeTypeGet[]
     >([]);
+
     useEffect(() => {
         if (!user?.id) return;
 
         (async () => {
             try {
                 const personalDataUrl = `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}${user.id}`;
-                const personalDataResponse =
-                    await api.get<PersonalData>(personalDataUrl);
-
-                if (personalDataResponse) setPersonalData(personalDataResponse);
-
                 const preferedIngredientsUrl = `${settings.API_BASE_URL}${settings.PREFERED_INGREDIENTS_ENDPOINT}`;
-                const preferedIngredientsReponse = await api.get<PreferedIngredients[]>(
-                    preferedIngredientsUrl,
-                );
-                if (preferedIngredientsReponse) {
-                    setPreferedIngredients(preferedIngredientsReponse);
+                const preferedDietTypesUrl = `${settings.API_BASE_URL}${settings.PREFERED_DIET_TYPES_ENDPOINT}`;
+
+                const [
+                    personalDataResponse,
+                    preferedIngredientsResponse,
+                    preferedDietTypesResponse,
+                ] = await Promise.all([
+                    api.get<PersonalData>(personalDataUrl),
+                    api.get<PreferedIngredients[]>(preferedIngredientsUrl),
+                    api.get<PreferedRecipeTypeGet[]>(preferedDietTypesUrl),
+                ]);
+
+                if (personalDataResponse) {
+                    setPersonalData(personalDataResponse);
                 }
 
-                const preferedDietTypesUrl = `${settings.API_BASE_URL}${settings.PREFERED_DIET_TYPES_ENDPOINT}`;
-                const preferedDietTypesResponse =
-                    await api.get<PreferedDietType[]>(preferedDietTypesUrl);
-                if (preferedIngredientsReponse) {
+                if (preferedIngredientsResponse) {
+                    setPreferedIngredients(preferedIngredientsResponse);
+                }
+
+                if (preferedDietTypesResponse) {
+                    console.log(preferedDietTypesResponse);
+                    console.log("Got diet types");
                     setPreferedDietTypes(preferedDietTypesResponse);
                 }
             } catch (e) {

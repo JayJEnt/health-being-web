@@ -4,14 +4,16 @@ import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import { api } from "../../api/api";
 import { settings } from "../../config";
 import type {
-    PreferedIngredients,
+    PreferedIngredientsGet,
     CreatePreferedIngredients,
 } from "../../types/prefered_ingredients";
 import type { Ingredient } from "../../types/ingredient";
+import { Preference } from "../../types/enum_utils";
+import { Preference as PreferenceValues } from "../../types/enum_utils";
 
 type Props = {
-    preferedIngredients: PreferedIngredients[];
-    setPreferedIngredients: Dispatch<SetStateAction<PreferedIngredients[]>>;
+    preferedIngredients: PreferedIngredientsGet[];
+    setPreferedIngredients: Dispatch<SetStateAction<PreferedIngredientsGet[]>>;
 };
 
 const PreferedIngredientInput: React.FC<Props> = ({
@@ -20,9 +22,10 @@ const PreferedIngredientInput: React.FC<Props> = ({
 }) => {
     const [query, setQuery] = useState("");
 
-    const options = ["like", "dislike", "allergic"] as const;
-    type Preference = (typeof options)[number];
-    const [preference, setPreference] = useState<Preference>("like");
+    const [preference, setPreference] = useState<Preference>(
+        PreferenceValues.like,
+    );
+    const options = Object.values(PreferenceValues);
 
     const fetchIngredient = useCallback(
         async (q: string, signal: AbortSignal) => {
@@ -49,7 +52,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
                 preference: pref,
             };
 
-            const res = await api.postJson<PreferedIngredients>(
+            const res = await api.postJson<PreferedIngredientsGet>(
                 `${settings.API_BASE_URL}${settings.PREFERED_INGREDIENTS_ENDPOINT}`,
                 fetchData,
             );
@@ -80,6 +83,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
                 <div>
                     {preferedIngredients?.map((ingredient) => (
                         <div key={ingredient.ingredient_id}>
+                            {ingredient.ingredients}
                             {ingredient.preference}
 
                             <button

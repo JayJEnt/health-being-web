@@ -4,14 +4,14 @@ import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import { api } from "../../api/api";
 import { settings } from "../../config";
 import type {
-    PreferedDietType,
-    CreatePreferedDietType,
+    PreferedRecipeTypeGet,
+    CreatePreferedRecipeType,
 } from "../../types/prefered_diet_type";
 import type { DietType } from "../../types/diet_type";
 
 type Props = {
-    preferedDietTypes: PreferedDietType[];
-    setPreferedDietTypes: Dispatch<SetStateAction<PreferedDietType[]>>;
+    preferedDietTypes: PreferedRecipeTypeGet[];
+    setPreferedDietTypes: Dispatch<SetStateAction<PreferedRecipeTypeGet[]>>;
 };
 
 const PreferedDietTypesInput: React.FC<Props> = ({
@@ -34,11 +34,11 @@ const PreferedDietTypesInput: React.FC<Props> = ({
 
     const addPreferedDietType = async (dietType: DietType) => {
         try {
-            const fetchData: CreatePreferedDietType = {
+            const fetchData: CreatePreferedRecipeType = {
                 diet_name: dietType.diet_name,
             };
 
-            const res = await api.postJson<PreferedDietType>(
+            const res = await api.postJson<PreferedRecipeTypeGet>(
                 `${settings.API_BASE_URL}${settings.PREFERED_DIET_TYPES_ENDPOINT}`,
                 fetchData,
             );
@@ -73,7 +73,7 @@ const PreferedDietTypesInput: React.FC<Props> = ({
                             <button
                                 onClickCapture={() => removePreferedDietType(dietType.type_id)}
                             >
-                                x
+                                {dietType.diet_types}x
                             </button>
                         </div>
                     ))}
