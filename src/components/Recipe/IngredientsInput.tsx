@@ -80,7 +80,11 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
         });
 
         setSelected(null);
-        setNewIngredient({ name: "", amount: 0, measure_unit: "pieces" });
+        setNewIngredient({
+            name: "",
+            amount: 0,
+            measure_unit: MeasuerUnitsValues.unit,
+        });
     };
 
     const clearSelection = () => {
