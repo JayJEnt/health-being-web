@@ -5,7 +5,9 @@ import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { RecipeCreate } from "../../types/recipe";
 import type { Dispatch, SetStateAction } from "react";
 import type { IngredientQuantity, Ingredient } from "../../types/ingredient";
-import type { RecipeEditPayload } from "../../pages/RecipeAdmin";
+import type { RecipeEditPayload } from "../../pages/Recipe";
+import { MeasureUnit as MeasuerUnitsValues } from "../../types/enum_utils";
+import type { MeasureUnit } from "../../types/enum_utils";
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
     recipe: T;
@@ -19,9 +21,17 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
     const [newIngredient, setNewIngredient] = useState<IngredientQuantity>({
         name: "",
         amount: 0,
-        measure_unit: "pieces",
+        measure_unit: MeasuerUnitsValues.unit as MeasureUnit,
     });
     const [selected, setSelected] = useState<Ingredient | null>(null);
+
+    const MEASURE_OPTIONS: { label: string; value: MeasureUnit }[] = [
+        { label: "kg", value: MeasuerUnitsValues.kilogram },
+        { label: "g", value: MeasuerUnitsValues.gram },
+        { label: "l", value: MeasuerUnitsValues.liter },
+        { label: "ml", value: MeasuerUnitsValues.milliliter },
+        { label: "unit", value: MeasuerUnitsValues.unit },
+    ];
 
     const fetchIngredient = useCallback(
         async (q: string, signal: AbortSignal) => {
@@ -154,14 +164,16 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
                     onChange={(e) =>
                         setNewIngredient((prev) => ({
                             ...prev,
-                            measure_unit: e.target.value,
+                            measure_unit: e.target.value as MeasureUnit,
                         }))
                     }
                     className="border rounded px-3 py-2"
                 >
-                    <option value="pieces">pieces</option>
-                    <option value="grams">grams</option>
-                    <option value="mililiters">mililitres</option>
+                    {MEASURE_OPTIONS.map((opt) => (
+                        <option key={opt.label} value={opt.value}>
+                            {opt.label}
+                        </option>
+                    ))}
                 </select>
 
                 <button
