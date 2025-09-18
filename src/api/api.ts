@@ -121,15 +121,10 @@ function isAxiosError<T = unknown>(err: unknown): err is AxiosError<T> {
 
 function handleError(error: unknown): never {
     if (isAxiosError<ApiErrorResponse>(error)) {
-        const message = error.response?.data?.message || error.message;
-        const status = error.response?.status;
-        console.error(`API Error [${status}]: ${message}`, error.response?.data);
-        throw new Error(`API Error: ${message}`);
+        const ax = error as AxiosError<ApiErrorResponse>;
+        ax.message = ax.response?.data?.message || ax.message;
+        throw ax;
     }
-
-    if (error instanceof Error) {
-        throw error;
-    }
-
+    if (error instanceof Error) throw error;
     throw new Error("Unexpected error");
 }

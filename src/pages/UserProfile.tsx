@@ -12,6 +12,7 @@ import {
     ActivityLevel as ActivityLevelValues,
 } from "../types/enum_utils";
 import type { UserData, UserDataCreate } from "../types/user_data";
+import type { AxiosError } from "axios";
 
 const UserProfile: React.FC = () => {
     const { user } = useAuth();
@@ -42,7 +43,6 @@ const UserProfile: React.FC = () => {
                 const preferedIngredientsUrl = `${settings.API_BASE_URL}${settings.PREFERED_INGREDIENTS_ENDPOINT}`;
                 const preferedDietTypesUrl = `${settings.API_BASE_URL}${settings.PREFERED_DIET_TYPES_ENDPOINT}`;
 
-                // jeżeli któryś request padnie, nie wysyp całego zestawu
                 const [pd, pi, dt] = await Promise.all([
                     api.get<UserData>(personalDataUrl).catch(() => null),
                     api
@@ -78,14 +78,31 @@ const UserProfile: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!personalData) return;
+
         try {
             const changedData: UserDataCreate = personalData;
+
             await api.put<UserData>(
                 `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}`,
                 changedData,
             );
         } catch (err) {
-            console.log(err);
+            const error = err as AxiosError;
+
+            if (error.response?.status === 404) {
+                try {
+                    const changedData: UserDataCreate = personalData;
+                    await api.postJson<UserData>(
+                        `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}`,
+                        changedData,
+                    );
+                } catch (postErr) {
+                    const postError = postErr as AxiosError;
+                    console.error("POST after 404 failed:", postError.message);
+                }
+            } else {
+                console.error("PUT failed:", error.message);
+            }
         }
     };
 
@@ -151,7 +168,6 @@ const UserProfile: React.FC = () => {
                 </select>
             </div>
 
-            {/* Silhouette */}
             <div>
                 <label className="block font-medium mb-1">Body Type</label>
                 <select

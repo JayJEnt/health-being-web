@@ -65,17 +65,22 @@ const PreferedDietTypesInput: React.FC<Props> = ({
     return (
         <div>
             Prefred Diet Types
-            {preferedDietTypes && (
-                <div>
-                    {preferedDietTypes?.map((dietType) => (
-                        <div key={dietType.type_id}>
-                            {dietType.type_id}
+            {preferedDietTypes && preferedDietTypes.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                    {preferedDietTypes.map((dietType) => (
+                        <span
+                            key={dietType.type_id}
+                            className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-medium dark:bg-purple-800 dark:text-purple-100 shadow"
+                        >
+                            {dietType.diet_name}
                             <button
-                                onClickCapture={() => removePreferedDietType(dietType.type_id)}
+                                type="button"
+                                onClick={() => removePreferedDietType(dietType.type_id)}
+                                className="ml-2 text-purple-600 hover:text-purple-800 dark:text-purple-200 dark:hover:text-white font-bold"
                             >
-                                {dietType.diet_types}x
+                                ×
                             </button>
-                        </div>
+                        </span>
                     ))}
                 </div>
             )}

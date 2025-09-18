@@ -17,7 +17,7 @@ export interface PreferedIngredients {
 }
 
 export interface PreferedIngredientsGet {
-    ingredients: string;
     ingredient_id: number;
     preference: Preference;
+    name: string;
 }

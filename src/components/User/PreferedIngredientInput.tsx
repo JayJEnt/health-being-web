@@ -79,21 +79,29 @@ const PreferedIngredientInput: React.FC<Props> = ({
     return (
         <div>
             Prefred Ingredients
-            {preferedIngredients && (
-                <div>
-                    {preferedIngredients?.map((ingredient) => (
-                        <div key={ingredient.ingredient_id}>
-                            {ingredient.ingredients}
-                            {ingredient.preference}
-
+            {preferedIngredients && preferedIngredients.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                    {preferedIngredients.map((ingredient) => (
+                        <span
+                            key={ingredient.ingredient_id}
+                            className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-medium dark:bg-green-800 dark:text-green-100 shadow"
+                        >
+                            <span className="mr-2">
+                                {ingredient.name}{" "}
+                                <span className="italic text-xs">
+                                    ({ingredient.preference})
+                                </span>
+                            </span>
                             <button
-                                onClickCapture={() =>
+                                type="button"
+                                onClick={() =>
                                     removePreferedIngredient(ingredient.ingredient_id)
                                 }
+                                className="ml-1 text-green-600 hover:text-green-800 dark:text-green-200 dark:hover:text-white font-bold"
                             >
-                                x
+                                ×
                             </button>
-                        </div>
+                        </span>
                     ))}
                 </div>
             )}

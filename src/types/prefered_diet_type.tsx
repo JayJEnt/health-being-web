@@ -14,7 +14,6 @@ export interface PreferedRecipeType {
 }
 
 export interface PreferedRecipeTypeGet {
-    users: string;
-    diet_types: string;
+    diet_name: string;
     type_id: number;
 }
