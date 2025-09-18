@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { RecipeCreate } from "../../types/recipe";
 import type { SetStateAction, Dispatch } from "react";
-import type { RecipeEditPayload } from "../../pages/RecipeAdmin";
+import type { RecipeEditPayload } from "../../pages/Recipe";
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
     recipe: T;
