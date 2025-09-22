@@ -7,6 +7,7 @@ import UserProfile from "./pages/UserProfile.tsx";
 import LoginPage from "./pages/Login.tsx";
 import RegisterPage from "./pages/Register.tsx";
 import UsersList from "./pages/UsersList.tsx";
+import UserProfileOverview from "./pages/UserProfileOverview.tsx";
 import { useAuth } from "./auth/useAuth.ts";
 function App() {
     const { status } = useAuth();
@@ -31,7 +32,7 @@ function App() {
                     path="/user"
                     element={isAuthenticated ? <UserProfile /> : <LoginPage />}
                 />
-
+                <Route path="/profile/:id" element={<UserProfileOverview />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/users_list" element={<UsersList />} />
