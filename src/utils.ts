@@ -3,12 +3,12 @@ import { settings } from "./config";
 
 
 export async function getUser() {
-    const res = await api.get(settings.API_BASE_URL+settings.TOKEN_DATA_USER_ENDPOINT);
+    const res = await api.get(settings.API_BASE_URL+settings.TOKEN_DATA_ENDPOINT);
     return res;
 }
 
 export function getAdmin() {
-    const res = api.get(settings.API_BASE_URL+settings.TOKEN_DATA_ADMIN_ROLE_ENDPOINT);
+    const res = api.get(settings.API_BASE_URL+settings.TOKEN_DATA_ENDPOINT);
     return res;
 }
 

@@ -50,7 +50,7 @@ const RecipePage: React.FC = () => {
         const fetchRecipe = async () => {
             try {
                 const recipePromise = api.get<RecipeResponse>(
-                    `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
+                    `${settings.API_BASE_URL}${settings.RECIPES_ENDPOINT}/${id}`,
                     { timeout: 9000 },
                 );
                 const imagePromise = api.downloadBlob(
@@ -114,7 +114,7 @@ const RecipePage: React.FC = () => {
         setIsSaving(true);
         try {
             const saved = await api.put<RecipeResponse>(
-                `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}/${id}`,
+                `${settings.API_BASE_URL}${settings.RECIPES_ENDPOINT}/${id}`,
                 newRecipe,
             );
             if (!saved) throw new Error("Brak odpowiedzi z PUT");

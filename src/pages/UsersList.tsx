@@ -7,7 +7,7 @@ const UsersList: React.FC = () => {
     const [usersList, setUsersList] = useState<User[]>([]);
     useEffect(() => {
         api
-            .get<User[]>(`${settings.API_BASE_URL}${settings.USERS_BASE_ENDPOINT}`)
+            .get<User[]>(`${settings.API_BASE_URL}${settings.USERS_ENDPOINT}`)
             .then((res) => {
                 setUsersList(res);
             });
@@ -15,7 +15,7 @@ const UsersList: React.FC = () => {
     const handleDelete = async (deletedUser: User) => {
         try {
             await api.delete(
-                `${settings.API_BASE_URL}${settings.USERS_BASE_ENDPOINT}/${deletedUser.id}`,
+                `${settings.API_BASE_URL}${settings.USERS_ENDPOINT}/${deletedUser.id}`,
             );
             const newUsersList = usersList.filter(
                 (user) => user.id !== deletedUser.id,

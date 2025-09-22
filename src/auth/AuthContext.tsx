@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 if (!cancelled) setState((s) => ({ ...s, token, status: "loading" }));
 
                 const user: User = await api.get<User>(
-                    `${settings.API_BASE_URL}${settings.TOKEN_DATA_USER_ENDPOINT}`,
+                    `${settings.API_BASE_URL}${settings.TOKEN_DATA_ENDPOINT}`,
                 );
 
                 if (!cancelled) {
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                 localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(token));
                 const user = await api.get<User>(
-                    `${settings.API_BASE_URL}${settings.TOKEN_DATA_USER_ENDPOINT}`,
+                    `${settings.API_BASE_URL}${settings.TOKEN_DATA_ENDPOINT}`,
                 );
 
                 setState((s) => ({ ...s, token, user, status: "authenticated" }));

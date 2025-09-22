@@ -35,7 +35,7 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
 
     const fetchIngredient = useCallback(
         async (q: string, signal: AbortSignal) => {
-            const url = `${settings.API_BASE_URL}${settings.INGREDIENTS_NAME_ENDPOINT}${encodeURIComponent(q)}`;
+            const url = `${settings.API_BASE_URL}${settings.INGREDIENTS_ENDPOINT}${encodeURIComponent(q)}`;
             return api.get<Ingredient>(url, { signal });
         },
         [],

@@ -18,10 +18,16 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
 }: Props<T>) => {
     const [newDietType, setNewDietType] = useState<string>("");
 
-    const fetchDiet = useCallback(async (q: string, signal: AbortSignal) => {
-        const url = `${settings.API_BASE_URL}${settings.DIET_TYPES_NAME_ENDPOINT}${encodeURIComponent(q)}`;
-        return api.get<DietType>(url, { signal });
-    }, []);
+    const fetchDiet = useCallback(
+        async (q: string, signal: AbortSignal) => {
+            const url = `${settings.API_BASE_URL}${settings.DIET_TYPES_ENDPOINT}`;
+            return api.get<DietType>(url, {
+                params: { diet_name: q },
+                signal,
+            });
+        },
+        []
+    );
 
     const { data, loading, error } = useDebouncedSearch<DietType>({
         query: newDietType,

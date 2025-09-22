@@ -21,7 +21,7 @@ const PreferedDietTypesInput: React.FC<Props> = ({
     const [query, setQuery] = useState("");
 
     const fetchDietType = useCallback(async (q: string, signal: AbortSignal) => {
-        const url = `${settings.API_BASE_URL}${settings.DIET_TYPES_NAME_ENDPOINT}${encodeURIComponent(q)}`;
+        const url = `${settings.API_BASE_URL}${settings.DIET_TYPES_ENDPOINT}${encodeURIComponent(q)}`;
         return api.get<DietType>(url, { signal });
     }, []);
 

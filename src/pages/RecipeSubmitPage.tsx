@@ -22,7 +22,7 @@ const RecipeSubmitPage: React.FC = () => {
         if (!recipe) return;
 
         try {
-            const recipeApiUrl = `${settings.API_BASE_URL}${settings.RECIPES_BASE_ENDPOINT}`;
+            const recipeApiUrl = `${settings.API_BASE_URL}${settings.RECIPES_ENDPOINT}`;
             const recipeResponse = await api.postJson<RecipeResponse>(
                 recipeApiUrl,
                 recipe,

@@ -8,7 +8,7 @@ type FormLike = Record<string, string | number | boolean | null | undefined>;
 export const api = {
     get: async <T>(url: string, params?: Params): Promise<T> => {
         try {
-            const res = await axiosInstance.get<T>(url, { params });
+            const res = await axiosInstance.get<T>(url, params);
             return res.data;
         } catch (err) {
             handleError(err);

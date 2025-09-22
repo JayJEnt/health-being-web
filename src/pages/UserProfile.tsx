@@ -39,7 +39,7 @@ const UserProfile: React.FC = () => {
 
         (async () => {
             try {
-                const personalDataUrl = `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}${user.id}`;
+                const personalDataUrl = `${settings.API_BASE_URL}${settings.USERSDATA_ENDPOINT}${user.id}`;
                 const preferedIngredientsUrl = `${settings.API_BASE_URL}${settings.PREFERED_INGREDIENTS_ENDPOINT}`;
                 const preferedDietTypesUrl = `${settings.API_BASE_URL}${settings.PREFERED_DIET_TYPES_ENDPOINT}`;
 
@@ -83,7 +83,7 @@ const UserProfile: React.FC = () => {
             const changedData: UserDataCreate = personalData;
 
             await api.put<UserData>(
-                `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}`,
+                `${settings.API_BASE_URL}${settings.USERSDATA_ENDPOINT}`,
                 changedData,
             );
         } catch (err) {
@@ -93,7 +93,7 @@ const UserProfile: React.FC = () => {
                 try {
                     const changedData: UserDataCreate = personalData;
                     await api.postJson<UserData>(
-                        `${settings.API_BASE_URL}${settings.USERSDATA_BASE_ENDPOINT}`,
+                        `${settings.API_BASE_URL}${settings.USERSDATA_ENDPOINT}`,
                         changedData,
                     );
                 } catch (postErr) {
