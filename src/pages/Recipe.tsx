@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import type { RecipeResponse } from "../types/recipe";
-import { api } from "../api/api";
+import { api } from "../api/client";
 import { settings } from "../config";
 
 import RecipeOverview from "../components/Recipe/RecipeOverview";
@@ -50,12 +50,12 @@ const RecipePage: React.FC = () => {
         const fetchRecipe = async () => {
             try {
                 const recipePromise = api.get<RecipeResponse>(
-                    `${settings.API_BASE_URL}${settings.RECIPES_ENDPOINT}/${id}`,
-                    { timeout: 9000 },
+                    `${settings.RECIPES_ENDPOINT}`,
+                    { id: id },
                 );
-                const imagePromise = api.downloadBlob(
-                    `${settings.API_BASE_URL}${settings.IMAGES_DOWNLOAD_ENDPOINT}${id}`,
-                    { timeout: 9000 },
+                const imagePromise = api.download(
+                    `${settings.IMAGES_DOWNLOAD_ENDPOINT}`,
+                    { recipe_id: id },
                 );
 
                 const [fetchedRecipe, fetchedImage] = await Promise.all([
@@ -114,7 +114,7 @@ const RecipePage: React.FC = () => {
         setIsSaving(true);
         try {
             const saved = await api.put<RecipeResponse>(
-                `${settings.API_BASE_URL}${settings.RECIPES_ENDPOINT}/${id}`,
+                `${settings.RECIPES_ENDPOINT}/${id}`,
                 newRecipe,
             );
             if (!saved) throw new Error("Brak odpowiedzi z PUT");
@@ -123,7 +123,7 @@ const RecipePage: React.FC = () => {
                 const form = new FormData();
                 form.append("file", newImageFile);
                 await api.postMultipart(
-                    `${settings.API_BASE_URL}${settings.IMAGES_UPLOAD_ENDPOINT}/${id}`,
+                    `${settings.IMAGES_UPLOAD_ENDPOINT}/${id}`,
                     form,
                 );
 

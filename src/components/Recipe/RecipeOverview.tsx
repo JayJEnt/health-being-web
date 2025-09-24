@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import { api } from "../../api/api";
+import { api } from "../../api/client";
 import { settings } from "../../config";
 import type { RecipeResponse } from "../../types/recipe";
 import type { CreateRecipeFavourite } from "../../types/recipe_favourite";
@@ -25,7 +25,7 @@ const RecipeOverview: React.FC<Props> = ({
         const requestData: CreateRecipeFavourite = { title: recipe.title };
         try {
             const res = await api.postJson(
-                `${settings.API_BASE_URL}${settings.RECIPE_FAVOURITE_ENDPOINT}`,
+                `${settings.RECIPE_FAVOURITE_ENDPOINT}`,
                 requestData,
             );
             if (res) setIsLiked(true);
@@ -37,7 +37,7 @@ const RecipeOverview: React.FC<Props> = ({
     const unLikeRecipe = async () => {
         try {
             const res = await api.delete(
-                `${settings.API_BASE_URL}${settings.RECIPE_FAVOURITE_ENDPOINT}/${recipe.id}`,
+                `${settings.RECIPE_FAVOURITE_ENDPOINT}/${recipe.id}`,
             );
             if (res) setIsLiked(false);
         } catch (err) {

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { api } from "../../api/api";
+import { api } from "../../api/client";
 import { settings } from "../../config";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { Dispatch, SetStateAction } from "react";
@@ -20,7 +20,7 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
 
     const fetchDiet = useCallback(
         async (q: string, signal: AbortSignal) => {
-            const url = `${settings.API_BASE_URL}${settings.DIET_TYPES_ENDPOINT}`;
+            const url = `${settings.DIET_TYPES_ENDPOINT}`;
             return api.get<DietType>(url, {
                 params: { diet_name: q },
                 signal,

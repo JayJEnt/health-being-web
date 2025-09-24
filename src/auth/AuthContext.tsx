@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { AuthContext, type AuthContextValue } from "./context";
-import { api } from "../api/api";
+import { api } from "../api/client";
 import { settings } from "../config";
 import type { User, UserCreate } from "../types/user";
 import type { Token } from "../types/token";
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 if (!cancelled) setState((s) => ({ ...s, token, status: "loading" }));
 
                 const user: User = await api.get<User>(
-                    `${settings.API_BASE_URL}${settings.TOKEN_DATA_ENDPOINT}`,
+                    `${settings.TOKEN_DATA_ENDPOINT}`,
                 );
 
                 if (!cancelled) {
@@ -72,13 +72,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setState((s) => ({ ...s, status: "loading" }));
             try {
                 const token = await api.postForm<Token>(
-                    `${settings.API_BASE_URL}${settings.OAUTH2_OUR_LOGIN_ENDPOINT}`,
+                    `${settings.OAUTH2_OUR_LOGIN_ENDPOINT}`,
                     credentials,
                 );
 
                 localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(token));
                 const user = await api.get<User>(
-                    `${settings.API_BASE_URL}${settings.TOKEN_DATA_ENDPOINT}`,
+                    `${settings.TOKEN_DATA_ENDPOINT}`,
                 );
 
                 setState((s) => ({ ...s, token, user, status: "authenticated" }));
