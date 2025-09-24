@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
-import { api } from "../../api/api";
+import { api } from "../../api/client";
 import { settings } from "../../config";
 import type {
     PreferedIngredientsGet,
@@ -29,7 +29,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
 
     const fetchIngredient = useCallback(
         async (q: string, signal: AbortSignal) => {
-            const url = `${settings.API_BASE_URL}${settings.INGREDIENTS_ENDPOINT}${encodeURIComponent(q)}`;
+            const url = `${settings.INGREDIENTS_ENDPOINT}${encodeURIComponent(q)}`;
             return api.get<Ingredient>(url, { signal });
         },
         [],
@@ -53,7 +53,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
             };
 
             const res = await api.postJson<PreferedIngredientsGet>(
-                `${settings.API_BASE_URL}${settings.PREFERED_INGREDIENTS_ENDPOINT}`,
+                `${settings.PREFERED_INGREDIENTS_ENDPOINT}`,
                 fetchData,
             );
             setPreferedIngredients((prev) => [...prev, res]);
@@ -67,7 +67,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
     const removePreferedIngredient = async (id: number) => {
         try {
             await api.delete(
-                `${settings.API_BASE_URL}${settings.PREFERED_INGREDIENTS_ENDPOINT}/${id}`,
+                `${settings.PREFERED_INGREDIENTS_ENDPOINT}/${id}`,
             );
             setPreferedIngredients((prev) =>
                 prev.filter((ingredient) => ingredient.ingredient_id !== id),

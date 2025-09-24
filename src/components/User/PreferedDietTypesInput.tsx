@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
-import { api } from "../../api/api";
+import { api } from "../../api/client";
 import { settings } from "../../config";
 import type {
     PreferedRecipeTypeGet,
@@ -21,7 +21,7 @@ const PreferedDietTypesInput: React.FC<Props> = ({
     const [query, setQuery] = useState("");
 
     const fetchDietType = useCallback(async (q: string, signal: AbortSignal) => {
-        const url = `${settings.API_BASE_URL}${settings.DIET_TYPES_ENDPOINT}${encodeURIComponent(q)}`;
+        const url = `${settings.DIET_TYPES_ENDPOINT}${encodeURIComponent(q)}`;
         return api.get<DietType>(url, { signal });
     }, []);
 
@@ -39,7 +39,7 @@ const PreferedDietTypesInput: React.FC<Props> = ({
             };
 
             const res = await api.postJson<PreferedRecipeTypeGet>(
-                `${settings.API_BASE_URL}${settings.PREFERED_DIET_TYPES_ENDPOINT}`,
+                `${settings.PREFERED_DIET_TYPES_ENDPOINT}`,
                 fetchData,
             );
             setPreferedDietTypes((prev) => [...prev, res]);
@@ -53,7 +53,7 @@ const PreferedDietTypesInput: React.FC<Props> = ({
     const removePreferedDietType = async (id: number) => {
         try {
             await api.delete(
-                `${settings.API_BASE_URL}${settings.PREFERED_DIET_TYPES_ENDPOINT}/${id}`,
+                `${settings.PREFERED_DIET_TYPES_ENDPOINT}/${id}`,
             );
             setPreferedDietTypes((prev) =>
                 prev.filter((dietType) => dietType.type_id !== id),

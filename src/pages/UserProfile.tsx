@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
-import { api } from "../api/api";
+import { api } from "../api/client";
 import { settings } from "../config";
 import type { PreferedIngredientsGet } from "../types/prefered_ingredients";
 import PreferedIngredientInput from "../components/User/PreferedIngredientInput";
@@ -39,9 +39,9 @@ const UserProfile: React.FC = () => {
 
         (async () => {
             try {
-                const personalDataUrl = `${settings.API_BASE_URL}${settings.USERSDATA_ENDPOINT}${user.id}`;
-                const preferedIngredientsUrl = `${settings.API_BASE_URL}${settings.PREFERED_INGREDIENTS_ENDPOINT}`;
-                const preferedDietTypesUrl = `${settings.API_BASE_URL}${settings.PREFERED_DIET_TYPES_ENDPOINT}`;
+                const personalDataUrl = `${settings.USERSDATA_ENDPOINT}${user.id}`;
+                const preferedIngredientsUrl = `${settings.PREFERED_INGREDIENTS_ENDPOINT}`;
+                const preferedDietTypesUrl = `${settings.PREFERED_DIET_TYPES_ENDPOINT}`;
 
                 const [pd, pi, dt] = await Promise.all([
                     api.get<UserData>(personalDataUrl).catch(() => null),
@@ -83,7 +83,7 @@ const UserProfile: React.FC = () => {
             const changedData: UserDataCreate = personalData;
 
             await api.put<UserData>(
-                `${settings.API_BASE_URL}${settings.USERSDATA_ENDPOINT}`,
+                `${settings.USERSDATA_ENDPOINT}`,
                 changedData,
             );
         } catch (err) {
@@ -93,7 +93,7 @@ const UserProfile: React.FC = () => {
                 try {
                     const changedData: UserDataCreate = personalData;
                     await api.postJson<UserData>(
-                        `${settings.API_BASE_URL}${settings.USERSDATA_ENDPOINT}`,
+                        `${settings.USERSDATA_ENDPOINT}`,
                         changedData,
                     );
                 } catch (postErr) {

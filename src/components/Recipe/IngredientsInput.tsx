@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { settings } from "../../config";
-import { api } from "../../api/api";
+import { api } from "../../api/client";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { RecipeCreate } from "../../types/recipe";
 import type { Dispatch, SetStateAction } from "react";
@@ -35,7 +35,7 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
 
     const fetchIngredient = useCallback(
         async (q: string, signal: AbortSignal) => {
-            const url = `${settings.API_BASE_URL}${settings.INGREDIENTS_ENDPOINT}${encodeURIComponent(q)}`;
+            const url = `${settings.INGREDIENTS_ENDPOINT}${encodeURIComponent(q)}`;
             return api.get<Ingredient>(url, { signal });
         },
         [],
