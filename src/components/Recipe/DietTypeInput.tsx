@@ -4,7 +4,7 @@ import { settings } from "../../config";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { Dispatch, SetStateAction } from "react";
 import type { RecipeCreate } from "../../types/recipe";
-import type { DietType } from "../../types/diet_type";
+import type { DietType } from "../../api/models/diet_type";
 import type { RecipeEditPayload } from "../../pages/Recipe";
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {

@@ -1,11 +1,12 @@
-import type { RecipeCreate, RecipeResponse } from "../types/recipe";
+import type { RecipeCreate, RecipeResponse } from "../api/models/recipe";
 import DietTypeInput from "../components/Recipe/DietTypeInput";
 import IngredientsInput from "../components/Recipe/IngredientsInput";
 import RecipeSteps from "../components/Recipe/RecipeSteps";
 import ImageInput from "../components/Recipe/ImageInput";
 import { useState } from "react";
 import { settings } from "../config";
-import { api } from "../api/client";
+import { Api } from "../api/client";
+
 
 const RecipeSubmitPage: React.FC = () => {
     const [recipe, setRecipe] = useState<RecipeCreate>({
@@ -23,7 +24,7 @@ const RecipeSubmitPage: React.FC = () => {
 
         try {
             const recipeApiUrl = `${settings.RECIPES_ENDPOINT}`;
-            const recipeResponse = await api.postJson<RecipeResponse>(
+            const recipeResponse = await Api.post<RecipeResponse>(
                 recipeApiUrl,
                 recipe,
             );
@@ -33,7 +34,7 @@ const RecipeSubmitPage: React.FC = () => {
                 const imageApiUrl = `${settings.IMAGES_UPLOAD_ENDPOINT}/${recipeResponse.id.toString()}`;
                 const formData = new FormData();
                 formData.append("file", image);
-                const imageResponse = await api.postMultipart(imageApiUrl, formData);
+                const imageResponse = await Api.postMultipart(imageApiUrl, formData);
                 console.log("Image uploaded", imageResponse);
             }
 

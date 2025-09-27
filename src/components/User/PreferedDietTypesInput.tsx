@@ -6,8 +6,8 @@ import { settings } from "../../config";
 import type {
     PreferedRecipeTypeGet,
     CreatePreferedRecipeType,
-} from "../../types/prefered_diet_type";
-import type { DietType } from "../../types/diet_type";
+} from "../../api/models/prefered_diet_type";
+import type { DietType } from "../../api/models/diet_type";
 
 type Props = {
     preferedDietTypes: PreferedRecipeTypeGet[];

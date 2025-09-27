@@ -2,9 +2,9 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { AuthContext, type AuthContextValue } from "./context";
 import { api } from "../api/client";
 import { settings } from "../config";
-import type { User, UserCreate } from "../types/user";
-import type { Token } from "../types/token";
-import type { AuthState } from "../types/auth";
+import type { User, UserCreate } from "../api/models/user";
+import type { Token } from "../api/models/token";
+import type { AuthState } from "./auth";
 
 const AUTH_TOKEN_KEY = "app.auth.token";
 

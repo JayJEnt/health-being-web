@@ -1,7 +1,7 @@
 import axios, { AxiosError } from "axios";
 import type { AxiosInstance, AxiosRequestConfig } from "axios";
 import { settings } from "../config";
-import type { Token } from "../types/token";
+import type { Token } from "./models/token";
 
 
 type Params = Record<string, unknown>;
@@ -48,7 +48,7 @@ export class ApiClient {
         return res.data;
     }
 
-    async postJson<T>(endpoint: string, data?: unknown, queryParams?: Params, config?: AxiosRequestConfig): Promise<T> {
+    async post<T>(endpoint: string, data?: unknown, queryParams?: Params, config?: AxiosRequestConfig): Promise<T> {
         const res = await this.client.post<T>(endpoint, data, {
             ...config,
             params: queryParams,
