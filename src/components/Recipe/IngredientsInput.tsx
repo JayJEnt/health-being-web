@@ -6,8 +6,8 @@ import type { RecipeCreate } from "../../types/recipe";
 import type { Dispatch, SetStateAction } from "react";
 import type { IngredientQuantity, Ingredient } from "../../types/ingredient";
 import type { RecipeEditPayload } from "../../pages/Recipe";
-import { MeasureUnit as MeasuerUnitsValues } from "../../types/enum_utils";
-import type { MeasureUnit } from "../../types/enum_utils";
+import { MeasureUnit as MeasuerUnitsValues } from "../../api/models/enum_utils";
+import type { MeasureUnit } from "../../api/models/enum_utils";
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
     recipe: T;

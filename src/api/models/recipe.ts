@@ -1,5 +1,6 @@
 import type { IngredientQuantity } from "./ingredient";
-import type { DietTypeCreate } from "./diet_type";
+import type { DietTypeCreate } from "./diet_type"
+
 
 export interface RecipeCreate {
     title: string;
@@ -9,10 +10,12 @@ export interface RecipeCreate {
     ingredients: IngredientQuantity[];
 }
 
+
 export interface RecipeOverview {
     id: number;
     title: string;
 }
+
 
 export interface RecipeResponse extends RecipeOverview {
     owner_id: number;

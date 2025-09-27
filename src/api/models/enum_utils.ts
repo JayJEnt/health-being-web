@@ -1,4 +1,3 @@
-/** Activity Options */
 export const ActivityLevel = {
     sedentary: "sedentary",
     light: "light",
@@ -8,7 +7,7 @@ export const ActivityLevel = {
 
 export type ActivityLevel = (typeof ActivityLevel)[keyof typeof ActivityLevel];
 
-/** Silhouette Options */
+
 export const Silhouette = {
     ectomorph: "ectomorph",
     mesomorph: "mesomorph",
@@ -17,7 +16,7 @@ export const Silhouette = {
 
 export type Silhouette = (typeof Silhouette)[keyof typeof Silhouette];
 
-/** Role Options */
+
 export const Role = {
     user: "user",
     admin: "admin",
@@ -25,7 +24,7 @@ export const Role = {
 
 export type Role = (typeof Role)[keyof typeof Role];
 
-/** Measure Options */
+
 export const MeasureUnit = {
     kilogram: "kg.",
     gram: "g.",
@@ -36,7 +35,7 @@ export const MeasureUnit = {
 
 export type MeasureUnit = (typeof MeasureUnit)[keyof typeof MeasureUnit];
 
-/** Preference Options */
+
 export const Preference = {
     like: "like",
     dislike: "dislike",

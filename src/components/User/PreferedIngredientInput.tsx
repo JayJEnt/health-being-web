@@ -8,8 +8,8 @@ import type {
     CreatePreferedIngredients,
 } from "../../types/prefered_ingredients";
 import type { Ingredient } from "../../types/ingredient";
-import { Preference } from "../../types/enum_utils";
-import { Preference as PreferenceValues } from "../../types/enum_utils";
+import { Preference } from "../../api/models/enum_utils";
+import { Preference as PreferenceValues } from "../../api/models/enum_utils";
 
 type Props = {
     preferedIngredients: PreferedIngredientsGet[];

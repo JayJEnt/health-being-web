@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import { api } from "../api/client";
 import { settings } from "../config";
-import type { PreferedIngredientsGet } from "../types/prefered_ingredients";
+import type { PreferedIngredientsGet } from "../api/models/prefered_ingredients";
 import PreferedIngredientInput from "../components/User/PreferedIngredientInput";
-import type { PreferedRecipeTypeGet } from "../types/prefered_diet_type";
+import type { PreferedRecipeTypeGet } from "../api/models/prefered_diet_type";
 import PreferedDietTypesInput from "../components/User/PreferedDietTypesInput";
-import type { ActivityLevel, Silhouette } from "../types/enum_utils";
+import type { ActivityLevel, Silhouette } from "../api/models/enum_utils";
 import {
     Silhouette as SilhouetteTypes,
     ActivityLevel as ActivityLevelValues,
-} from "../types/enum_utils";
-import type { UserData, UserDataCreate } from "../types/user_data";
+} from "../api/models/enum_utils";
+import type { UserData, UserDataCreate } from "../api/models/user_data";
 import type { AxiosError } from "axios";
 
 const UserProfile: React.FC = () => {
@@ -92,7 +92,7 @@ const UserProfile: React.FC = () => {
             if (error.response?.status === 404) {
                 try {
                     const changedData: UserDataCreate = personalData;
-                    await api.postJson<UserData>(
+                    await api.post<UserData>(
                         `${settings.USERSDATA_ENDPOINT}`,
                         changedData,
                     );

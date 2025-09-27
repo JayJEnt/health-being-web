@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from "react";
 import { api } from "../../api/client";
 import { settings } from "../../config";
 import type { RecipeResponse } from "../../types/recipe";
-import type { CreateRecipeFavourite } from "../../types/recipe_favourite";
+import type { CreateRecipeFavourite } from "../../api/models/recipe_favourite";
 import { useAuth } from "../../auth/useAuth";
 
 type Props = {

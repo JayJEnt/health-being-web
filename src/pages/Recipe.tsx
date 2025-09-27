@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import type { RecipeResponse } from "../types/recipe";
-import { api } from "../api/client";
+import type { RecipeResponse } from "../api/models/recipe";
+import { Api } from "../api/client";
 import { settings } from "../config";
-
 import RecipeOverview from "../components/Recipe/RecipeOverview";
 import IngredientsInput from "../components/Recipe/IngredientsInput";
 import DietTypeInput from "../components/Recipe/DietTypeInput";
@@ -49,11 +48,11 @@ const RecipePage: React.FC = () => {
 
         const fetchRecipe = async () => {
             try {
-                const recipePromise = api.get<RecipeResponse>(
+                const recipePromise = Api.get<RecipeResponse>(
                     `${settings.RECIPES_ENDPOINT}`,
                     { id: id },
                 );
-                const imagePromise = api.download(
+                const imagePromise = Api.download(
                     `${settings.IMAGES_DOWNLOAD_ENDPOINT}`,
                     { recipe_id: id },
                 );
@@ -113,7 +112,7 @@ const RecipePage: React.FC = () => {
         if (!id || !originalRecipeRef.current) return;
         setIsSaving(true);
         try {
-            const saved = await api.put<RecipeResponse>(
+            const saved = await Api.put<RecipeResponse>(
                 `${settings.RECIPES_ENDPOINT}/${id}`,
                 newRecipe,
             );
@@ -122,7 +121,7 @@ const RecipePage: React.FC = () => {
             if (newImageFile) {
                 const form = new FormData();
                 form.append("file", newImageFile);
-                await api.postMultipart(
+                await Api.postMultipart(
                     `${settings.IMAGES_UPLOAD_ENDPOINT}/${id}`,
                     form,
                 );

@@ -1,6 +1,5 @@
 import type { MeasureUnit } from "./enum_utils";
 
-/** Refrigerator models */
 
 export interface CreateRefrigerator {
     name: string;
@@ -8,9 +7,11 @@ export interface CreateRefrigerator {
     measure_unit: MeasureUnit;
 }
 
+
 export interface PostCreateRefrigerator extends CreateRefrigerator {
     id: number;
 }
+
 
 export interface Refrigerator {
     user_id: number;
@@ -18,6 +19,7 @@ export interface Refrigerator {
     amount: number;
     measure_unit: MeasureUnit;
 }
+
 
 export interface RefrigeratorGet {
     users: string;
