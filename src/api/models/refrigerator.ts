@@ -1,29 +1,22 @@
-import type { MeasureUnit } from "./enum_utils";
+import type { Quantity } from "./ingredient";
 
 
-export interface CreateRefrigerator {
+export interface RefrigeratorCreate extends Quantity {
     name: string;
-    amount: number;
-    measure_unit: MeasureUnit;
 }
 
 
-export interface PostCreateRefrigerator extends CreateRefrigerator {
+export interface RefrigeratorCreateResponse extends RefrigeratorCreate {
     id: number;
 }
 
 
-export interface Refrigerator {
-    user_id: number;
+export interface RefrigeratorResponse extends RefrigeratorCreate {
     ingredient_id: number;
-    amount: number;
-    measure_unit: MeasureUnit;
 }
 
 
-export interface RefrigeratorGet {
-    users: string;
-    ingredients: string;
-    amount: number;
-    measure_unit: MeasureUnit;
+export interface RefrigeratorDelete extends Quantity {
+    user_id: number;
+    ingredient_id: number;
 }

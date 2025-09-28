@@ -3,7 +3,7 @@ import { settings } from "../../config";
 import type { FollowsCreate, FollowsResponse, FollowsDelete } from "../models/follows";
 
 
-export const dietTypeApi = {
+export const followsApi = {
   getById: (followed_user_id: number, requesting_user: number) =>
     api.get<FollowsResponse>(`${settings.FOLLOWS_ENDPOINT}`, { followed_user_id, requesting_user }),
 
