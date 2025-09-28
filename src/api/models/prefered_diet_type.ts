@@ -1,20 +1,14 @@
-export interface CreatePreferedRecipeType {
+export interface PreferedRecipeTypeCreate {
     diet_name: string;
 }
 
 
-export interface PostCreatePreferedRecipeType extends CreatePreferedRecipeType {
-    id: number;
-}
-
-
-export interface PreferedRecipeType {
-    user_id: number;
+export interface PreferedRecipeTypeResponse extends PreferedRecipeTypeCreate {
     type_id: number;
 }
 
 
-export interface PreferedRecipeTypeGet {
-    diet_name: string;
+export interface PreferedRecipeTypeDelete {
+    user_id: number;
     type_id: number;
 }

@@ -56,7 +56,10 @@ export interface IngredientUpdateResponse extends Ingredient {
 
 
 /** Ingredient included models */
-export interface IngredientQuantity extends IngredientName {
-    amount: number;
-    measure_unit: MeasureUnit;
+export interface Quantity {
+    amount: number
+    measure_unit: MeasureUnit
 }
+
+
+export interface IngredientQuantity extends IngredientName, Quantity {}

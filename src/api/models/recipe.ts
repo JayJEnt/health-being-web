@@ -17,10 +17,14 @@ export interface RecipeOverview {
 }
 
 
-export interface RecipeResponse extends RecipeOverview {
+export interface Recipe extends RecipeOverview {
     owner_id: number;
     description: string;
     instructions: string[];
+}
+
+
+export interface RecipeResponse extends Recipe {
     diet_type?: DietTypeCreate[] | null;
     ingredients: IngredientQuantity[];
 }

@@ -1,5 +1,3 @@
-// src/icons.ts
-
 export {
     HeartIcon,
     StarIcon,

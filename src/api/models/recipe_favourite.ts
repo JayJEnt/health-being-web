@@ -1,20 +1,14 @@
-export interface CreateRecipeFavourite {
+export interface RecipeFavouriteCreate {
     title: string;
 }
 
 
-export interface PostCreateRecipeFavourite {
-    id: number;
-}
-
-
-export interface RecipeFavourite {
-    user_id: number;
+export interface RecipeFavouriteResponse extends RecipeFavouriteCreate {
     recipe_id: number;
 }
 
 
-export interface RecipeFavouriteGet {
-    users: string;
-    recipes: string;
+export interface RecipeFavouriteDelete {
+    user_id: number;
+    recipe_id: number;
 }

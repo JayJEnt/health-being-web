@@ -1,27 +1,26 @@
 import type { Preference } from "./enum_utils";
 
 
-export interface CreatePreferedIngredients {
+export interface PreferedIngredientsCreate {
     name: string;
     preference: Preference;
 }
 
 
-export interface PostCreatePreferedIngredients
-    extends CreatePreferedIngredients {
+export interface PreferedIngredientsCreateResponse
+    extends PreferedIngredientsCreate {
     id: number;
 }
 
 
-export interface PreferedIngredients {
-    user_id: number;
+export interface PreferedIngredientsResponse
+    extends PreferedIngredientsCreate {
     ingredient_id: number;
-    preference: Preference;
 }
 
 
-export interface PreferedIngredientsGet {
+export interface PreferedIngredientsDelete {
+    user_id: number;
     ingredient_id: number;
     preference: Preference;
-    name: string;
 }
