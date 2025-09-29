@@ -1,11 +1,11 @@
 import { useState, useCallback } from "react";
-import { api } from "../../api/client";
-import { settings } from "../../config";
+import { dietTypeApi } from "../../api/endpoints/public/diet_types";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { Dispatch, SetStateAction } from "react";
-import type { RecipeCreate } from "../../types/recipe";
-import type { DietType } from "../../api/models/diet_type";
+import type { RecipeCreate } from "../../api/models/recipe";
+import type { DietTypeResponse } from "../../api/models/diet_type";
 import type { RecipeEditPayload } from "../../pages/Recipe";
+
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
     recipe: T;
@@ -20,23 +20,19 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
 
     const fetchDiet = useCallback(
         async (q: string, signal: AbortSignal) => {
-            const url = `${settings.DIET_TYPES_ENDPOINT}`;
-            return api.get<DietType>(url, {
-                params: { diet_name: q },
-                signal,
-            });
+            return dietTypeApi.getByName(q, signal)
         },
         []
     );
 
-    const { data, loading, error } = useDebouncedSearch<DietType>({
+    const { data, loading, error } = useDebouncedSearch<DietTypeResponse>({
         query: newDietType,
         fetcher: fetchDiet,
         delay: 300,
         minLength: 1,
     });
 
-    const addDietType = (diet: DietType) => {
+    const addDietType = (diet: DietTypeResponse) => {
         setRecipe({
             ...recipe,
             diet_type: [...(recipe.diet_type ?? []), diet],

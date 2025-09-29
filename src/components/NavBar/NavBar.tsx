@@ -2,6 +2,8 @@ import * as Icons from "../../assets/icons";
 import { useAuth } from "../../auth/useAuth";
 import NavButton from "./NavButton";
 import { useNavigate } from "react-router-dom";
+
+
 const NavBar: React.FC = () => {
     const { status, user, logout } = useAuth();
     const navigate = useNavigate();

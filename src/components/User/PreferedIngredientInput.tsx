@@ -4,16 +4,17 @@ import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import { api } from "../../api/client";
 import { settings } from "../../config";
 import type {
-    PreferedIngredientsGet,
-    CreatePreferedIngredients,
-} from "../../types/prefered_ingredients";
-import type { Ingredient } from "../../types/ingredient";
+    PreferedIngredientsResponse,
+    PreferedIngredientsCreate,
+} from "../../api/models/prefered_ingredients";
+import type { Ingredient } from "../../api/models/ingredient";
 import { Preference } from "../../api/models/enum_utils";
 import { Preference as PreferenceValues } from "../../api/models/enum_utils";
 
+
 type Props = {
-    preferedIngredients: PreferedIngredientsGet[];
-    setPreferedIngredients: Dispatch<SetStateAction<PreferedIngredientsGet[]>>;
+    preferedIngredients: PreferedIngredientsResponse[];
+    setPreferedIngredients: Dispatch<SetStateAction<PreferedIngredientsResponse[]>>;
 };
 
 const PreferedIngredientInput: React.FC<Props> = ({
@@ -47,12 +48,12 @@ const PreferedIngredientInput: React.FC<Props> = ({
         pref: Preference,
     ) => {
         try {
-            const fetchData: CreatePreferedIngredients = {
+            const fetchData: PreferedIngredientsCreate = {
                 name: ingredient.name,
                 preference: pref,
             };
 
-            const res = await api.postJson<PreferedIngredientsGet>(
+            const res = await api.post<PreferedIngredientsResponse>(
                 `${settings.PREFERED_INGREDIENTS_ENDPOINT}`,
                 fetchData,
             );

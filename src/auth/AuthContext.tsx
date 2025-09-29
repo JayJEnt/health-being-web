@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { AuthContext, type AuthContextValue } from "./context";
 import { api } from "../api/client";
+import { tokenDataApi } from "../api/endpoints/user_role/token_data";
 import { settings } from "../config";
 import type { User, UserCreate } from "../api/models/user";
 import type { Token } from "../api/models/token";
 import type { AuthState } from "./auth";
+
 
 const AUTH_TOKEN_KEY = "app.auth.token";
 
@@ -39,9 +41,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                 if (!cancelled) setState((s) => ({ ...s, token, status: "loading" }));
 
-                const user: User = await api.get<User>(
-                    `${settings.TOKEN_DATA_ENDPOINT}`,
-                );
+                const user: User = await tokenDataApi.getUser();
 
                 if (!cancelled) {
                     setState((s) => ({ ...s, user, status: "authenticated" }));
@@ -77,9 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 );
 
                 localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(token));
-                const user = await api.get<User>(
-                    `${settings.TOKEN_DATA_ENDPOINT}`,
-                );
+                const user = await tokenDataApi.getUser();
 
                 setState((s) => ({ ...s, token, user, status: "authenticated" }));
                 return true;

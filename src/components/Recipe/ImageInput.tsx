@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { SetStateAction, Dispatch } from "react";
 
+
 type Props = {
     setImage: Dispatch<SetStateAction<File | null>>;
 };

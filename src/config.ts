@@ -24,17 +24,20 @@ class Settings {
     VITAMINS_ENDPOINT: string = "/vitamins";
 }
 
+
 class LocalSettings extends Settings {
     API_BASE_URL: string = "http://127.0.0.1:8000";
     ENVIRONMENT: string = "local";
     LOG_LEVEL: string = "DEBUG";
 }
 
+
 class RemoteSettings extends Settings {
     API_BASE_URL: string = "unknown :)";
     ENVIRONMENT: string = "remote";
     LOG_LEVEL: string = "INFO";
 }
+
 
 const getSettings = (): Settings => {
     const environment =

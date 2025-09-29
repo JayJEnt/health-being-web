@@ -8,7 +8,7 @@ export const tokenDataApi = {
   getUser: () =>
     api.get<User>(`${settings.TOKEN_DATA_ENDPOINT}`),
 
-  getUserRole: () =>
+  hasAdminRole: () =>
     api.get<boolean>(`${settings.TOKEN_DATA_ENDPOINT}`, { radmin_role: true }),
 
   refreshToken: () =>

@@ -2,6 +2,7 @@ import * as Icons from "../assets/icons.ts"; //Icons List
 import Fridge from "../components/Fridge/Fridge.tsx"; //Fridge Component
 import HomeCarousel from "../components/Home/HomeCarousel.tsx"; //Carousel Component
 
+
 const Home: React.FC = () => {
   const user = "Jan"; //Username variable (static for a moment, will be fetech from api later)
   return (
