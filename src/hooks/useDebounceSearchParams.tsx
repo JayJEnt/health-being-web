@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+
 type UseDebouncedSearchParams<T> = {
     query: string;
     fetcher: (q: string, signal: AbortSignal) => Promise<T>;

@@ -8,6 +8,8 @@ import LoginPage from "./pages/Login.tsx";
 import RegisterPage from "./pages/Register.tsx";
 import UsersList from "./pages/UsersList.tsx";
 import { useAuth } from "./auth/useAuth.ts";
+
+
 function App() {
     const { status } = useAuth();
     const isAuthenticated = status === "authenticated";

@@ -1,5 +1,6 @@
 import ProductsList from "./ProductsList.ts";
 
+
 const Fridge: React.FC = () => {
 	const productList = ProductsList; //Products from users fridge will be fetch from api (right now static from file)
 	return (

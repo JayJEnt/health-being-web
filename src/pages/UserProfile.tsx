@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
 import { api } from "../api/client";
 import { settings } from "../config";
-import type { PreferedIngredientsGet } from "../api/models/prefered_ingredients";
+import type { PreferedIngredientsResponse } from "../api/models/prefered_ingredients";
 import PreferedIngredientInput from "../components/User/PreferedIngredientInput";
-import type { PreferedRecipeTypeGet } from "../api/models/prefered_diet_type";
+import type { PreferedRecipeTypeResponse } from "../api/models/prefered_diet_type";
 import PreferedDietTypesInput from "../components/User/PreferedDietTypesInput";
 import type { ActivityLevel, Silhouette } from "../api/models/enum_utils";
 import {
@@ -14,15 +14,16 @@ import {
 import type { UserData, UserDataCreate } from "../api/models/user_data";
 import type { AxiosError } from "axios";
 
+
 const UserProfile: React.FC = () => {
     const { user } = useAuth();
 
     const [personalData, setPersonalData] = useState<UserData | null>(null);
     const [preferedIngredients, setPreferedIngredients] = useState<
-        PreferedIngredientsGet[]
+        PreferedIngredientsResponse[]
     >([]);
     const [preferedDietTypes, setPreferedDietTypes] = useState<
-        PreferedRecipeTypeGet[]
+        PreferedRecipeTypeResponse[]
     >([]);
 
     const makeDefaultPersonalData = (uid: number): UserData => ({
@@ -46,10 +47,10 @@ const UserProfile: React.FC = () => {
                 const [pd, pi, dt] = await Promise.all([
                     api.get<UserData>(personalDataUrl).catch(() => null),
                     api
-                        .get<PreferedIngredientsGet[]>(preferedIngredientsUrl)
+                        .get<PreferedIngredientsResponse[]>(preferedIngredientsUrl)
                         .catch(() => []),
                     api
-                        .get<PreferedRecipeTypeGet[]>(preferedDietTypesUrl)
+                        .get<PreferedRecipeTypeResponse[]>(preferedDietTypesUrl)
                         .catch(() => []),
                 ]);
 

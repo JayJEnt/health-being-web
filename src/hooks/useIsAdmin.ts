@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { getAdmin } from "../utils";
+import { tokenDataApi } from "../api/endpoints/user_role/token_data";
 import { isLoggedIn } from "../utils";
+
 
 export function useIsAdmin() {
     const [isAdmin, setIsAdmin] = useState(false);
@@ -20,7 +21,7 @@ export function useIsAdmin() {
                     return;
                 }
 
-                const result = await getAdmin();
+                const result = await tokenDataApi.hasAdminRole();
                 if (isMounted) {
                     setIsAdmin(Boolean(result));
                 }

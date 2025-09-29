@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import type { RecipeResponse } from "../api/models/recipe";
-import { Api } from "../api/client";
+import { api } from "../api/client";
 import { settings } from "../config";
 import RecipeOverview from "../components/Recipe/RecipeOverview";
 import IngredientsInput from "../components/Recipe/IngredientsInput";
@@ -48,11 +48,11 @@ const RecipePage: React.FC = () => {
 
         const fetchRecipe = async () => {
             try {
-                const recipePromise = Api.get<RecipeResponse>(
+                const recipePromise = api.get<RecipeResponse>(
                     `${settings.RECIPES_ENDPOINT}`,
                     { id: id },
                 );
-                const imagePromise = Api.download(
+                const imagePromise = api.download(
                     `${settings.IMAGES_DOWNLOAD_ENDPOINT}`,
                     { recipe_id: id },
                 );
@@ -112,7 +112,7 @@ const RecipePage: React.FC = () => {
         if (!id || !originalRecipeRef.current) return;
         setIsSaving(true);
         try {
-            const saved = await Api.put<RecipeResponse>(
+            const saved = await api.put<RecipeResponse>(
                 `${settings.RECIPES_ENDPOINT}/${id}`,
                 newRecipe,
             );
@@ -121,7 +121,7 @@ const RecipePage: React.FC = () => {
             if (newImageFile) {
                 const form = new FormData();
                 form.append("file", newImageFile);
-                await Api.postMultipart(
+                await api.postMultipart(
                     `${settings.IMAGES_UPLOAD_ENDPOINT}/${id}`,
                     form,
                 );

@@ -1,13 +1,13 @@
 import { useState, useCallback } from "react";
-import { settings } from "../../config";
-import { api } from "../../api/client";
+import { ingredientsApi } from "../../api/endpoints/public/ingredients";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
-import type { RecipeCreate } from "../../types/recipe";
+import type { RecipeCreate } from "../../api/models/recipe";
 import type { Dispatch, SetStateAction } from "react";
-import type { IngredientQuantity, Ingredient } from "../../types/ingredient";
+import type { IngredientQuantity, Ingredient } from "../../api/models/ingredient";
 import type { RecipeEditPayload } from "../../pages/Recipe";
 import { MeasureUnit as MeasuerUnitsValues } from "../../api/models/enum_utils";
 import type { MeasureUnit } from "../../api/models/enum_utils";
+
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
     recipe: T;
@@ -35,8 +35,7 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
 
     const fetchIngredient = useCallback(
         async (q: string, signal: AbortSignal) => {
-            const url = `${settings.INGREDIENTS_ENDPOINT}${encodeURIComponent(q)}`;
-            return api.get<Ingredient>(url, { signal });
+            return ingredientsApi.getByName(q, signal)
         },
         [],
     );

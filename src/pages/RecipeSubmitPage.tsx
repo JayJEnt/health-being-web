@@ -5,7 +5,7 @@ import RecipeSteps from "../components/Recipe/RecipeSteps";
 import ImageInput from "../components/Recipe/ImageInput";
 import { useState } from "react";
 import { settings } from "../config";
-import { Api } from "../api/client";
+import { api } from "../api/client";
 
 
 const RecipeSubmitPage: React.FC = () => {
@@ -24,7 +24,7 @@ const RecipeSubmitPage: React.FC = () => {
 
         try {
             const recipeApiUrl = `${settings.RECIPES_ENDPOINT}`;
-            const recipeResponse = await Api.post<RecipeResponse>(
+            const recipeResponse = await api.post<RecipeResponse>(
                 recipeApiUrl,
                 recipe,
             );
@@ -34,7 +34,7 @@ const RecipeSubmitPage: React.FC = () => {
                 const imageApiUrl = `${settings.IMAGES_UPLOAD_ENDPOINT}/${recipeResponse.id.toString()}`;
                 const formData = new FormData();
                 formData.append("file", image);
-                const imageResponse = await Api.postMultipart(imageApiUrl, formData);
+                const imageResponse = await api.postMultipart(imageApiUrl, formData);
                 console.log("Image uploaded", imageResponse);
             }
 

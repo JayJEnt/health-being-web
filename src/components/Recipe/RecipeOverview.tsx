@@ -1,9 +1,9 @@
 import type { Dispatch, SetStateAction } from "react";
-import { api } from "../../api/client";
-import { settings } from "../../config";
-import type { RecipeResponse } from "../../types/recipe";
-import type { CreateRecipeFavourite } from "../../api/models/recipe_favourite";
+import { recipeFavouriteApi } from "../../api/endpoints/user_role/recipe_favourite";
+import type { RecipeResponse } from "../../api/models/recipe";
+import type { RecipeFavouriteCreate } from "../../api/models/recipe_favourite";
 import { useAuth } from "../../auth/useAuth";
+
 
 type Props = {
     recipe: RecipeResponse;
@@ -22,12 +22,9 @@ const RecipeOverview: React.FC<Props> = ({
 }) => {
     const { user } = useAuth();
     const likeRecipe = async () => {
-        const requestData: CreateRecipeFavourite = { title: recipe.title };
+        const requestData: RecipeFavouriteCreate = { title: recipe.title };
         try {
-            const res = await api.postJson(
-                `${settings.RECIPE_FAVOURITE_ENDPOINT}`,
-                requestData,
-            );
+            const res = await recipeFavouriteApi.create(requestData);
             if (res) setIsLiked(true);
         } catch (err) {
             console.log(err);
@@ -36,9 +33,7 @@ const RecipeOverview: React.FC<Props> = ({
 
     const unLikeRecipe = async () => {
         try {
-            const res = await api.delete(
-                `${settings.RECIPE_FAVOURITE_ENDPOINT}/${recipe.id}`,
-            );
+            const res = await recipeFavouriteApi.delete(recipe.id);
             if (res) setIsLiked(false);
         } catch (err) {
             console.log(err);
