@@ -7,7 +7,7 @@ export const recipesApi = {
   getByPhrase: (phrase: string) =>
     api.get<RecipeResponse>(`${settings.RECIPES_ENDPOINT}`, { phrase }),
 
-  getById: (id: number) =>
+  getById: (id: string) =>
     api.get<RecipeResponse>(`${settings.RECIPES_ENDPOINT}`, { id }),
 
   getAll: () =>
