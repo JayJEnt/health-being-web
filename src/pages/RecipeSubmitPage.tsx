@@ -1,11 +1,11 @@
-import type { RecipeCreate, RecipeResponse } from "../api/models/recipe";
+import type { RecipeCreate } from "../api/models/recipe";
 import DietTypeInput from "../components/Recipe/DietTypeInput";
 import IngredientsInput from "../components/Recipe/IngredientsInput";
 import RecipeSteps from "../components/Recipe/RecipeSteps";
 import ImageInput from "../components/Recipe/ImageInput";
 import { useState } from "react";
-import { settings } from "../config";
-import { api } from "../api/client";
+import { recipesApi } from "../api/endpoints/user_role/recipes";
+import { imagesApi } from "../api/endpoints/user_role/images";
 
 
 const RecipeSubmitPage: React.FC = () => {
@@ -23,18 +23,13 @@ const RecipeSubmitPage: React.FC = () => {
         if (!recipe) return;
 
         try {
-            const recipeApiUrl = `${settings.RECIPES_ENDPOINT}`;
-            const recipeResponse = await api.post<RecipeResponse>(
-                recipeApiUrl,
-                recipe,
-            );
-
+            const recipeResponse = await recipesApi.create(recipe);
             if (!recipeResponse) return;
             if (image) {
-                const imageApiUrl = `${settings.IMAGES_UPLOAD_ENDPOINT}/${recipeResponse.id.toString()}`;
                 const formData = new FormData();
                 formData.append("file", image);
-                const imageResponse = await api.postMultipart(imageApiUrl, formData);
+
+                const imageResponse = await imagesApi.upload(String(recipeResponse.id), formData);
                 console.log("Image uploaded", imageResponse);
             }
 

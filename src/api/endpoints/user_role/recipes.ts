@@ -7,9 +7,9 @@ export const recipesApi = {
   create: (data: RecipeCreate) =>
     api.post<RecipeResponse>(`${settings.RECIPES_ENDPOINT}`, data),
 
-  update: (id: number, data: RecipeResponse) =>
+  update: (id: string, data: RecipeResponse) =>
     api.put<RecipeResponse>(`${settings.RECIPES_ENDPOINT}`, data, { id }),
 
-  delete: (id: number) =>
+  delete: (id: string) =>
     api.delete(`${settings.RECIPES_ENDPOINT}`, { id }),
 };

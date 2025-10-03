@@ -1,8 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import type { RecipeResponse } from "../api/models/recipe";
-import { api } from "../api/client";
-import { settings } from "../config";
+import { recipesApi } from "../api/endpoints/public/recipes";
+import { recipesApi as recipesApiUser } from "../api/endpoints/user_role/recipes";
+import { imagesApi } from "../api/endpoints/public/images";
+import { imagesApi as imagesApiUser } from "../api/endpoints/user_role/images";
 import RecipeOverview from "../components/Recipe/RecipeOverview";
 import IngredientsInput from "../components/Recipe/IngredientsInput";
 import DietTypeInput from "../components/Recipe/DietTypeInput";
@@ -48,14 +50,8 @@ const RecipePage: React.FC = () => {
 
         const fetchRecipe = async () => {
             try {
-                const recipePromise = api.get<RecipeResponse>(
-                    `${settings.RECIPES_ENDPOINT}`,
-                    { id: id },
-                );
-                const imagePromise = api.download(
-                    `${settings.IMAGES_DOWNLOAD_ENDPOINT}`,
-                    { recipe_id: id },
-                );
+                const recipePromise = recipesApi.getById(id);
+                const imagePromise = imagesApi.download(id);
 
                 const [fetchedRecipe, fetchedImage] = await Promise.all([
                     recipePromise,
@@ -112,20 +108,13 @@ const RecipePage: React.FC = () => {
         if (!id || !originalRecipeRef.current) return;
         setIsSaving(true);
         try {
-            const saved = await api.put<RecipeResponse>(
-                `${settings.RECIPES_ENDPOINT}/${id}`,
-                newRecipe,
-            );
+            const saved = await recipesApiUser.update(id, newRecipe);
             if (!saved) throw new Error("Brak odpowiedzi z PUT");
 
             if (newImageFile) {
                 const form = new FormData();
                 form.append("file", newImageFile);
-                await api.postMultipart(
-                    `${settings.IMAGES_UPLOAD_ENDPOINT}/${id}`,
-                    form,
-                );
-
+                await imagesApiUser.upload(id, form);
                 if (newImagePreviewUrl) setImageUrl(newImagePreviewUrl);
             }
 

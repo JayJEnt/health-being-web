@@ -1,8 +1,8 @@
 import { useState, useCallback } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
-import { api } from "../../api/client";
-import { settings } from "../../config";
+import { ingredientsApi } from "../../api/endpoints/public/ingredients";
+import { preferedIngredientsApi } from "../../api/endpoints/user_role/prefered_ingredients";
 import type {
     PreferedIngredientsResponse,
     PreferedIngredientsCreate,
@@ -30,8 +30,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
 
     const fetchIngredient = useCallback(
         async (q: string, signal: AbortSignal) => {
-            const url = `${settings.INGREDIENTS_ENDPOINT}${encodeURIComponent(q)}`;
-            return api.get<Ingredient>(url, { signal });
+            return ingredientsApi.getByName(q, signal)
         },
         [],
     );
@@ -53,11 +52,14 @@ const PreferedIngredientInput: React.FC<Props> = ({
                 preference: pref,
             };
 
-            const res = await api.post<PreferedIngredientsResponse>(
-                `${settings.PREFERED_INGREDIENTS_ENDPOINT}`,
-                fetchData,
-            );
-            setPreferedIngredients((prev) => [...prev, res]);
+            const res = await preferedIngredientsApi.create(fetchData)
+            const newIngredient: PreferedIngredientsResponse = {
+                name: res.name,
+                preference: res.preference,
+                ingredient_id: res.id,
+            };
+
+            setPreferedIngredients((prev) => [...prev, newIngredient]);
         } catch (err) {
             console.log(err);
         }
@@ -67,9 +69,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
 
     const removePreferedIngredient = async (id: number) => {
         try {
-            await api.delete(
-                `${settings.PREFERED_INGREDIENTS_ENDPOINT}/${id}`,
-            );
+            await preferedIngredientsApi.delete(id);
             setPreferedIngredients((prev) =>
                 prev.filter((ingredient) => ingredient.ingredient_id !== id),
             );

@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { AuthContext, type AuthContextValue } from "./context";
-import { api } from "../api/client";
+import { oauth2Api } from "../api/endpoints/public/oauth2"
 import { tokenDataApi } from "../api/endpoints/user_role/token_data";
-import { settings } from "../config";
 import type { User, UserCreate } from "../api/models/user";
 import type { Token } from "../api/models/token";
 import type { AuthState } from "./auth";
@@ -71,10 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         async (credentials: Omit<UserCreate, "email">) => {
             setState((s) => ({ ...s, status: "loading" }));
             try {
-                const token = await api.postForm<Token>(
-                    `${settings.OAUTH2_OUR_LOGIN_ENDPOINT}`,
-                    credentials,
-                );
+                const token = await oauth2Api.ourLogin(credentials)
 
                 localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(token));
                 const user = await tokenDataApi.getUser();

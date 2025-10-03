@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
-import { api } from "../api/client";
-import { settings } from "../config";
+import { userDataOwnerApi } from "../api/endpoints/user_role/user_data";
+import { preferedIngredientsApi } from "../api/endpoints/user_role/prefered_ingredients";
+import { preferedDietTypeApi } from "../api/endpoints/user_role/prefered_diet_type";
 import type { PreferedIngredientsResponse } from "../api/models/prefered_ingredients";
 import PreferedIngredientInput from "../components/User/PreferedIngredientInput";
 import type { PreferedRecipeTypeResponse } from "../api/models/prefered_diet_type";
@@ -40,18 +41,10 @@ const UserProfile: React.FC = () => {
 
         (async () => {
             try {
-                const personalDataUrl = `${settings.USERSDATA_ENDPOINT}${user.id}`;
-                const preferedIngredientsUrl = `${settings.PREFERED_INGREDIENTS_ENDPOINT}`;
-                const preferedDietTypesUrl = `${settings.PREFERED_DIET_TYPES_ENDPOINT}`;
-
                 const [pd, pi, dt] = await Promise.all([
-                    api.get<UserData>(personalDataUrl).catch(() => null),
-                    api
-                        .get<PreferedIngredientsResponse[]>(preferedIngredientsUrl)
-                        .catch(() => []),
-                    api
-                        .get<PreferedRecipeTypeResponse[]>(preferedDietTypesUrl)
-                        .catch(() => []),
+                    userDataOwnerApi.get().catch(() => null),
+                    preferedIngredientsApi.getAll().catch(() => []),
+                    preferedDietTypeApi.getAll().catch(() => []),
                 ]);
 
                 if (pd) {
@@ -83,20 +76,14 @@ const UserProfile: React.FC = () => {
         try {
             const changedData: UserDataCreate = personalData;
 
-            await api.put<UserData>(
-                `${settings.USERSDATA_ENDPOINT}`,
-                changedData,
-            );
+            await userDataOwnerApi.update(changedData);
         } catch (err) {
             const error = err as AxiosError;
 
             if (error.response?.status === 404) {
                 try {
                     const changedData: UserDataCreate = personalData;
-                    await api.post<UserData>(
-                        `${settings.USERSDATA_ENDPOINT}`,
-                        changedData,
-                    );
+                    await userDataOwnerApi.create(changedData);
                 } catch (postErr) {
                     const postError = postErr as AxiosError;
                     console.error("POST after 404 failed:", postError.message);
