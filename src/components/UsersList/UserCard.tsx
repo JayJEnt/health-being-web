@@ -1,8 +1,6 @@
 import { useState } from "react";
 import type { User } from "../../api/models/user";
 import { api } from "../../api/client";
-import { usersApi } from "../../api/endpoints/admin_role/users";
-
 
 type Props = {
     user: User;
