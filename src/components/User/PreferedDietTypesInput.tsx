@@ -9,7 +9,6 @@ import type {
 } from "../../api/models/prefered_diet_type";
 import type { DietTypeResponse } from "../../api/models/diet_type";
 
-
 type Props = {
     preferedDietTypes: PreferedRecipeTypeResponse[];
     setPreferedDietTypes: Dispatch<SetStateAction<PreferedRecipeTypeResponse[]>>;
@@ -22,7 +21,7 @@ const PreferedDietTypesInput: React.FC<Props> = ({
     const [query, setQuery] = useState("");
 
     const fetchDietType = useCallback(async (q: string, signal: AbortSignal) => {
-        return dietTypeApi.getByName(q, signal)
+        return dietTypeApi.getByName(q, signal);
     }, []);
 
     const { data, loading, error, reset } = useDebouncedSearch<DietTypeResponse>({
@@ -39,7 +38,10 @@ const PreferedDietTypesInput: React.FC<Props> = ({
             };
 
             const res = await preferedDietTypeApi.create(fetchData);
-            setPreferedDietTypes((prev) => [...prev, res]);
+            setPreferedDietTypes((prev) => [
+                ...prev,
+                { diet_name: res.diet_name, type_id: res.id },
+            ]);
         } catch (err) {
             console.log(err);
         }
