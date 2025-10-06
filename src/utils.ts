@@ -1,4 +1,11 @@
+import type { Token } from './api/models/token';
 export function isLoggedIn(): boolean {
-    const token = localStorage.getItem("token");
-    return !!token;
+  const token = localStorage.getItem('token');
+  return !!token;
+}
+
+export function isToken(v: unknown): v is Token {
+  if (typeof v !== 'object' || v === null) return false;
+  const o = v as Record<string, unknown>;
+  return typeof o.access === 'string' && typeof o.exp === 'number';
 }
