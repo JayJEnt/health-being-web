@@ -7,7 +7,7 @@ import NavButton from './NavButton';
 
 const NavBar: React.FC = () => {
   const { status, user, logout } = useAuth() as {
-    logout: () => Promise<void>;
+    logout: () => void;
     status: string;
     user: User;
   };
@@ -15,9 +15,8 @@ const NavBar: React.FC = () => {
   const isAuthenticated = status === 'authenticated';
   const isAdmin = user?.role === 'admin';
   const handleLogout = () => {
-    void logout().then(() => {
-      void navigate('/');
-    });
+    logout();
+    void navigate('/');
   };
 
   return (
