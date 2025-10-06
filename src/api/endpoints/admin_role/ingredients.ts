@@ -1,7 +1,6 @@
-import { api } from "../../client";
-import { settings } from "../../../config";
-import type { IngredientCreate, IngredientResponse } from "../../models/ingredient";
-
+import { settings } from '../../../config';
+import { api } from '../../client';
+import type { IngredientCreate, IngredientResponse } from '../../models/ingredient';
 
 export const ingredientsAdminApi = {
   create: (data: IngredientCreate) =>

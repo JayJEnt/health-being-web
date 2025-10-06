@@ -1,19 +1,19 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-	/* light mode */
-	--color-light-navbar-bg: #2b2b2a;
-	--color-light-main-bg: #fefffb;
-	--color-light-carousel-tile-bg: #fefefc;
-	--color-light-navbar-text: #f3f4f3;
-	--color-light-main-text: #16191a;
+  /* light mode */
+  --color-light-navbar-bg: #2b2b2a;
+  --color-light-main-bg: #fefffb;
+  --color-light-carousel-tile-bg: #fefefc;
+  --color-light-navbar-text: #f3f4f3;
+  --color-light-main-text: #16191a;
 
-	/* drak mode */
-	--color-dark-navbar-bg: #2b2b2a;
-	--color-dark-main-bg: #fefffb;
-	--color-dark-carousel-tile-bg: #fefefc;
-	--color-dark-navbar-text: #f3f4f3;
-	--color-dark-main-text: #16191a;
+  /* drak mode */
+  --color-dark-navbar-bg: #2b2b2a;
+  --color-dark-main-bg: #fefffb;
+  --color-dark-carousel-tile-bg: #fefefc;
+  --color-dark-navbar-text: #f3f4f3;
+  --color-dark-main-text: #16191a;
 }

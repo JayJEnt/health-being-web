@@ -1,8 +1,7 @@
 export interface VitaminCreate {
-    name: string;
+  name: string;
 }
 
-
 export interface Vitamin extends VitaminCreate {
-    id: number;
+  id: number;
 }

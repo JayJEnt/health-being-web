@@ -1,6 +1,5 @@
-import { api } from "../../client";
-import { settings } from "../../../config";
-
+import { settings } from '../../../config';
+import { api } from '../../client';
 
 export const imagesApi = {
   upload: (recipe_id: string, form: FormData) =>

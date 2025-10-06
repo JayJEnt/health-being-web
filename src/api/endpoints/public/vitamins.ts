@@ -1,7 +1,6 @@
-import { api } from "../../client";
-import { settings } from "../../../config";
-import type { Vitamin } from "../../models/vitamin";
-
+import { settings } from '../../../config';
+import { api } from '../../client';
+import type { Vitamin } from '../../models/vitamin';
 
 export const vitaminApi = {
   getByName: (vitamin_name: string) =>
@@ -10,6 +9,5 @@ export const vitaminApi = {
   getById: (vitamin_id: number) =>
     api.get<Vitamin>(`${settings.VITAMINS_ENDPOINT}`, { vitamin_id }),
 
-  getAll: () =>
-    api.get<Vitamin[]>(`${settings.VITAMINS_ENDPOINT}`),
+  getAll: () => api.get<Vitamin[]>(`${settings.VITAMINS_ENDPOINT}`),
 };

@@ -1,22 +1,18 @@
-import type { Quantity } from "./ingredient";
-
+import type { Quantity } from './ingredient';
 
 export interface RefrigeratorCreate extends Quantity {
-    name: string;
+  name: string;
 }
-
 
 export interface RefrigeratorCreateResponse extends RefrigeratorCreate {
-    id: number;
+  id: number;
 }
-
 
 export interface RefrigeratorResponse extends RefrigeratorCreate {
-    ingredient_id: number;
+  ingredient_id: number;
 }
 
-
 export interface RefrigeratorDelete extends Quantity {
-    user_id: number;
-    ingredient_id: number;
+  user_id: number;
+  ingredient_id: number;
 }
