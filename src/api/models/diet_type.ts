@@ -1,8 +1,7 @@
 export interface DietTypeCreate {
-    diet_name: string;
+  diet_name: string;
 }
 
-
 export interface DietTypeResponse extends DietTypeCreate {
-    id: number;
+  id: number;
 }
