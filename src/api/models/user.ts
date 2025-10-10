@@ -1,10 +1,14 @@
-import type { Role } from './enum_utils';
-import type { UserDataCreate } from './user_data';
+import type { ActivityLevel, Role, Silhouette } from './enum_utils';
 
 /** User Create models */
 export interface UserBaseModel {
   username: string;
   email: string; // EmailStr → string
+  weight?: number;
+  hieght?: number;
+  age?: number;
+  activity_level?: ActivityLevel;
+  silhouette?: Silhouette;
 }
 
 export interface UserCreate extends UserBaseModel {
@@ -24,6 +28,3 @@ export interface User extends UserBaseModel {
 export interface UserOurAuth extends User {
   hashed_password: string;
 }
-
-/** User with UserData models */
-export interface UserCreateAll extends User, UserDataCreate {}

@@ -7,5 +7,5 @@ export function isLoggedIn(): boolean {
 export function isToken(v: unknown): v is Token {
   if (typeof v !== 'object' || v === null) return false;
   const o = v as Record<string, unknown>;
-  return typeof o.access === 'string' && typeof o.exp === 'number';
+  return typeof o.access_token === 'string' && typeof o.token_type === 'string';
 }

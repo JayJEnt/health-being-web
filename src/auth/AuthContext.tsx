@@ -77,10 +77,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setState((s) => ({ ...s, status: 'loading' }));
       try {
         const token = await oauth2Api.ourLogin(credentials);
-
         localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(token));
         const user = await tokenDataApi.getUser();
-
         setState((s) => ({ ...s, token, user, status: 'authenticated' }));
         return true;
       } catch (err) {
