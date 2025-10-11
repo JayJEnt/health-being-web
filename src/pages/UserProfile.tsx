@@ -1,17 +1,15 @@
-import type { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
-
 import { preferedDietTypeApi } from '../api/endpoints/user_role/prefered_diet_type';
 import { preferedIngredientsApi } from '../api/endpoints/user_role/prefered_ingredients';
-import { userDataOwnerApi } from '../api/endpoints/user_role/user_data';
-import type { ActivityLevel, Silhouette } from '../api/models/enum_utils';
+import { usersOwnerApi } from '../api/endpoints/user_role/users';
+import type { ActivityLevel, Silhouette, Role } from '../api/models/enum_utils';
 import {
   ActivityLevel as ActivityLevelValues,
   Silhouette as SilhouetteTypes,
 } from '../api/models/enum_utils';
 import type { PreferedRecipeTypeResponse } from '../api/models/prefered_diet_type';
 import type { PreferedIngredientsResponse } from '../api/models/prefered_ingredients';
-import type { UserData, UserDataCreate } from '../api/models/user_data';
+import type { User, UserCreate } from '../api/models/user';
 import { useAuth } from '../auth/useAuth';
 import PreferedDietTypesInput from '../components/User/PreferedDietTypesInput';
 import PreferedIngredientInput from '../components/User/PreferedIngredientInput';
@@ -19,12 +17,15 @@ import PreferedIngredientInput from '../components/User/PreferedIngredientInput'
 const UserProfile: React.FC = () => {
   const { user } = useAuth();
 
-  const [personalData, setPersonalData] = useState<UserData | null>(null);
+  const [personalData, setPersonalData] = useState<User | null>(null);
   const [preferedIngredients, setPreferedIngredients] = useState<PreferedIngredientsResponse[]>([]);
   const [preferedDietTypes, setPreferedDietTypes] = useState<PreferedRecipeTypeResponse[]>([]);
 
-  const makeDefaultPersonalData = (uid: number): UserData => ({
-    user_id: uid,
+  const makeDefaultPersonalData = (id: number, username: string, email: string, role: Role): User => ({
+    id: id,
+    username: username,
+    email: email,
+    role: role,
     age: null,
     height: null,
     weight: null,
@@ -38,24 +39,24 @@ const UserProfile: React.FC = () => {
     const load = async () => {
       try {
         const [pd, pi, dt] = await Promise.all([
-          userDataOwnerApi.get().catch(() => null),
+          usersOwnerApi.get().catch(() => null),
           preferedIngredientsApi.getAll().catch(() => []),
           preferedDietTypeApi.getAll().catch(() => []),
         ]);
 
-        setPersonalData(pd ?? makeDefaultPersonalData(user.id));
+        setPersonalData(pd ?? makeDefaultPersonalData(user.id, user.username, user.email, user.role));
         setPreferedIngredients(pi ?? []);
         setPreferedDietTypes(dt ?? []);
       } catch (e) {
         console.error(e);
-        setPersonalData(makeDefaultPersonalData(user.id));
+        setPersonalData(makeDefaultPersonalData(user.id, user.username, user.email, user.role));
       }
     };
 
     void load();
   }, [user?.id]);
 
-  const setData = <K extends keyof UserData>(name: K, value: UserData[K]) => {
+  const setData = <K extends keyof User>(name: K, value: User[K]) => {
     setPersonalData((prev) => (prev ? { ...prev, [name]: value } : prev));
   };
 
@@ -65,25 +66,9 @@ const UserProfile: React.FC = () => {
     e.preventDefault();
     if (!personalData) return;
 
-    try {
-      const changedData: UserDataCreate = personalData;
+      const changedData: UserCreate = personalData; //lacking password, it will require to create new model (UserUpdate)
 
-      await userDataOwnerApi.update(changedData);
-    } catch (err) {
-      const error = err as AxiosError;
-
-      if (error.response?.status === 404) {
-        try {
-          const changedData: UserDataCreate = personalData;
-          await userDataOwnerApi.create(changedData);
-        } catch (postErr) {
-          const postError = postErr as AxiosError;
-          console.error('POST after 404 failed:', postError.message);
-        }
-      } else {
-        console.error('PUT failed:', error.message);
-      }
-    }
+      await usersOwnerApi.update(changedData);
   };
 
   const activityOptions = Object.values(ActivityLevelValues);
