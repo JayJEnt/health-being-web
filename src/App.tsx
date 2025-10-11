@@ -7,6 +7,7 @@ import LoginPage from './pages/Login.tsx';
 import RecipePage from './pages/Recipe.tsx';
 import RecipeSubmitPage from './pages/RecipeSubmitPage.tsx';
 import RegisterPage from './pages/Register.tsx';
+import Settings from './pages/Settings.tsx';
 import UserProfile from './pages/UserProfile.tsx';
 import UsersList from './pages/UsersList.tsx';
 
@@ -34,6 +35,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/users_list" element={<UsersList />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </div>
   );

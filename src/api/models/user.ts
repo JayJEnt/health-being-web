@@ -2,8 +2,8 @@ import type { ActivityLevel, Role, Silhouette } from './enum_utils';
 
 /** User Create models */
 export interface UserBaseModel {
-  username: string;
-  email: string; // EmailStr → string
+  username?: string;
+  email?: string;
   weight?: number;
   hieght?: number;
   age?: number;

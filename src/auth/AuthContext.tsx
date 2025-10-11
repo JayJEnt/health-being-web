@@ -108,6 +108,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }));
   }, []);
 
+  function refreshUser(newUser: User) {
+    setState((prev) => ({ ...prev, user: newUser }));
+  }
   // Synchronization between tabs
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
@@ -138,6 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       ...state,
       login,
       logout,
+      refreshUser,
     };
   }, [state, login, logout]);
 
