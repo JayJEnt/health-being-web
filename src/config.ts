@@ -17,8 +17,6 @@ class Settings {
   REFRIGERATOR_ENDPOINT: string = '/refrigerator';
   RECIPES_ENDPOINT: string = '/recipes';
   TOKEN_DATA_ENDPOINT: string = '/token_data';
-  USERSDATA_ENDPOINT: string = '/users_data';
-  USERSDATA_OWNER_ENDPOINT: string = '/users_data/owner';
   USERS_ENDPOINT: string = '/users';
   USERS_OWNER_ENDPOINT: string = '/users/owner';
   VITAMINS_ENDPOINT: string = '/vitamins';
