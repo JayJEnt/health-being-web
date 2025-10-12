@@ -1,4 +1,4 @@
-import type { Quantity } from './ingredient';
+import type { Quantity } from './utils';
 
 export interface RefrigeratorCreate extends Quantity {
   name: string;
