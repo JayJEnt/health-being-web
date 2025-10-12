@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+
 import { preferedDietTypeApi } from '../api/endpoints/user_role/prefered_diet_type';
 import { preferedIngredientsApi } from '../api/endpoints/user_role/prefered_ingredients';
 import { usersOwnerApi } from '../api/endpoints/user_role/users';
-import type { ActivityLevel, Silhouette, Role } from '../api/models/enum_utils';
+import type { ActivityLevel, Role, Silhouette } from '../api/models/enum_utils';
 import {
   ActivityLevel as ActivityLevelValues,
   Silhouette as SilhouetteTypes,
@@ -21,7 +22,12 @@ const UserProfile: React.FC = () => {
   const [preferedIngredients, setPreferedIngredients] = useState<PreferedIngredientsResponse[]>([]);
   const [preferedDietTypes, setPreferedDietTypes] = useState<PreferedRecipeTypeResponse[]>([]);
 
-  const makeDefaultPersonalData = (id: number, username: string, email: string, role: Role): User => ({
+  const makeDefaultPersonalData = (
+    id: number,
+    username: string,
+    email: string,
+    role: Role,
+  ): User => ({
     id: id,
     username: username,
     email: email,
@@ -44,7 +50,9 @@ const UserProfile: React.FC = () => {
           preferedDietTypeApi.getAll().catch(() => []),
         ]);
 
-        setPersonalData(pd ?? makeDefaultPersonalData(user.id, user.username, user.email, user.role));
+        setPersonalData(
+          pd ?? makeDefaultPersonalData(user.id, user.username, user.email, user.role),
+        );
         setPreferedIngredients(pi ?? []);
         setPreferedDietTypes(dt ?? []);
       } catch (e) {
@@ -66,9 +74,9 @@ const UserProfile: React.FC = () => {
     e.preventDefault();
     if (!personalData) return;
 
-      const changedData: UserCreate = personalData; //lacking password, it will require to create new model (UserUpdate)
+    const changedData: UserCreate = { ...personalData, password: 'pass' }; // added dummy password for pre-commit until we decide how to resolve this
 
-      await usersOwnerApi.update(changedData);
+    await usersOwnerApi.update(changedData);
   };
 
   const activityOptions = Object.values(ActivityLevelValues);

@@ -33,7 +33,7 @@ const LoginPage: React.FC = () => {
         <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800 dark:text-white">
           Login to your account
         </h2>
-        <form onSubmit={void handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={(e) => void handleSubmit(e)} className="flex flex-col gap-4">
           <input
             type="text"
             placeholder="Email"

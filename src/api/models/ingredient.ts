@@ -1,7 +1,6 @@
 import type { Quantity } from './utils';
 import type { Vitamin, VitaminCreate } from './vitamin';
 
-
 export interface IngredientName {
   name: string;
 }
