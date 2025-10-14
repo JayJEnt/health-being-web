@@ -5,7 +5,7 @@ import { refrigeratorApi } from "../../api/endpoints/user_role/refrigerator";
 const Fridge: React.FC = () => {
   const [productsList, setProductsList] = useState<RefrigeratorResponse[]>([]);
   useEffect(() => {
-    async function fetchProductsList() {
+    async function fetchProductsList(x) {
       try {
         const fetchResponse = await refrigeratorApi.getAll();
 
