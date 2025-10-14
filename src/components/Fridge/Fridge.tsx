@@ -1,23 +1,36 @@
-import ProductsList from "./ProductsList.ts";
-
+import { useState, useEffect } from "react";
+import type { RefrigeratorResponse } from "../../api/models/refrigerator";
+import { refrigeratorApi } from "../../api/endpoints/user_role/refrigerator";
 
 const Fridge: React.FC = () => {
-	const productList = ProductsList; //Products from users fridge will be fetch from api (right now static from file)
-	return (
-		<div
-			className="border w-60
+  const [productsList, setProductsList] = useState<RefrigeratorResponse[]>([]);
+  useEffect(() => {
+    async function fetchProductsList() {
+      try {
+        const fetchResponse = await refrigeratorApi.getAll();
+
+        setProductsList(fetchResponse);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchProductsList();
+  }, []);
+  return (
+    <div
+      className="border w-60
                         lg:col-start-2"
-		>
-			{productList.map((product, index) => (
-				<div key={index} className="grid grid-cols-2">
-					<span>{product.name}</span>
-					<span>
-						{product.amount} {product.unit}{" "}
-					</span>
-				</div>
-			))}
-		</div>
-	);
+    >
+      {productsList.map((product, index) => (
+        <div key={index} className="grid grid-cols-2">
+          <span>{product.name}</span>
+          <span>
+            {product.amount} {product.measure_unit}{" "}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export default Fridge;
