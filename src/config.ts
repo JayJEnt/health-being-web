@@ -11,6 +11,7 @@ class Settings {
   OAUTH2_GOOGLE_LOGIN_ENDPOINT: string = '/oauth2_google/login';
   OAUTH2_OUR_LOGIN_ENDPOINT: string = '/oauth2/login';
   OAUTH2_OUR_REGISTER_ENDPOINT: string = '/oauth2/register';
+
   PREFERED_INGREDIENTS_ENDPOINT: string = '/prefered_ingredients';
   PREFERED_DIET_TYPES_ENDPOINT: string = '/prefered_recipe_type';
   RECIPE_FAVOURITE_ENDPOINT: string = '/recipe_favourite';
@@ -19,6 +20,7 @@ class Settings {
   TOKEN_DATA_ENDPOINT: string = '/token_data';
   USERSDATA_ENDPOINT: string = '/users_data';
   USERSDATA_OWNER_ENDPOINT: string = '/users_data/owner';
+
   USERS_ENDPOINT: string = '/users';
   USERS_OWNER_ENDPOINT: string = '/users/owner';
   VITAMINS_ENDPOINT: string = '/vitamins';
@@ -36,10 +38,12 @@ class RemoteSettings extends Settings {
   LOG_LEVEL: string = 'INFO';
 }
 
+type Environment = 'remote' | 'local';
 const getSettings = (): Settings => {
-  const environment = import.meta.env.VITE_ENVIRONMENT?.toLowerCase() || 'local';
+  const rawEnv: unknown = import.meta.env.VITE_ENVIRONMENT;
+  const environment: Environment =
+    typeof rawEnv === 'string' && rawEnv.toLowerCase() === 'remote' ? 'remote' : 'local';
 
   return environment === 'remote' ? new RemoteSettings() : new LocalSettings();
 };
-
 export const settings = getSettings();

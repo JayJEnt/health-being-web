@@ -1,10 +1,10 @@
-import { api } from '../../client';
 import { settings } from '../../../config';
+import { api } from '../../client';
 import type {
   RefrigeratorCreate,
   RefrigeratorCreateResponse,
-  RefrigeratorResponse,
   RefrigeratorDelete,
+  RefrigeratorResponse,
 } from '../../models/refrigerator';
 
 export const refrigeratorApi = {
@@ -19,4 +19,3 @@ export const refrigeratorApi = {
   delete: (ingredient_id: number) =>
     api.delete<RefrigeratorDelete>(`${settings.REFRIGERATOR_ENDPOINT}`, { ingredient_id }),
 };
-

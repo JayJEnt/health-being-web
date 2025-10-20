@@ -1,15 +1,11 @@
-import { api } from "../../client";
-import { settings } from "../../../config";
-import type { UserCreate, UserCreateAll, User } from "../../models/user";
-
+import { settings } from '../../../config';
+import { api } from '../../client';
+import type { User, UserCreate } from '../../models/user';
 
 export const usersOwnerApi = {
-  get: () =>
-    api.get<UserCreateAll>(`${settings.USERS_OWNER_ENDPOINT}`),
+  get: () => api.get<User>(`${settings.USERS_OWNER_ENDPOINT}`),
 
-  update: (data: UserCreate) =>
-    api.put<User>(`${settings.USERS_OWNER_ENDPOINT}`, data),
+  update: (data: UserCreate) => api.put<User>(`${settings.USERS_OWNER_ENDPOINT}`, data),
 
-  delete: () =>
-    api.delete<User>(`${settings.USERS_OWNER_ENDPOINT}`),
+  delete: () => api.delete<User>(`${settings.USERS_OWNER_ENDPOINT}`),
 };

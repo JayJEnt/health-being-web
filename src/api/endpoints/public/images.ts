@@ -1,6 +1,5 @@
-import { api } from "../../client";
-import { settings } from "../../../config";
-
+import { settings } from '../../../config';
+import { api } from '../../client';
 
 export const imagesApi = {
   download: (recipe_id: string) =>

@@ -1,16 +1,12 @@
-import { api } from "../../client";
-import { settings } from "../../../config";
-import type { User } from "../../models/user";
-import type { Token } from "../../models/token";
-
+import { settings } from '../../../config';
+import { api } from '../../client';
+import type { Token } from '../../models/token';
+import type { User } from '../../models/user';
 
 export const tokenDataApi = {
-  getUser: () =>
-    api.get<User>(`${settings.TOKEN_DATA_ENDPOINT}`),
+  getUser: () => api.get<User>(`${settings.TOKEN_DATA_ENDPOINT}`),
 
-  hasAdminRole: () =>
-    api.get<boolean>(`${settings.TOKEN_DATA_ENDPOINT}`, { radmin_role: true }),
+  hasAdminRole: () => api.get<boolean>(`${settings.TOKEN_DATA_ENDPOINT}`, { radmin_role: true }),
 
-  refreshToken: () =>
-    api.post<Token>(`${settings.TOKEN_DATA_ENDPOINT}`),
+  refreshToken: () => api.post<Token>(`${settings.TOKEN_DATA_ENDPOINT}`),
 };
