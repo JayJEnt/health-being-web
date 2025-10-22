@@ -2,7 +2,6 @@ class Settings {
   API_BASE_URL: string = '';
   ENVIRONMENT: string = '';
   LOG_LEVEL: string = '';
-
   DIET_TYPES_ENDPOINT: string = '/diet_types';
   FOLLOWS_ENDPOINT: string = '/follows';
   IMAGES_UPLOAD_ENDPOINT: string = '/images/upload';
@@ -11,7 +10,6 @@ class Settings {
   OAUTH2_GOOGLE_LOGIN_ENDPOINT: string = '/oauth2_google/login';
   OAUTH2_OUR_LOGIN_ENDPOINT: string = '/oauth2/login';
   OAUTH2_OUR_REGISTER_ENDPOINT: string = '/oauth2/register';
-
   PREFERED_INGREDIENTS_ENDPOINT: string = '/prefered_ingredients';
   PREFERED_DIET_TYPES_ENDPOINT: string = '/prefered_recipe_type';
   RECIPE_FAVOURITE_ENDPOINT: string = '/recipe_favourite';
@@ -19,8 +17,6 @@ class Settings {
   RECIPES_ENDPOINT: string = '/recipes';
   TOKEN_DATA_ENDPOINT: string = '/token_data';
   USERSDATA_ENDPOINT: string = '/users_data';
-  USERSDATA_OWNER_ENDPOINT: string = '/users_data/owner';
-
   USERS_ENDPOINT: string = '/users';
   USERS_OWNER_ENDPOINT: string = '/users/owner';
   VITAMINS_ENDPOINT: string = '/vitamins';
