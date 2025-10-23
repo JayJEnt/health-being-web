@@ -1,7 +1,6 @@
 import type { Role } from './enum_utils';
 import type { ActivityLevel, Silhouette } from './enum_utils';
 
-
 export interface UserBaseModel {
   username: string;
   email: string; // EmailStr (TODO: add some email patern validation)
