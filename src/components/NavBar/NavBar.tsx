@@ -25,7 +25,7 @@ const NavBar: React.FC = () => {
 
       <div className="flex flex-col gap-2 w-full">
         <NavButton icon={Icons.HomeIcon} label="Home" to="/" />
-        <NavButton icon={Icons.MagnifyingGlassIcon} label="Search" to="/recipe/1" />
+        <NavButton icon={Icons.MagnifyingGlassIcon} label="Search" to="/search" />
         <NavButton icon={Icons.HeartIcon} label="Favourite" to="/favourites" />
         <NavButton icon={Icons.Cog6ToothIcon} label="Settings" to="/settings" />
       </div>
