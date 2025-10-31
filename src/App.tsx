@@ -5,6 +5,7 @@ import NavBar from './components/NavBar/NavBar.tsx';
 import Home from './pages/Home.tsx';
 import LoginPage from './pages/Login.tsx';
 import RecipePage from './pages/Recipe.tsx';
+import RecipesSearch from './pages/RecipesSearch.tsx';
 import RecipeSubmitPage from './pages/RecipeSubmitPage.tsx';
 import RegisterPage from './pages/Register.tsx';
 import UserProfile from './pages/UserProfile.tsx';
@@ -24,6 +25,7 @@ function App() {
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/search" element={<RecipesSearch />} />
         <Route path="/recipe/:id" element={<RecipePage />} />
         <Route
           path="/recipe/submit"
