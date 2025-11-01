@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { dietTypeApi } from '../api/endpoints/public/diet_types';
 import { recipesApi } from '../api/endpoints/public/recipes';
+import { recipesApi as recipesApiUser } from '../api/endpoints/user_role/recipes';
 import type { DietTypeResponse } from '../api/models/diet_type';
-import type { RecipeOverview } from '../api/models/recipe';
+import type { RecipeFilter, RecipeOverview } from '../api/models/recipe';
 
 const RecipesSearch: React.FC = () => {
   const [query, setQuery] = useState('');
@@ -21,6 +22,16 @@ const RecipesSearch: React.FC = () => {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const isLoadingRef = useRef(false);
 
+  // Deep search filters
+  const [filters, setFilters] = useState<RecipeFilter>({
+    allergies_off: false,
+    dislike_off: false,
+    only_favourite_ingredients: false,
+    only_favourite_diets: false,
+    only_followed_authors: false,
+    only_owned_ingredients: false,
+  });
+
   // Load diet types when component mounts
   useEffect(() => {
     const loadDietTypes = async () => {
@@ -34,14 +45,25 @@ const RecipesSearch: React.FC = () => {
     void loadDietTypes();
   }, []);
 
+  const hasActiveFilters = Object.values(filters).some((value) => value === true);
+
   const loadRecipes = useCallback(
     async (searchPhrase?: string) => {
       setLoading(true);
       setError(null);
       try {
-        const res = searchPhrase
-          ? await recipesApi.getByPhrase(searchPhrase, { dietType, page: 1, limit: PAGE_SIZE })
-          : await recipesApi.getAll({ page: 1, limit: PAGE_SIZE });
+        let res: RecipeOverview[];
+
+        // Use deep search if user is authenticated and has active filters
+        if (hasActiveFilters && searchPhrase) {
+          res = await recipesApiUser.deepSearch(searchPhrase, filters);
+        } else {
+          // Use regular public search
+          res = searchPhrase
+            ? await recipesApi.getByPhrase(searchPhrase, { dietType, page: 1, limit: PAGE_SIZE })
+            : await recipesApi.getAll({ page: 1, limit: PAGE_SIZE });
+        }
+
         if (Array.isArray(res)) {
           setResults(res);
           setPage(1);
@@ -67,7 +89,7 @@ const RecipesSearch: React.FC = () => {
         setLoading(false);
       }
     },
-    [dietType],
+    [dietType, filters, hasActiveFilters],
   );
 
   useEffect(() => {
@@ -181,6 +203,100 @@ const RecipesSearch: React.FC = () => {
               </select>
             </div>
           </div>
+
+          {/* Deep search filters - only visible when query is entered */}
+          {query && (
+            <div className="px-8">
+              <div className="mx-auto max-w-4xl rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <h3 className="mb-3 text-sm font-semibold text-gray-700">Advanced Filters</h3>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                    <input
+                      type="checkbox"
+                      checked={filters.allergies_off}
+                      onChange={(e) =>
+                        setFilters((prev) => ({ ...prev, allergies_off: e.target.checked }))
+                      }
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span>Exclude allergies</span>
+                  </label>
+
+                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                    <input
+                      type="checkbox"
+                      checked={filters.dislike_off}
+                      onChange={(e) =>
+                        setFilters((prev) => ({ ...prev, dislike_off: e.target.checked }))
+                      }
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span>Exclude dislikes</span>
+                  </label>
+
+                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                    <input
+                      type="checkbox"
+                      checked={filters.only_favourite_ingredients}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          only_favourite_ingredients: e.target.checked,
+                        }))
+                      }
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span>Favourite ingredients</span>
+                  </label>
+
+                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                    <input
+                      type="checkbox"
+                      checked={filters.only_favourite_diets}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          only_favourite_diets: e.target.checked,
+                        }))
+                      }
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span>Favourite diets</span>
+                  </label>
+
+                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                    <input
+                      type="checkbox"
+                      checked={filters.only_followed_authors}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          only_followed_authors: e.target.checked,
+                        }))
+                      }
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span>Followed authors</span>
+                  </label>
+
+                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                    <input
+                      type="checkbox"
+                      checked={filters.only_owned_ingredients}
+                      onChange={(e) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          only_owned_ingredients: e.target.checked,
+                        }))
+                      }
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span>Owned ingredients</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
