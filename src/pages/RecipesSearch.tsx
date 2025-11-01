@@ -1,275 +1,269 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
+import { dietTypeApi } from '../api/endpoints/public/diet_types';
 import { recipesApi } from '../api/endpoints/public/recipes';
-import type { DietTypeCreate } from '../api/models/diet_type';
-import type { Recipe } from '../api/models/recipe';
-import styles from './RecipesSearch.module.css';
-
-interface ExtendedRecipe extends Recipe {
-  diet_type?: DietTypeCreate[] | null;
-}
+import type { DietTypeResponse } from '../api/models/diet_type';
+import type { RecipeOverview } from '../api/models/recipe';
 
 const RecipesSearch: React.FC = () => {
   const [query, setQuery] = useState('');
   const [dietType, setDietType] = useState('');
-  const [results, setResults] = useState<ExtendedRecipe[]>([]);
+  const [results, setResults] = useState<RecipeOverview[]>([]);
+  const [displayedRecipes, setDisplayedRecipes] = useState<RecipeOverview[]>([]);
+  const PAGE_SIZE = 18;
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoopingMode, setIsLoopingMode] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [columns, setColumns] = useState(3);
+  const [dietTypes, setDietTypes] = useState<DietTypeResponse[]>([]);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const isLoadingRef = useRef(false);
 
-  const loadRecipes = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await recipesApi.getAll();
-      if (Array.isArray(res)) {
-        setResults(
-          (res as Partial<ExtendedRecipe>[]).map((r) => ({
-            ...r,
-            owner_id: r.owner_id ?? '',
-            description: r.description ?? '',
-            instructions: r.instructions ?? [],
-            diet_type: r.diet_type ?? null,
-          })) as ExtendedRecipe[],
-        );
+  // Load diet types when component mounts
+  useEffect(() => {
+    const loadDietTypes = async () => {
+      try {
+        const types = await dietTypeApi.getAll();
+        setDietTypes(types);
+      } catch (err) {
+        console.error('Failed to load diet types', err);
       }
-    } catch (err) {
-      console.error('Failed to load recipes', err);
-      setError('Failed to load recipes. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    void loadDietTypes();
+  }, []);
+
+  const loadRecipes = useCallback(
+    async (searchPhrase?: string) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = searchPhrase
+          ? await recipesApi.getByPhrase(searchPhrase, { dietType, page: 1, limit: PAGE_SIZE })
+          : await recipesApi.getAll({ page: 1, limit: PAGE_SIZE });
+        if (Array.isArray(res)) {
+          setResults(res);
+          setPage(1);
+
+          // If we have fewer results than PAGE_SIZE, enable looping mode
+          const shouldLoop = res.length < PAGE_SIZE && res.length > 0;
+          setIsLoopingMode(shouldLoop);
+
+          if (shouldLoop) {
+            // In looping mode, display multiple copies to fill the screen
+            setDisplayedRecipes(res);
+            setHasMore(true); // Always has more in looping mode
+          } else {
+            // In normal pagination mode
+            setDisplayedRecipes(res);
+            setHasMore(res.length === PAGE_SIZE);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load recipes', err);
+        setError('Failed to load recipes. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    },
+    [dietType],
+  );
 
   useEffect(() => {
     void loadRecipes();
-  }, []);
+  }, [loadRecipes]);
 
-  // Recipe filtering
-  const filtered = useMemo(() => {
-    if (!query && !dietType) return results;
+  // Debounce search input to avoid too many API calls
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      void loadRecipes(query || undefined);
+    }, 300); // Wait 300ms after last keystroke before searching
 
-    return results.filter((recipe) => {
-      // Text filtering
-      if (query) {
-        const q = query.toLowerCase();
-        const searchableText = [recipe.title, recipe.description, ...(recipe.instructions || [])]
-          .join(' ')
-          .toLowerCase();
+    return () => clearTimeout(timer);
+  }, [query, dietType, loadRecipes]);
 
-        if (!searchableText.includes(q)) {
-          return false;
+  const loadMore = useCallback(async () => {
+    if (loadingMore || !hasMore || isLoadingRef.current) return;
+    isLoadingRef.current = true;
+    setLoadingMore(true);
+
+    try {
+      if (isLoopingMode) {
+        // In looping mode: just append another copy of results (no API call)
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate loading delay
+        setDisplayedRecipes((prev) => [...prev, ...results]);
+      } else {
+        // In normal pagination mode: fetch next page from backend
+        const nextPage = page + 1;
+        const res = query
+          ? await recipesApi.getByPhrase(query, { dietType, page: nextPage, limit: PAGE_SIZE })
+          : await recipesApi.getAll({ page: nextPage, limit: PAGE_SIZE });
+        if (Array.isArray(res)) {
+          setResults((prev) => [...prev, ...res]);
+          setDisplayedRecipes((prev) => [...prev, ...res]);
+          setPage(nextPage);
+          setHasMore(res.length === PAGE_SIZE);
         }
       }
+    } catch (err) {
+      console.error('Failed to load more recipes', err);
+    } finally {
+      setLoadingMore(false);
+      isLoadingRef.current = false;
+    }
+  }, [loadingMore, hasMore, page, query, dietType, isLoopingMode, results]);
 
-      // Diet type filtering
-      if (dietType && recipe.diet_type) {
-        const matchingDiet = recipe.diet_type.some(
-          (dt: DietTypeCreate) => dt.diet_name.toLowerCase() === dietType.toLowerCase(),
-        );
-        if (!matchingDiet) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-  }, [results, query, dietType]);
-
-  // displayed holds the items currently shown in the masonry. We append copies
-  // of `filtered` to `displayed` when the sentinel is visible to create a loop.
-  const [displayed, setDisplayed] = useState<Recipe[]>([]);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
-  // only allow automatic appends after the user has actually scrolled
-  const [hasUserScrolled, setHasUserScrolled] = useState(false);
-
-  // Fill the page with recipes on initial load and when filters change
+  // Infinite scroll: load next page when sentinel is visible
   useEffect(() => {
-    // Repeat recipes 20 times on initial load to fill the page
-    const repeatedRecipes = Array(20).fill(filtered).flat();
-    setDisplayed(repeatedRecipes);
-  }, [filtered]);
-
-  // Infinite scroll: append another copy of the filtered items whenever
-  // the sentinel element becomes visible (creates looping/repeat behavior)
-  useEffect(() => {
-    const el = sentinelRef.current;
-    if (!el) return;
+    const sentinel = sentinelRef.current;
+    if (!sentinel || displayedRecipes.length === 0) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          // Load more when item is 50% visible
-          if (entry.isIntersecting && hasUserScrolled && !loadingMore && filtered.length > 0) {
-            setLoadingMore(true);
-            // Add 10 copies of recipes at once for better infinite effect
-            const newBatch = Array(10).fill(filtered).flat() as Recipe[];
-            setDisplayed((prev: Recipe[]) => [...prev, ...newBatch]);
-            // Shorter delay for smoother operation
-            setTimeout(() => setLoadingMore(false), 150);
-          }
-        });
+        if (entries[0].isIntersecting) {
+          void loadMore();
+        }
       },
       {
-        root: null,
-        // Start loading when user is 150px from the bottom
-        rootMargin: '150px',
-        // 50% visibility of the element is enough
-        threshold: 0.5,
+        threshold: 0.1,
+        rootMargin: '100px', // Start loading before reaching the sentinel
       },
     );
 
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [filtered, loadingMore, hasUserScrolled]);
+    observer.observe(sentinel);
 
-  // detect first user scroll so we don't auto-load on initial render when the
-  // sentinel might already be visible in short viewports
-  useEffect(() => {
-    if (hasUserScrolled) return;
-    const onScroll = () => {
-      const scrolled = window.scrollY > 0 || document.documentElement.scrollTop > 0;
-      if (scrolled) {
-        setHasUserScrolled(true);
-        window.removeEventListener('scroll', onScroll);
-      }
+    return () => {
+      observer.disconnect();
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [hasUserScrolled]);
-
-  // simple distribution into N columns to mimic masonry structure using plain markup
-  const columnsItems = useMemo(() => {
-    const cols: Recipe[][] = Array.from({ length: columns }, () => []);
-    displayed.forEach((item, idx) => {
-      cols[idx % columns].push(item);
-    });
-    return cols;
-  }, [displayed, columns]);
+  }, [displayedRecipes, loadMore]);
 
   return (
     <main>
-      <header className={styles.searchBar}>
-        <div className={styles.searchControls}>
-          <div className={styles.searchField}>
+      <header className="sticky top-0 z-10 w-full bg-white py-6 shadow-md">
+        <div className="flex flex-col gap-4">
+          <div className="px-8">
             <input
               id="search"
-              className={styles.searchInput}
+              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-4 text-lg
+                         transition-all focus:border-blue-500 focus:bg-white focus:shadow-sm focus:outline-none
+                         focus:ring-2 focus:ring-blue-100"
               type="search"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                // Search immediately on empty query to show all recipes
+                if (!e.target.value) {
+                  void loadRecipes();
+                }
+              }}
               placeholder="Search by name, ingredients or description..."
               aria-label="Search recipes"
             />
           </div>
 
-          <div className={styles.filtersRow}>
-            <div className={styles.filterField}>
-              <select
-                id="columns"
-                className={styles.searchSelect}
-                value={String(columns)}
-                onChange={(e) => setColumns(Number(e.target.value))}
-                aria-label="Number of columns"
-              >
-                <option value="1">1 column</option>
-                <option value="2">2 columns</option>
-                <option value="3">3 columns</option>
-                <option value="4">4 columns</option>
-              </select>
-            </div>
-
-            <div className={styles.filterField}>
+          <div className="flex justify-center px-8">
+            <div className="min-w-[200px] w-80">
               <select
                 id="diet"
-                className={styles.searchSelect}
+                className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base
+                           cursor-pointer transition-all hover:border-gray-300"
                 value={dietType}
                 onChange={(e) => setDietType(e.target.value)}
                 aria-label="Filter by diet type"
               >
                 <option value="">All diets</option>
-                <option value="weganskie">Vegan</option>
-                <option value="wegetarianskie">Vegetarian</option>
-                <option value="ketogeniczne">Ketogenic</option>
-                <option value="bezglutenowe">Gluten-free</option>
-                <option value="paleo">Paleo</option>
+                {dietTypes.map((dt) => (
+                  <option key={dt.id} value={dt.diet_name}>
+                    {dt.diet_name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
         </div>
       </header>
 
-      <section className={styles.resultsContainer}>
+      <section className="container mx-auto px-4">
         {loading && (
-          <div className={styles.message}>
+          <div className="py-8 text-center text-gray-600">
             <p>Loading recipes...</p>
           </div>
         )}
 
         {error && (
-          <div className={styles.message}>
-            <p className={styles.error}>{error}</p>
-            <button onClick={() => void loadRecipes()} className={styles.retryButton}>
+          <div className="py-8 text-center">
+            <p className="mb-4 text-red-600">{error}</p>
+            <button
+              onClick={() => void loadRecipes()}
+              className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors
+                         hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+            >
               Try again
             </button>
           </div>
         )}
 
-        {!loading && !error && filtered.length === 0 && (
-          <div className={styles.message}>
+        {!loading && !error && results.length === 0 && (
+          <div className="py-8 text-center text-gray-600">
             <p>No recipes found matching your search criteria</p>
           </div>
         )}
 
-        {!loading && !error && filtered.length > 0 && (
-          /* Pinterest-style grid */
-          <div
-            role="list"
-            aria-label="Recipe grid"
-            className={styles.grid}
-            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-          >
-            {columnsItems.map((col, colIdx) => (
-              <div key={colIdx} role="listitem" aria-label={`Column ${colIdx + 1}`}>
-                {col.map((recipe) => (
-                  <article
-                    key={recipe.id}
-                    className={styles.recipeCard}
-                    aria-labelledby={`title-${recipe.id}`}
-                    tabIndex={0}
+        {!loading && !error && displayedRecipes.length > 0 && (
+          <>
+            <div
+              role="list"
+              aria-label="Recipe grid"
+              className="mx-auto mt-8 grid max-w-7xl grid-cols-3 gap-6 p-4"
+            >
+              {displayedRecipes.map((recipe, index) => (
+                <article
+                  key={`${recipe.id}-${index}`}
+                  className="group relative aspect-square cursor-pointer overflow-hidden rounded-xl
+                           transition-all duration-300 hover:scale-[1.02] hover:shadow-lg
+                           animate-fade-in"
+                  style={{
+                    animationDelay: `${(index % (isLoopingMode ? results.length : PAGE_SIZE)) * 50}ms`,
+                  }}
+                  aria-labelledby={`title-${recipe.id}-${index}`}
+                  tabIndex={0}
+                >
+                  <img
+                    src={`/api/recipes/${recipe.id}/image`}
+                    alt={recipe.title}
+                    className="h-full w-full rounded-xl object-cover"
+                    loading="lazy"
+                  />
+                  <div
+                    className="absolute inset-0 flex flex-col justify-end bg-gradient-to-b from-transparent
+                                via-black/60 to-black/90 p-6 text-white opacity-0 transition-all duration-300
+                                group-hover:opacity-100"
                   >
-                    <img
-                      src={`/api/recipes/${recipe.id}/image`}
-                      alt={recipe.title}
-                      className={styles.recipeImage}
-                    />
-                    <div className={styles.recipeOverlay}>
-                      <h2 id={`title-${recipe.id}`} className={styles.recipeTitle}>
-                        {recipe.title}
-                      </h2>
-                      <p className={styles.recipeDescription}>{recipe.description}</p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            ))}
-          </div>
-        )}
+                    <h2
+                      id={`title-${recipe.id}-${index}`}
+                      className="mb-2 translate-y-5 text-xl font-semibold opacity-0 transition-all duration-300
+                               group-hover:translate-y-0 group-hover:opacity-100"
+                    >
+                      {recipe.title}
+                    </h2>
+                  </div>
+                </article>
+              ))}
+            </div>
 
-        {/* Watched element for infinite scrolling */}
-        <div
-          ref={sentinelRef}
-          style={{
-            height: 20,
-            margin: '20px 0',
-            textAlign: 'center',
-            fontSize: '14px',
-            color: '#666',
-          }}
-        >
-          {loadingMore ? 'Loading more recipes...' : ''}
-        </div>
+            {/* Loading indicator */}
+            {loadingMore && (
+              <div className="py-8 text-center">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
+                <p className="mt-2 text-sm text-gray-600">Loading more recipes...</p>
+              </div>
+            )}
+
+            {/* Sentinel element for infinite scroll */}
+            <div ref={sentinelRef} className="h-20 w-full" aria-hidden="true" />
+          </>
+        )}
       </section>
     </main>
   );
