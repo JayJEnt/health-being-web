@@ -1,76 +1,76 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import type { User } from '../../api/models/user';
 import * as Icons from '../../assets/icons';
 import { useAuth } from '../../auth/useAuth';
 import NavButton from './NavButton';
 
 const NavBar: React.FC = () => {
-  const { status, user, logout } = useAuth() as {
+  const { status, logout } = useAuth() as {
     logout: () => void;
     status: string;
     user: User;
   };
   const navigate = useNavigate();
   const isAuthenticated = status === 'authenticated';
-  const isAdmin = user?.role === 'admin';
+  const [searchQuery, setSearchQuery] = useState('');
+
   const handleLogout = () => {
     logout();
     void navigate('/');
   };
 
+  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
+
   return (
-    <nav className="flex flex-col items-start h-full p-6 bg-light-navbar-bg lg:w-[15vw] min-w-[180px]">
-      <h1 className="text-xl font-bold mb-6 text-light-navbar-text">Menu</h1>
+    <nav className="fixed top-0 left-0 w-full h-16 bg-white shadow-md flex items-center px-8 z-50">
+      {/* Left: Logo, Title */}
+      <h1 className="text-xl font-bold text-gray-800 mr-8">Health-being</h1>
 
-      <div className="flex flex-col gap-2 w-full">
+      {/* Center: Search Bar */}
+      <form
+        onSubmit={handleSearchSubmit}
+        className="flex-1 flex justify-center"
+      >
+        <div className="relative w-full max-w-md">
+          <Icons.MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 w-5 h-5" />
+          <input
+            type="text"
+            placeholder="Search recipes..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-full border border-gray-300 pl-10 pr-4 py-2 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </form>
+
+      {/* Right: Nav buttons */}
+      <div className="ml-auto flex flex-row gap-4 items-center">
         <NavButton icon={Icons.HomeIcon} label="Home" to="/" />
-        <NavButton icon={Icons.MagnifyingGlassIcon} label="Search" to="/recipe/1" />
-        <NavButton icon={Icons.HeartIcon} label="Favourite" to="/favourites" />
-        <NavButton icon={Icons.Cog6ToothIcon} label="Settings" to="/settings" />
-      </div>
 
-      <h2 className="text-sm font-semibold mt-8 mb-2 text-light-navbar-text uppercase tracking-wide">
-        Recipes
-      </h2>
-      <div className="flex flex-col gap-2 w-full">
-        <NavButton icon={Icons.PlusIcon} label="Submit Recipe" to="/recipe/submit" />
-      </div>
-
-      <h2 className="text-sm font-semibold mt-8 mb-2 text-light-navbar-text uppercase tracking-wide">
-        User
-      </h2>
-      <div className="flex flex-col gap-2 w-full">
-        <NavButton icon={Icons.UserIcon} label="My Profile" to="/user" />
-
-        {!isAuthenticated && (
+        {!isAuthenticated ? (
           <>
             <NavButton icon={Icons.ArrowRightOnRectangleIcon} label="Login" to="/login" />
             <NavButton icon={Icons.UserPlusIcon} label="Register" to="/register" />
           </>
-        )}
-
-        {isAuthenticated && (
+        ) : (
           <button
-            className="flex cursor-pointer items-center gap-4 w-full px-4 py-3 rounded-xl transition-colors text-light-navbar-text hover:bg-light-navbar-hover"
             onClick={handleLogout}
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
           >
-            <Icons.ArrowRightOnRectangleIcon className="w-6 h-6 lg:w-8 lg:h-8" />
-            <span className="text-base lg:text-lg font-medium">Logout</span>
+            <Icons.ArrowRightOnRectangleIcon className="w-6 h-6" />
+            <span className="text-base font-medium">Logout</span>
           </button>
         )}
-      </div>
 
-      {isAdmin && (
-        <>
-          <h2 className="text-sm font-semibold mt-8 mb-2 text-light-navbar-text uppercase tracking-wide">
-            Admin
-          </h2>
-          <div className="flex flex-col gap-2 w-full ">
-            <NavButton icon={Icons.UserIcon} label="Users" to="/users_list" />
-          </div>
-        </>
-      )}
+        <NavButton icon={Icons.Cog6ToothIcon} label="Settings" to="/settings" />
+      </div>
     </nav>
   );
 };
