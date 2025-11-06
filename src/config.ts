@@ -2,8 +2,14 @@ class Settings {
   API_BASE_URL: string = '';
   ENVIRONMENT: string = '';
   LOG_LEVEL: string = '';
+<<<<<<< HEAD
   DIET_ENDPOINT: string = '/diet';
   USER_FOLLOWED_ENDPOINT: string = '/user_followed';
+=======
+  RECIPES_PAGE_SIZE: number = 18;
+  DIET_TYPES_ENDPOINT: string = '/diet_types';
+  FOLLOWS_ENDPOINT: string = '/follows';
+>>>>>>> 323ba70 (Add filter checkboxes Add dynamic RecipeFilter Use deepSearch endpoint use mock(TODO))
   IMAGES_UPLOAD_ENDPOINT: string = '/images/upload';
   IMAGES_DOWNLOAD_ENDPOINT: string = '/images/download';
   INGREDIENT_ENDPOINT: string = '/ingredient';
