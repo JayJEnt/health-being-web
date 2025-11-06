@@ -1,51 +1,38 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { dietTypeApi } from '../api/endpoints/public/diet_types';
 import { recipesApi } from '../api/endpoints/public/recipes';
 import { recipesApi as recipesApiUser } from '../api/endpoints/user_role/recipes';
-import type { DietTypeResponse } from '../api/models/diet_type';
 import type { RecipeFilter, RecipeOverview } from '../api/models/recipe';
+import { useAuth } from '../auth/useAuth';
+import { settings } from '../config';
 
 const RecipesSearch: React.FC = () => {
+  const { user } = useAuth();
   const [query, setQuery] = useState('');
-  const [dietType, setDietType] = useState('');
   const [results, setResults] = useState<RecipeOverview[]>([]);
   const [displayedRecipes, setDisplayedRecipes] = useState<RecipeOverview[]>([]);
-  const PAGE_SIZE = 18;
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoopingMode, setIsLoopingMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [dietTypes, setDietTypes] = useState<DietTypeResponse[]>([]);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const isLoadingRef = useRef(false);
 
   // Deep search filters
-  const [filters, setFilters] = useState<RecipeFilter>({
-    allergies_off: false,
-    dislike_off: false,
-    only_favourite_ingredients: false,
-    only_favourite_diets: false,
-    only_followed_authors: false,
-    only_owned_ingredients: false,
-  });
+  const filterLabels: Record<keyof RecipeFilter, string> = {
+    allergies_off: 'Exclude allergies',
+    dislike_off: 'Exclude dislikes',
+    only_favourite_ingredients: 'Favourite ingredients',
+    only_favourite_diets: 'Favourite diets',
+    only_followed_authors: 'Followed authors',
+    only_owned_ingredients: 'Owned ingredients',
+  };
 
-  // Load diet types when component mounts
-  useEffect(() => {
-    const loadDietTypes = async () => {
-      try {
-        const types = await dietTypeApi.getAll();
-        setDietTypes(types);
-      } catch (err) {
-        console.error('Failed to load diet types', err);
-      }
-    };
-    void loadDietTypes();
-  }, []);
-
-  const hasActiveFilters = Object.values(filters).some((value) => value === true);
+  const [filters, setFilters] = useState<RecipeFilter>(() =>
+    Object.keys(filterLabels).reduce((acc, key) => ({ ...acc, [key]: false }), {} as RecipeFilter),
+  );
 
   const loadRecipes = useCallback(
     async (searchPhrase?: string) => {
@@ -54,22 +41,23 @@ const RecipesSearch: React.FC = () => {
       try {
         let res: RecipeOverview[];
 
-        // Use deep search if user is authenticated and has active filters
-        if (hasActiveFilters && searchPhrase) {
-          res = await recipesApiUser.deepSearch(searchPhrase, filters);
+        // Use deep search if user is logged in, otherwise use public search
+        if (user) {
+          res = await recipesApiUser.deepSearch(searchPhrase || '', filters);
         } else {
-          // Use regular public search
-          res = searchPhrase
-            ? await recipesApi.getByPhrase(searchPhrase, { dietType, page: 1, limit: PAGE_SIZE })
-            : await recipesApi.getAll({ page: 1, limit: PAGE_SIZE });
+          // Use public search endpoint - TODO: replace with /search endpoint when backend is ready
+          res = await recipesApi.getByPhrase(searchPhrase || '', {
+            page: 1,
+            limit: settings.RECIPES_PAGE_SIZE,
+          });
         }
 
         if (Array.isArray(res)) {
           setResults(res);
           setPage(1);
 
-          // If we have fewer results than PAGE_SIZE, enable looping mode
-          const shouldLoop = res.length < PAGE_SIZE && res.length > 0;
+          // If we have fewer results than settings.RECIPES_PAGE_SIZE, enable looping mode
+          const shouldLoop = res.length < settings.RECIPES_PAGE_SIZE && res.length > 0;
           setIsLoopingMode(shouldLoop);
 
           if (shouldLoop) {
@@ -79,7 +67,7 @@ const RecipesSearch: React.FC = () => {
           } else {
             // In normal pagination mode
             setDisplayedRecipes(res);
-            setHasMore(res.length === PAGE_SIZE);
+            setHasMore(res.length === settings.RECIPES_PAGE_SIZE);
           }
         }
       } catch (err) {
@@ -89,7 +77,7 @@ const RecipesSearch: React.FC = () => {
         setLoading(false);
       }
     },
-    [dietType, filters, hasActiveFilters],
+    [filters, user],
   );
 
   useEffect(() => {
@@ -103,7 +91,7 @@ const RecipesSearch: React.FC = () => {
     }, 300); // Wait 300ms after last keystroke before searching
 
     return () => clearTimeout(timer);
-  }, [query, dietType, loadRecipes]);
+  }, [query, loadRecipes]);
 
   const loadMore = useCallback(async () => {
     if (loadingMore || !hasMore || isLoadingRef.current) return;
@@ -118,14 +106,17 @@ const RecipesSearch: React.FC = () => {
       } else {
         // In normal pagination mode: fetch next page from backend
         const nextPage = page + 1;
-        const res = query
-          ? await recipesApi.getByPhrase(query, { dietType, page: nextPage, limit: PAGE_SIZE })
-          : await recipesApi.getAll({ page: nextPage, limit: PAGE_SIZE });
+        const res = user
+          ? await recipesApiUser.deepSearch(query || '', filters)
+          : await recipesApi.getByPhrase(query || '', {
+              page: nextPage,
+              limit: settings.RECIPES_PAGE_SIZE,
+            });
         if (Array.isArray(res)) {
           setResults((prev) => [...prev, ...res]);
           setDisplayedRecipes((prev) => [...prev, ...res]);
           setPage(nextPage);
-          setHasMore(res.length === PAGE_SIZE);
+          setHasMore(res.length === settings.RECIPES_PAGE_SIZE);
         }
       }
     } catch (err) {
@@ -134,7 +125,7 @@ const RecipesSearch: React.FC = () => {
       setLoadingMore(false);
       isLoadingRef.current = false;
     }
-  }, [loadingMore, hasMore, page, query, dietType, isLoopingMode, results]);
+  }, [loadingMore, hasMore, page, query, isLoopingMode, results, user, filters]);
 
   // Infinite scroll: load next page when sentinel is visible
   useEffect(() => {
@@ -184,115 +175,28 @@ const RecipesSearch: React.FC = () => {
             />
           </div>
 
-          <div className="flex justify-center px-8">
-            <div className="min-w-[200px] w-80">
-              <select
-                id="diet"
-                className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base
-                           cursor-pointer transition-all hover:border-gray-300"
-                value={dietType}
-                onChange={(e) => setDietType(e.target.value)}
-                aria-label="Filter by diet type"
-              >
-                <option value="">All diets</option>
-                {dietTypes.map((dt) => (
-                  <option key={dt.id} value={dt.diet_name}>
-                    {dt.diet_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Deep search filters - only visible when query is entered */}
-          {query && (
+          {/* Deep search filters - only visible for authenticated users */}
+          {user && (
             <div className="px-8">
               <div className="mx-auto max-w-4xl rounded-lg border border-gray-200 bg-gray-50 p-4">
                 <h3 className="mb-3 text-sm font-semibold text-gray-700">Advanced Filters</h3>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-                    <input
-                      type="checkbox"
-                      checked={filters.allergies_off}
-                      onChange={(e) =>
-                        setFilters((prev) => ({ ...prev, allergies_off: e.target.checked }))
-                      }
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span>Exclude allergies</span>
-                  </label>
-
-                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-                    <input
-                      type="checkbox"
-                      checked={filters.dislike_off}
-                      onChange={(e) =>
-                        setFilters((prev) => ({ ...prev, dislike_off: e.target.checked }))
-                      }
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span>Exclude dislikes</span>
-                  </label>
-
-                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-                    <input
-                      type="checkbox"
-                      checked={filters.only_favourite_ingredients}
-                      onChange={(e) =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          only_favourite_ingredients: e.target.checked,
-                        }))
-                      }
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span>Favourite ingredients</span>
-                  </label>
-
-                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-                    <input
-                      type="checkbox"
-                      checked={filters.only_favourite_diets}
-                      onChange={(e) =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          only_favourite_diets: e.target.checked,
-                        }))
-                      }
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span>Favourite diets</span>
-                  </label>
-
-                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-                    <input
-                      type="checkbox"
-                      checked={filters.only_followed_authors}
-                      onChange={(e) =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          only_followed_authors: e.target.checked,
-                        }))
-                      }
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span>Followed authors</span>
-                  </label>
-
-                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-                    <input
-                      type="checkbox"
-                      checked={filters.only_owned_ingredients}
-                      onChange={(e) =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          only_owned_ingredients: e.target.checked,
-                        }))
-                      }
-                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span>Owned ingredients</span>
-                  </label>
+                  {(Object.keys(filterLabels) as Array<keyof RecipeFilter>).map((filterKey) => (
+                    <label
+                      key={filterKey}
+                      className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={filters[filterKey] ?? false}
+                        onChange={(e) =>
+                          setFilters((prev) => ({ ...prev, [filterKey]: e.target.checked }))
+                        }
+                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                      />
+                      <span>{filterLabels[filterKey]}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
             </div>
@@ -340,7 +244,7 @@ const RecipesSearch: React.FC = () => {
                            transition-all duration-300 hover:scale-[1.02] hover:shadow-lg
                            animate-fade-in"
                   style={{
-                    animationDelay: `${(index % (isLoopingMode ? results.length : PAGE_SIZE)) * 50}ms`,
+                    animationDelay: `${(index % (isLoopingMode ? results.length : settings.RECIPES_PAGE_SIZE)) * 50}ms`,
                   }}
                   aria-labelledby={`title-${recipe.id}-${index}`}
                   tabIndex={0}
