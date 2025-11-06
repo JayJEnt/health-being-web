@@ -2,6 +2,7 @@ class Settings {
   API_BASE_URL: string = '';
   ENVIRONMENT: string = '';
   LOG_LEVEL: string = '';
+  RECIPES_PAGE_SIZE: number = 18;
   DIET_TYPES_ENDPOINT: string = '/diet_types';
   FOLLOWS_ENDPOINT: string = '/follows';
   IMAGES_UPLOAD_ENDPOINT: string = '/images/upload';
