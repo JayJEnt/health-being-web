@@ -61,7 +61,7 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
                   Edit
                 </button>
               )}
-              {user && user.id !== recipe.owner_id && (
+              {user && user.id !== recipe.author_id && (
                 <button
                   className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                   onClick={toggleLiked}
@@ -79,12 +79,12 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
           <div>
             <h2 className="text-xl font-semibold mb-2">Diet types:</h2>
             <ul className="flex flex-wrap gap-2">
-              {recipe.diet_type?.map((diet, index) => (
+              {recipe.diet?.map((diet, index) => (
                 <li
                   key={index}
                   className="px-3 py-1 bg-green-100 dark:bg-green-800 text-sm rounded-full"
                 >
-                  {diet.diet_name}
+                  {diet.name}
                 </li>
               ))}
             </ul>
@@ -121,7 +121,7 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
         <div className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold">Ingredients:</h2>
           <ul className="space-y-3">
-            {recipe.ingredients?.map((ingredient) => (
+            {recipe.ingredient?.map((ingredient) => (
               <li key={ingredient.name} className="p-4 bg-white dark:bg-gray-800 rounded-xl shadow">
                 <span className="font-medium">{ingredient.name}</span> – {ingredient.amount}{' '}
                 {ingredient.measure_unit}

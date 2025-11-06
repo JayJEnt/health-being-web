@@ -1,42 +1,42 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useState } from 'react';
 
-import { dietTypeApi } from '../../api/endpoints/public/diet_types';
-import { preferedDietTypeApi } from '../../api/endpoints/user_role/prefered_diet_type';
-import type { DietTypeResponse } from '../../api/models/diet_type';
+import { dietApi } from '../../api/endpoints/public/diet';
+import { dietFavouriteApi } from '../../api/endpoints/user_role/diet_favourite';
+import type { DietResponse } from '../../api/models/diet';
 import type {
-  PreferedRecipeTypeCreate,
-  PreferedRecipeTypeResponse,
-} from '../../api/models/prefered_diet_type';
+  DietFavouriteCreate,
+  DietFavouriteResponse,
+} from '../../api/models/diet_favourite';
 import { useDebouncedSearch } from '../../hooks/useDebounceSearchParams';
 
 type Props = {
-  preferedDietTypes: PreferedRecipeTypeResponse[];
-  setPreferedDietTypes: Dispatch<SetStateAction<PreferedRecipeTypeResponse[]>>;
+  preferedDietTypes: DietFavouriteResponse[];
+  setPreferedDietTypes: Dispatch<SetStateAction<DietFavouriteResponse[]>>;
 };
 
 const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPreferedDietTypes }) => {
   const [query, setQuery] = useState('');
 
   const fetchDietType = useCallback(async (q: string, signal: AbortSignal) => {
-    return dietTypeApi.getByName(q, signal);
+    return dietApi.getByName(q, signal);
   }, []);
 
-  const { data, loading, error, reset } = useDebouncedSearch<DietTypeResponse>({
+  const { data, loading, error, reset } = useDebouncedSearch<DietResponse>({
     query,
     fetcher: fetchDietType,
     delay: 300,
     minLength: 1,
   });
 
-  const addPreferedDietType = async (dietType: DietTypeResponse) => {
+  const addPreferedDietType = async (dietType: DietResponse) => {
     try {
-      const fetchData: PreferedRecipeTypeCreate = {
-        diet_name: dietType.diet_name,
+      const fetchData: DietFavouriteCreate = {
+        name: dietType.name,
       };
 
-      const res = await preferedDietTypeApi.create(fetchData);
-      setPreferedDietTypes((prev) => [...prev, { diet_name: res.diet_name, type_id: res.id }]);
+      const res = await dietFavouriteApi.create(fetchData);
+      setPreferedDietTypes((prev) => [...prev, { name: res.name, diet_id: res.id }]);
     } catch (err) {
       console.log(err);
     }
@@ -46,8 +46,8 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
 
   const removePreferedDietType = async (id: number) => {
     try {
-      await preferedDietTypeApi.delete(id);
-      setPreferedDietTypes((prev) => prev.filter((dietType) => dietType.type_id !== id));
+      await dietFavouriteApi.delete(id);
+      setPreferedDietTypes((prev) => prev.filter((dietType) => dietType.diet_id !== id));
     } catch (err) {
       console.error('Error removing ingredient:', err);
     }
@@ -59,13 +59,13 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
         <div className="flex flex-wrap gap-2 mt-3">
           {preferedDietTypes.map((dietType) => (
             <span
-              key={dietType.type_id}
+              key={dietType.diet_id}
               className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-medium dark:bg-purple-800 dark:text-purple-100 shadow"
             >
-              {dietType.diet_name}
+              {dietType.name}
               <button
                 type="button"
-                onClick={() => void removePreferedDietType(dietType.type_id)}
+                onClick={() => void removePreferedDietType(dietType.diet_id)}
                 className="ml-2 text-purple-600 hover:text-purple-800 dark:text-purple-200 dark:hover:text-white font-bold"
               >
                 ×
@@ -91,7 +91,7 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
             onClick={() => void addPreferedDietType(data)}
             className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
           >
-            Add {data.diet_name}
+            Add {data.name}
           </button>
         )}
       </div>

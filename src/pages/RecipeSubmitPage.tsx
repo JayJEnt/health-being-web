@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { imagesApi } from '../api/endpoints/user_role/images';
-import { recipesApi } from '../api/endpoints/user_role/recipes';
+import { recipeApi } from '../api/endpoints/user_role/recipe';
 import type { RecipeCreate } from '../api/models/recipe';
 import DietTypeInput from '../components/Recipe/DietTypeInput';
 import ImageInput from '../components/Recipe/ImageInput';
@@ -13,8 +13,8 @@ const RecipeSubmitPage: React.FC = () => {
     title: '',
     description: '',
     instructions: [],
-    diet_type: [],
-    ingredients: [],
+    diet: [],
+    ingredient: [],
   });
   const [image, setImage] = useState<File | null>(null);
 
@@ -23,7 +23,7 @@ const RecipeSubmitPage: React.FC = () => {
     if (!recipe) return;
 
     try {
-      const recipeResponse = await recipesApi.create(recipe);
+      const recipeResponse = await recipeApi.create(recipe);
       if (!recipeResponse) return;
       if (image) {
         const formData = new FormData();

@@ -1,12 +1,12 @@
-import type { DietTypeCreate } from './diet_type';
+import type { DietCreate } from './diet';
 import type { IngredientQuantity } from './ingredient';
 
 export interface RecipeCreate {
   title: string;
   description: string;
   instructions: string[];
-  diet_type?: DietTypeCreate[] | null;
-  ingredients: IngredientQuantity[];
+  diet?: DietCreate[] | null;
+  ingredient: IngredientQuantity[];
 }
 
 export interface RecipeOverview {
@@ -15,12 +15,12 @@ export interface RecipeOverview {
 }
 
 export interface Recipe extends RecipeOverview {
-  owner_id: number;
+  author_id: number;
   description: string;
   instructions: string[];
 }
 
 export interface RecipeResponse extends Recipe {
-  diet_type?: DietTypeCreate[] | null;
-  ingredients: IngredientQuantity[];
+  diet?: DietCreate[] | null;
+  ingredient: IngredientQuantity[];
 }
