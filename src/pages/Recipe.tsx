@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { imagesApi } from '../api/endpoints/public/images';
-import { recipesApi } from '../api/endpoints/public/recipes';
+import { recipeApi } from '../api/endpoints/public/recipe';
 import { imagesApi as imagesApiUser } from '../api/endpoints/user_role/images';
-import { recipesApi as recipesApiUser } from '../api/endpoints/user_role/recipes';
+import { recipeApi as recipesApiUser } from '../api/endpoints/user_role/recipe';
 import type { RecipeResponse } from '../api/models/recipe';
 import { useAuth } from '../auth/useAuth';
 import DietTypeInput from '../components/Recipe/DietTypeInput';
@@ -17,11 +17,11 @@ export type RecipeEditPayload = Omit<RecipeResponse, 'id'>;
 
 const EMPTY_EDIT: RecipeEditPayload = {
   title: '',
-  owner_id: 0,
+  author_id: 0,
   description: '',
   instructions: [],
-  diet_type: [],
-  ingredients: [],
+  diet: [],
+  ingredient: [],
 };
 
 const RecipePage: React.FC = () => {
@@ -49,7 +49,7 @@ const RecipePage: React.FC = () => {
 
     const fetchRecipe = async () => {
       try {
-        const recipePromise = recipesApi.getById(id);
+        const recipePromise = recipeApi.getById(id);
         const imagePromise = imagesApi.download(id);
 
         const [fetchedRecipe, fetchedImage] = await Promise.all([recipePromise, imagePromise]);
@@ -196,7 +196,7 @@ const RecipePage: React.FC = () => {
       imageUrl={imageUrl}
       isLiked={isLiked}
       setIsLiked={setIsLiked}
-      handleEdit={user?.id === recipe.owner_id ? handleEdit : undefined}
+      handleEdit={user?.id === recipe.author_id ? handleEdit : undefined}
     />
   );
 };

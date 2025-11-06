@@ -1,8 +1,8 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useState } from 'react';
 
-import { dietTypeApi } from '../../api/endpoints/public/diet_types';
-import type { DietTypeResponse } from '../../api/models/diet_type';
+import { dietApi } from '../../api/endpoints/public/diet';
+import type { DietResponse } from '../../api/models/diet';
 import type { RecipeCreate } from '../../api/models/recipe';
 import { useDebouncedSearch } from '../../hooks/useDebounceSearchParams';
 import type { RecipeEditPayload } from '../../pages/Recipe';
@@ -19,20 +19,20 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
   const [newDietType, setNewDietType] = useState<string>('');
 
   const fetchDiet = useCallback(async (q: string, signal: AbortSignal) => {
-    return dietTypeApi.getByName(q, signal);
+    return dietApi.getByName(q, signal);
   }, []);
 
-  const { data, loading, error } = useDebouncedSearch<DietTypeResponse>({
+  const { data, loading, error } = useDebouncedSearch<DietResponse>({
     query: newDietType,
     fetcher: fetchDiet,
     delay: 300,
     minLength: 1,
   });
 
-  const addDietType = (diet: DietTypeResponse) => {
+  const addDietType = (diet: DietResponse) => {
     setRecipe({
       ...recipe,
-      diet_type: [...(recipe.diet_type ?? []), diet],
+      diet: [...(recipe.diet ?? []), diet],
     });
     setNewDietType('');
   };
@@ -42,7 +42,7 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
       if (!prev) return prev;
       return {
         ...prev,
-        diet_type: prev.diet_type?.filter((_, i) => i !== index) ?? [],
+        diet: prev.diet?.filter((_, i) => i !== index) ?? [],
       };
     });
   };
@@ -52,12 +52,12 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
       <h2 className="text-xl font-semibold mb-2">Diet Types</h2>
 
       <div className="flex flex-wrap gap-2 mb-3">
-        {recipe.diet_type?.map((diet, index) => (
+        {recipe.diet?.map((diet, index) => (
           <span
             key={index}
             className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
           >
-            {diet.diet_name}
+            {diet.name}
             <button
               type="button"
               onClick={() => removeDietType(index)}
@@ -89,7 +89,7 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
               onClick={() => addDietType(data)}
               className="block w-full text-left px-3 py-2 hover:bg-gray-100"
             >
-              {data.diet_name}
+              {data.name}
             </button>
           )}
         </div>

@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useState } from 'react';
 
-import { ingredientsApi } from '../../api/endpoints/public/ingredients';
+import { ingredientApi } from '../../api/endpoints/public/ingredient';
 import type { MeasureUnit } from '../../api/models/enum_utils';
 import { MeasureUnit as MeasuerUnitsValues } from '../../api/models/enum_utils';
 import type { Ingredient, IngredientQuantity } from '../../api/models/ingredient';
@@ -34,7 +34,7 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
   ];
 
   const fetchIngredient = useCallback(async (q: string, signal: AbortSignal) => {
-    return ingredientsApi.getByName(q, signal);
+    return ingredientApi.getByName(q, signal);
   }, []);
 
   const { data, loading, error } = useDebouncedSearch<Ingredient>({
@@ -64,8 +64,8 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
 
       return {
         ...prev,
-        ingredients: [
-          ...prev.ingredients,
+        ingredient: [
+          ...prev.ingredient,
           {
             name: selected.name,
             amount: newIngredient.amount,
@@ -91,11 +91,11 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
     setRecipe((prev) => {
       if (!prev) return prev;
 
-      const filteredIngredients = prev.ingredients.filter((_, i) => index !== i);
+      const filteredIngredients = prev.ingredient.filter((_, i) => index !== i);
 
       return {
         ...prev,
-        ingredients: filteredIngredients,
+        ingredient: filteredIngredients,
       };
     });
   };
@@ -107,7 +107,7 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
       <h2 className="text-xl font-semibold mb-2">Ingredients</h2>
 
       <div className="space-y-2 mb-3">
-        {recipe.ingredients.map((ingredient, index) => (
+        {recipe.ingredient.map((ingredient, index) => (
           <div key={index} className="flex gap-3 items-center text-sm">
             <span className="font-medium">{ingredient.name}</span>
             <span>{ingredient.amount}</span>
