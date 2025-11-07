@@ -20,7 +20,7 @@ const LoginPage: React.FC = () => {
       return;
     }
 
-    const ok = await login({ name: email, password });
+    const ok = await login({ email, password });
     if (ok) {
       void navigate('/');
     } else {

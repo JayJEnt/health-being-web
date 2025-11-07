@@ -3,7 +3,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { oauth2Api } from '../api/endpoints/public/oauth2';
 import { tokenDataApi } from '../api/endpoints/user_role/token_data';
 import type { Token } from '../api/models/token';
-import type { User, UserCreate } from '../api/models/user';
+import type { User } from '../api/models/user';
+import type { Oauth2RequestForm } from '../api/models/oauth2_form';
 import { isToken } from '../utils';
 import type { AuthState } from './auth';
 import { AuthContext, type AuthContextValue } from './context';
@@ -73,15 +74,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // login: set state -> save token -> get user
   const login = useCallback<AuthContextValue['login']>(
-    async (credentials: Omit<UserCreate, 'email'>) => {
+    async (credentials: Oauth2RequestForm) => {
       setState((s) => ({ ...s, status: 'loading' }));
       try {
         const token = await oauth2Api.ourLogin(credentials);
-
+        console.log(`token: ${token}`)
         localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(token));
+        console.log(`set up`)
         const user = await tokenDataApi.getUser();
-
+        console.log(`user: ${user}`)
         setState((s) => ({ ...s, token, user, status: 'authenticated' }));
+        console.log(`set up`)
         return true;
       } catch (err) {
         console.error('Login error:', err);
