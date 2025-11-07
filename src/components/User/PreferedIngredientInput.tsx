@@ -1,20 +1,20 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useState } from 'react';
 
-import { ingredientsApi } from '../../api/endpoints/public/ingredients';
-import { preferedIngredientsApi } from '../../api/endpoints/user_role/prefered_ingredients';
+import { ingredientApi } from '../../api/endpoints/public/ingredient';
+import { ingredientPreferenceApi } from '../../api/endpoints/user_role/ingredient_preference';
 import { Preference } from '../../api/models/enum_utils';
 import { Preference as PreferenceValues } from '../../api/models/enum_utils';
 import type { Ingredient } from '../../api/models/ingredient';
 import type {
-  PreferedIngredientsCreate,
-  PreferedIngredientsResponse,
-} from '../../api/models/prefered_ingredients';
+  IngredientPreferenceCreate,
+  IngredientPreferenceResponse,
+} from '../../api/models/ingredient_preference';
 import { useDebouncedSearch } from '../../hooks/useDebounceSearchParams';
 
 type Props = {
-  preferedIngredients: PreferedIngredientsResponse[];
-  setPreferedIngredients: Dispatch<SetStateAction<PreferedIngredientsResponse[]>>;
+  preferedIngredients: IngredientPreferenceResponse[];
+  setPreferedIngredients: Dispatch<SetStateAction<IngredientPreferenceResponse[]>>;
 };
 
 const PreferedIngredientInput: React.FC<Props> = ({
@@ -27,7 +27,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
   const options = Object.values(PreferenceValues);
 
   const fetchIngredient = useCallback(async (q: string, signal: AbortSignal) => {
-    return ingredientsApi.getByName(q, signal);
+    return ingredientApi.getByName(q, signal);
   }, []);
 
   const { data, loading, error, reset } = useDebouncedSearch<Ingredient>({
@@ -39,13 +39,13 @@ const PreferedIngredientInput: React.FC<Props> = ({
 
   const addPreferedIngredient = async (ingredient: Ingredient, pref: Preference) => {
     try {
-      const fetchData: PreferedIngredientsCreate = {
+      const fetchData: IngredientPreferenceCreate = {
         name: ingredient.name,
         preference: pref,
       };
 
-      const res = await preferedIngredientsApi.create(fetchData);
-      const newIngredient: PreferedIngredientsResponse = {
+      const res = await ingredientPreferenceApi.create(fetchData);
+      const newIngredient: IngredientPreferenceResponse = {
         name: res.name,
         preference: res.preference,
         ingredient_id: res.id,
@@ -61,7 +61,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
 
   const removePreferedIngredient = async (id: number) => {
     try {
-      await preferedIngredientsApi.delete(id);
+      await ingredientPreferenceApi.delete(id);
       setPreferedIngredients((prev) =>
         prev.filter((ingredient) => ingredient.ingredient_id !== id),
       );

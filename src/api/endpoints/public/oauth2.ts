@@ -5,10 +5,10 @@ import type { User, UserCreate } from '../../models/user';
 
 export const oauth2Api = {
   ourRegister: (user: UserCreate) =>
-    api.post<User>(`${settings.OAUTH2_OUR_REGISTER_ENDPOINT}`, user),
+    api.post<User>(`${settings.REGISTER_ENDPOINT}`, user),
 
   ourLogin: (credentials: Omit<UserCreate, 'email'>) =>
-    api.postForm<Token>(`${settings.OAUTH2_OUR_LOGIN_ENDPOINT}`, credentials),
+    api.postForm<Token>(`${settings.LOGIN_ENDPOINT}`, credentials),
 
-  googleLogin: () => api.get<Token>(`${settings.OAUTH2_GOOGLE_LOGIN_ENDPOINT}`),
+  googleLogin: (provider: string) => api.get<Token>(`${settings.LOGIN_ENDPOINT}`, { provider }),
 };

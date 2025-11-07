@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import type { RefrigeratorCreate, RefrigeratorResponse } from '../../api/models/refrigerator';
-import { refrigeratorApi } from '../../api/endpoints/user_role/refrigerator';
+import type { IngredientRefrigeratorCreate, IngredientRefrigeratorResponse } from '../../api/models/ingredient_refrigerator';
+import { ingredientRefrigeratorApi } from '../../api/endpoints/user_role/ingredient_refrigerator';
 import { MeasureUnit } from '../../api/models/enum_utils';
 const Fridge: React.FC = () => {
-  const [productsList, setProductsList] = useState<RefrigeratorResponse[]>([]);
-  const [newProduct, setNewProduct] = useState<RefrigeratorCreate>({
+  const [productsList, setProductsList] = useState<IngredientRefrigeratorResponse[]>([]);
+  const [newProduct, setNewProduct] = useState<IngredientRefrigeratorCreate>({
     name: '',
     amount: 0,
     measure_unit: '',
@@ -13,7 +13,7 @@ const Fridge: React.FC = () => {
   useEffect(() => {
     async function fetchProductsList() {
       try {
-        const fetchResponse = await refrigeratorApi.getAll();
+        const fetchResponse = await ingredientRefrigeratorApi.getAll();
         setProductsList(fetchResponse);
       } catch (err) {
         console.log(err);
@@ -32,7 +32,7 @@ const Fridge: React.FC = () => {
 
   async function handleSubmit() {
     try {
-      const createResponse = await refrigeratorApi.create(newProduct);
+      const createResponse = await ingredientRefrigeratorApi.create(newProduct);
       if (createResponse) {
         setProductsList((prev) => [
           ...prev,
@@ -51,7 +51,7 @@ const Fridge: React.FC = () => {
 
   async function handleDelete(id: number) {
     try {
-      const deleteResponse = await refrigeratorApi.delete(id);
+      const deleteResponse = await ingredientRefrigeratorApi.delete(id);
       if (deleteResponse) {
         const newProductsList = productsList.filter((product) => {
           product.ingredient_id != id;

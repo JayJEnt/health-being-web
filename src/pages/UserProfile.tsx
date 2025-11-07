@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 
-import { preferedDietTypeApi } from '../api/endpoints/user_role/prefered_diet_type';
-import { preferedIngredientsApi } from '../api/endpoints/user_role/prefered_ingredients';
-import { usersOwnerApi } from '../api/endpoints/user_role/users';
+import { dietFavouriteApi } from '../api/endpoints/user_role/diet_favourite';
+import { ingredientPreferenceApi } from '../api/endpoints/user_role/ingredient_preference';
+import { userOwnerApi } from '../api/endpoints/user_role/user';
 import type { ActivityLevel, Role, Silhouette } from '../api/models/enum_utils';
 import {
   ActivityLevel as ActivityLevelValues,
   Silhouette as SilhouetteTypes,
 } from '../api/models/enum_utils';
-import type { PreferedRecipeTypeResponse } from '../api/models/prefered_diet_type';
-import type { PreferedIngredientsResponse } from '../api/models/prefered_ingredients';
+import type { DietFavouriteResponse } from '../api/models/diet_favourite';
+import type { IngredientPreferenceResponse } from '../api/models/ingredient_preference';
 import type { User, UserCreate } from '../api/models/user';
 import { useAuth } from '../auth/useAuth';
 import PreferedDietTypesInput from '../components/User/PreferedDietTypesInput';
@@ -19,8 +19,8 @@ const UserProfile: React.FC = () => {
   const { user } = useAuth();
 
   const [personalData, setPersonalData] = useState<User | null>(null);
-  const [preferedIngredients, setPreferedIngredients] = useState<PreferedIngredientsResponse[]>([]);
-  const [preferedDietTypes, setPreferedDietTypes] = useState<PreferedRecipeTypeResponse[]>([]);
+  const [preferedIngredients, setPreferedIngredients] = useState<IngredientPreferenceResponse[]>([]);
+  const [preferedDietTypes, setPreferedDietTypes] = useState<DietFavouriteResponse[]>([]);
 
   const makeDefaultPersonalData = (
     id: number,
@@ -29,7 +29,7 @@ const UserProfile: React.FC = () => {
     role: Role,
   ): User => ({
     id: id,
-    username: username,
+    name: username,
     email: email,
     role: role,
     age: null,
@@ -45,19 +45,19 @@ const UserProfile: React.FC = () => {
     const load = async () => {
       try {
         const [pd, pi, dt] = await Promise.all([
-          usersOwnerApi.get().catch(() => null),
-          preferedIngredientsApi.getAll().catch(() => []),
-          preferedDietTypeApi.getAll().catch(() => []),
+          userOwnerApi.get().catch(() => null),
+          ingredientPreferenceApi.getAll().catch(() => []),
+          dietFavouriteApi.getAll().catch(() => []),
         ]);
 
         setPersonalData(
-          pd ?? makeDefaultPersonalData(user.id, user.username, user.email, user.role),
+          pd ?? makeDefaultPersonalData(user.id, user.name, user.email, user.role),
         );
         setPreferedIngredients(pi ?? []);
         setPreferedDietTypes(dt ?? []);
       } catch (e) {
         console.error(e);
-        setPersonalData(makeDefaultPersonalData(user.id, user.username, user.email, user.role));
+        setPersonalData(makeDefaultPersonalData(user.id, user.name, user.email, user.role));
       }
     };
 
@@ -76,7 +76,7 @@ const UserProfile: React.FC = () => {
 
     const changedData: UserCreate = { ...personalData, password: 'pass' }; // added dummy password for pre-commit until we decide how to resolve this
 
-    await usersOwnerApi.update(changedData);
+    await userOwnerApi.update(changedData);
   };
 
   const activityOptions = Object.values(ActivityLevelValues);

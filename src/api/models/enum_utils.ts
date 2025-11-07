@@ -16,6 +16,7 @@ export const Silhouette = {
 export type Silhouette = (typeof Silhouette)[keyof typeof Silhouette];
 
 export const Role = {
+  unconfirmed: "unconfirmed",
   user: 'user',
   admin: 'admin',
 } as const;

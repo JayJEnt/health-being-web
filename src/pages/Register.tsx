@@ -6,7 +6,7 @@ import type { UserCreate } from '../api/models/user';
 
 const LoginPage: React.FC = () => {
   const [user, setUser] = useState<UserCreate>({
-    username: '',
+    name: '',
     email: '',
     password: '',
   });
@@ -35,7 +35,7 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user.username || !user.email || !user.password) {
+    if (!user.name || !user.email || !user.password) {
       setError('Please enter username, email and password.');
       return;
     }
@@ -72,8 +72,8 @@ const LoginPage: React.FC = () => {
           <input
             type="text"
             placeholder="Username"
-            value={user.username}
-            onChange={(e) => setUser((user) => ({ ...user, username: e.target.value }))}
+            value={user.name}
+            onChange={(e) => setUser((user) => ({ ...user, name: e.target.value }))}
             className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
           />
           <input

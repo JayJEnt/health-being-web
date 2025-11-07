@@ -10,7 +10,7 @@ type Props = {
 
 const UserCard: React.FC<Props> = ({ user, deleteHandler }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [username, setUsername] = useState(user.username);
+  const [username, setUsername] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [password, setPassword] = useState('');
 
@@ -32,7 +32,7 @@ const UserCard: React.FC<Props> = ({ user, deleteHandler }) => {
 
   const handleCancel = () => {
     setIsEditing(false);
-    setUsername(user.username);
+    setUsername(user.name);
     setEmail(user.email);
     setPassword('');
   };
@@ -79,7 +79,7 @@ const UserCard: React.FC<Props> = ({ user, deleteHandler }) => {
         </>
       ) : (
         <>
-          <div className="text-lg font-semibold text-gray-900">{user.username}</div>
+          <div className="text-lg font-semibold text-gray-900">{user.name}</div>
           <div className="text-sm text-gray-600">{user.email}</div>
           <div className="text-sm text-gray-600">ID: {user.id}</div>
           <div className="text-sm text-gray-600">Role: {user.role}</div>
