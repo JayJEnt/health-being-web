@@ -78,13 +78,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setState((s) => ({ ...s, status: 'loading' }));
       try {
         const token = await oauth2Api.ourLogin(credentials);
-        console.log(`token: ${token}`)
+
         localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(token));
-        console.log(`set up`)
         const user = await tokenDataApi.getUser();
-        console.log(`user: ${user}`)
+        
         setState((s) => ({ ...s, token, user, status: 'authenticated' }));
-        console.log(`set up`)
         return true;
       } catch (err) {
         console.error('Login error:', err);
