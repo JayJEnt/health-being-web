@@ -1,10 +1,10 @@
 import { createContext } from 'react';
 
-import type { UserCreate } from '../api/models/user';
+import type { Oauth2RequestForm } from '../api/models/oauth2_form';
 import type { AuthState } from './auth';
 
 export type AuthContextValue = AuthState & {
-  login: (creds: Omit<UserCreate, 'email'>) => Promise<boolean>;
+  login: (creds: Oauth2RequestForm) => Promise<boolean>;
   logout: () => void;
 };
 
