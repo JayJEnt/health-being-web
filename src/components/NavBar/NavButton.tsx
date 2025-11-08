@@ -5,19 +5,24 @@ type NavButtonProps = {
   icon: React.ElementType;
   label: string;
   to: string;
+  onClick?: () => void;
 };
 
-const NavButton: React.FC<NavButtonProps> = ({ icon: Icon, label, to }) => {
+const NavButton: React.FC<NavButtonProps> = ({ icon: Icon, label, to, onClick }) => {
   return (
     <NavLink
       to={to}
       className={({ isActive }) =>
         `flex items-center gap-4 w-full px-4 py-3 rounded-xl transition-colors
-				${isActive ? 'bg-light-accent/20 text-light-accent' : 'text-light-navbar-text hover:bg-light-navbar-hover'}`
+				${isActive 
+          ? 'text-blue-600 font-semibold' 
+          : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+        }`
       }
+      onClick={onClick}
     >
-      <Icon className="w-6 h-6 lg:w-8 lg:h-8" />
-      <span className="text-base lg:text-lg font-medium">{label}</span>
+      <Icon className="w-5 h-5 text-current" />
+      <span className="text-sm font-medium">{label}</span>
     </NavLink>
   );
 };
