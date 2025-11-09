@@ -3,10 +3,21 @@ import { api } from '../../client';
 import type { RecipeOverview, RecipeResponse } from '../../models/recipe';
 
 export const recipeApi = {
-  getByPhrase: (phrase: string) =>
-    api.get<RecipeResponse>(`${settings.RECIPE_ENDPOINT}`, { phrase }),
+  getByPhrase: (phrase: string, opts?: { dietType?: string; page?: number; limit?: number }) =>
+    api.get<RecipeOverview[]>(`${settings.RECIPE_ENDPOINT}`, {
+      phrase,
+      diet_type: opts?.dietType,
+      page: opts?.page,
+      limit: opts?.limit,
+    }),
 
-  getById: (recipe_id: string) => api.get<RecipeResponse>(`${settings.RECIPE_ENDPOINT}`, { recipe_id }),
+  // Mock search endpoint - replace with actual /search endpoint when backend is ready
+  search: (phrase: string, opts?: { page?: number; limit?: number }) =>
+    api.get<RecipeOverview[]>(`${settings.RECIPE_ENDPOINT}/search`, {
+      phrase,
+      page: opts?.page,
+      limit: opts?.limit,
+    }),
 
-  getAll: () => api.get<RecipeOverview[]>(`${settings.RECIPE_ENDPOINT}`),
+  getById: (id: string) => api.get<RecipeResponse>(`${settings.RECIPE_ENDPOINT}`, { id }),
 };
