@@ -22,6 +22,7 @@ const EMPTY_EDIT: RecipeEditPayload = {
   instructions: [],
   diet: [],
   ingredient: [],
+  category: 'Snack',
 };
 
 const RecipePage: React.FC = () => {
