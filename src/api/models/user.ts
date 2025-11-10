@@ -9,20 +9,13 @@ export interface UserData {
   silhouette?: Silhouette | null;
 }
 
-export interface UserBaseModel extends UserData {
+export interface UserCreate extends UserData {
   name: string;
   email: string; // EmailStr (TODO: add some email patern validation)
+  password?: string | null;
 }
 
-export interface UserCreate extends UserBaseModel {
-  password: string;
-}
-
-export interface UserUpdateAdmin extends UserCreate {
-  role: Role;
-}
-
-export interface User extends UserBaseModel {
+export interface User extends UserCreate {
   id: number;
   role: Role;
 }

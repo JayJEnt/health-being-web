@@ -1,5 +1,5 @@
 export interface FollowsCreate {
-  username: string;
+  name: string;
 }
 
 export interface FollowsResponse extends FollowsCreate {
