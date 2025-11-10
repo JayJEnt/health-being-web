@@ -86,7 +86,7 @@ const LoginPage: React.FC = () => {
           <input
             type="password"
             placeholder="Password"
-            value={user.password}
+            value={user.password ?? ""}
             onChange={handlePasswordChange}
             className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
           />

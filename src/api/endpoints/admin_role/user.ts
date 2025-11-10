@@ -1,6 +1,6 @@
 import { settings } from '../../../config';
 import { api } from '../../client';
-import type { User, UserUpdateAdmin } from '../../models/user';
+import type { User, UserCreate } from '../../models/user';
 
 export const userAdminApi = {
   getByName: (name: string) => api.get<User>(`${settings.USER_ENDPOINT}`, { name }),
@@ -11,7 +11,7 @@ export const userAdminApi = {
 
   getAll: () => api.get<User[]>(`${settings.USER_ENDPOINT}`),
 
-  update: (data: UserUpdateAdmin, user_id: number) =>
+  update: (data: UserCreate, user_id: number) =>
     api.put<User>(`${settings.USER_ENDPOINT}`, data, { user_id }),
 
   delete: (user_id: number) => api.delete<User>(`${settings.USER_ENDPOINT}`, { user_id }),
