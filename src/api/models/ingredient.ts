@@ -5,7 +5,10 @@ export interface IngredientName {
   name: string;
 }
 
-export interface Ingredient extends IngredientName, Micronutrients {}
+export interface Ingredient extends IngredientName, Micronutrients {
+  default_weight?: number;
+  rho?: number;
+}
 
 export interface IngredientResponse extends Ingredient {
   id: number;

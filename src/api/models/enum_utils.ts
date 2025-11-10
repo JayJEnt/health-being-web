@@ -40,3 +40,25 @@ export const Preference = {
 } as const;
 
 export type Preference = (typeof Preference)[keyof typeof Preference];
+
+export const Category = {
+  salad: "Salad",
+  soup: "Soup",
+  main_dish: "Main Dish",
+  appetizer: "Appetizer",
+  dessert: "Dessert",
+  snack: "Snack",
+  beverage: "Beverage",
+  breakfast: "Breakfast",
+  brunch: "Brunch",
+  side_dish: "Side Dish",
+  pasta: "Pasta",
+  grilled: "Grilled",
+  smoothie: "Smoothie",
+  bbq: "BBQ",
+  slow_cooker: "Slow Cooker",
+  stir_fry: "Stir Fry",
+  fermented: "Fermented",
+} as const;
+
+export type Category = (typeof Category)[keyof typeof Category];
