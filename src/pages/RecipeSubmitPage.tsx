@@ -15,6 +15,7 @@ const RecipeSubmitPage: React.FC = () => {
     instructions: [],
     diet: [],
     ingredient: [],
+    category: 'Snack',
   });
   const [image, setImage] = useState<File | null>(null);
 
