@@ -21,7 +21,7 @@ function App() {
   }
 
   return (
-    <div className={`grid grid-cols-[auto_1fr] gap-4 min-h-screen`}>
+    <div className="grid grid-cols-[auto_1fr] gap-4 min-h-screen">
       <NavBar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -33,10 +33,11 @@ function App() {
         />
         <Route path="/user" element={isAuthenticated ? <UserProfile /> : <LoginPage />} />
 
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/users_list" element={<UsersList />} />
-      </Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/users_list" element={<UsersList />} />
+        </Routes>
+      </main>
     </div>
   );
 }
