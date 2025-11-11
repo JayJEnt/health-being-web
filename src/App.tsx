@@ -10,6 +10,7 @@ import RecipeSubmitPage from './pages/RecipeSubmitPage.tsx';
 import RegisterPage from './pages/Register.tsx';
 import UserProfile from './pages/UserProfile.tsx';
 import UsersList from './pages/UsersList.tsx';
+import EmailCallbackPage from './pages/EmailCallback.tsx';
 
 function App() {
   const { status } = useAuth();
@@ -33,6 +34,8 @@ function App() {
             element={isAuthenticated ? <RecipeSubmitPage /> : <LoginPage />}
           />
           <Route path="/user" element={isAuthenticated ? <UserProfile /> : <LoginPage />} />
+
+          <Route path="/email_callback/:token" element={<EmailCallbackPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/users_list" element={<UsersList />} />
