@@ -6,10 +6,17 @@ import type { Oauth2RequestForm } from '../../models/oauth2_form';
 
 export const oauth2Api = {
   ourRegister: (user: UserCreate) =>
-    api.post<User>(`${settings.REGISTER_ENDPOINT}`, user),
+    api.post<User>(`${settings.OAUTH2_ENDPOINT}/register`, user),
 
   ourLogin: (credentials: Oauth2RequestForm) =>
-    api.postForm<Token>(`${settings.LOGIN_ENDPOINT}`, credentials),
+    api.postForm<Token>(`${settings.OAUTH2_ENDPOINT}/login`, credentials),
 
-  googleLogin: (provider: string) => api.get<Token>(`${settings.LOGIN_ENDPOINT}`, { provider }),
+  sendVerificationEmail: (email: string) =>
+    api.post<JSON>(`${settings.OAUTH2_ENDPOINT}/send_verification_email`, undefined, { email }),
+
+  verifyEmail: () =>
+    api.get<User>(`${settings.OAUTH2_ENDPOINT}/verify_email`),
+
+  externalLogin: (provider: string) =>
+    api.get<Token>(`${settings.OAUTH2_ENDPOINT}/login`, { provider }),
 };
