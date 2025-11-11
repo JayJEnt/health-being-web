@@ -1,4 +1,4 @@
-import type { Quantity, Micronutrients } from './utils';
+import type { Micronutrients, Quantity } from './utils';
 import type { Vitamin, VitaminCreate } from './vitamin';
 
 export interface IngredientName {

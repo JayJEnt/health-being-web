@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
+import { tokenDataApi } from '../api/endpoints/user_role/token_data.ts';
+import type { User } from '../api/models/user.ts';
 import Fridge from '../components/Fridge/Fridge.tsx';
 import HomeCarousel from '../components/Home/HomeCarousel.tsx';
-import { tokenDataApi } from '../api/endpoints/user_role/token_data.ts';
-import type { User } from '../api/models/user.ts'; 
 
 const Home: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -28,7 +28,7 @@ const Home: React.FC = () => {
           className="lg:text-5xl
             text-light-main-text dark:bg-dark-main-text "
         >
-          Welcome, {user ? `${user.name.charAt(0).toUpperCase()}${user.name.slice(1)}!` : ""}
+          Welcome, {user ? `${user.name.charAt(0).toUpperCase()}${user.name.slice(1)}!` : ''}
         </h1>
 
         <div className="p-20">
