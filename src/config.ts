@@ -2,14 +2,14 @@ class Settings {
   API_BASE_URL: string = '';
   ENVIRONMENT: string = '';
   LOG_LEVEL: string = '';
+
   DIET_ENDPOINT: string = '/diet';
   USER_FOLLOWED_ENDPOINT: string = '/user_followed';
   RECIPES_PAGE_SIZE: number = 18;
   IMAGES_UPLOAD_ENDPOINT: string = '/images/upload';
   IMAGES_DOWNLOAD_ENDPOINT: string = '/images/download';
   INGREDIENT_ENDPOINT: string = '/ingredient';
-  LOGIN_ENDPOINT: string = '/oauth2/login';
-  REGISTER_ENDPOINT: string = '/oauth2/register';
+  OAUTH2_ENDPOINT: string = '/oauth2';
   INGREDIENT_PREFERENCE_ENDPOINT: string = '/ingredient_preference';
   DIET_FAVOURITE_ENDPOINT: string = '/diet_favourite';
   RECIPE_FAVOURITE_ENDPOINT: string = '/recipe_favourite';
@@ -19,6 +19,8 @@ class Settings {
   USER_ENDPOINT: string = '/user';
   USER_OWNER_ENDPOINT: string = '/user/owner';
   VITAMIN_ENDPOINT: string = '/vitamin';
+
+  AUTH_TOKEN_KEY: string = 'app.auth.token';
 }
 
 class LocalSettings extends Settings {

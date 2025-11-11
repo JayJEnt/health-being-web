@@ -8,8 +8,7 @@ import type { Oauth2RequestForm } from '../api/models/oauth2_form';
 import { isToken } from '../utils';
 import type { AuthState } from './auth';
 import { AuthContext, type AuthContextValue } from './context';
-
-const AUTH_TOKEN_KEY = 'app.auth.token';
+import { settings } from '../config';
 
 // Provider
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -24,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     let cancelled = false;
 
     const init = async () => {
-      const raw = localStorage.getItem(AUTH_TOKEN_KEY);
+      const raw = localStorage.getItem(settings.AUTH_TOKEN_KEY);
       if (!raw) {
         if (!cancelled) {
           setState((s) => ({
@@ -54,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       } catch (err) {
         console.log(err);
-        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(settings.AUTH_TOKEN_KEY);
         if (!cancelled) {
           setState((s) => ({
             ...s,
@@ -79,14 +78,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         const token = await oauth2Api.ourLogin(credentials);
 
-        localStorage.setItem(AUTH_TOKEN_KEY, JSON.stringify(token));
+        localStorage.setItem(settings.AUTH_TOKEN_KEY, JSON.stringify(token));
         const user = await tokenDataApi.getUser();
         
         setState((s) => ({ ...s, token, user, status: 'authenticated' }));
         return true;
       } catch (err) {
         console.error('Login error:', err);
-        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(settings.AUTH_TOKEN_KEY);
         setState((s) => ({
           ...s,
           token: null,
@@ -101,7 +100,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // logout: clear state -> clear localStorage
   const logout = useCallback(() => {
-    localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(settings.AUTH_TOKEN_KEY);
     setState((s) => ({
       ...s,
       token: null,
@@ -114,7 +113,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Synchronization between tabs
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
-      if (e.key !== AUTH_TOKEN_KEY) return;
+      if (e.key !== settings.AUTH_TOKEN_KEY) return;
       if (!e.newValue) {
         logout();
       } else {

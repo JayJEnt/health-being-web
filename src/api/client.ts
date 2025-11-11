@@ -43,7 +43,7 @@ export class ApiClient {
     });
     let token: Token | null = null;
     this.client.interceptors.request.use((config) => {
-      const rawToken = localStorage.getItem('app.auth.token');
+      const rawToken = localStorage.getItem(settings.AUTH_TOKEN_KEY);
       if (rawToken) {
         const parsed: unknown = JSON.parse(rawToken);
         if (isToken(parsed)) {
