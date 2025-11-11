@@ -4,6 +4,7 @@ class Settings {
   LOG_LEVEL: string = '';
   DIET_ENDPOINT: string = '/diet';
   USER_FOLLOWED_ENDPOINT: string = '/user_followed';
+  RECIPES_PAGE_SIZE: number = 18;
   IMAGES_UPLOAD_ENDPOINT: string = '/images/upload';
   IMAGES_DOWNLOAD_ENDPOINT: string = '/images/download';
   INGREDIENT_ENDPOINT: string = '/ingredient';

@@ -5,6 +5,7 @@ import NavBar from './components/NavBar/NavBar.tsx';
 import Home from './pages/Home.tsx';
 import LoginPage from './pages/Login.tsx';
 import RecipePage from './pages/Recipe.tsx';
+import RecipesSearch from './pages/RecipesSearch.tsx';
 import RecipeSubmitPage from './pages/RecipeSubmitPage.tsx';
 import RegisterPage from './pages/Register.tsx';
 import UserProfile from './pages/UserProfile.tsx';
@@ -25,13 +26,13 @@ function App() {
       <main className="pt-16 absolute inset-0">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/search" element={<RecipesSearch />} />
           <Route path="/recipe/:id" element={<RecipePage />} />
           <Route
             path="/recipe/submit"
             element={isAuthenticated ? <RecipeSubmitPage /> : <LoginPage />}
           />
           <Route path="/user" element={isAuthenticated ? <UserProfile /> : <LoginPage />} />
-
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/users_list" element={<UsersList />} />

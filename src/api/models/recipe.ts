@@ -1,7 +1,7 @@
 import type { DietCreate } from './diet';
+import type { Category } from './enum_utils';
 import type { IngredientQuantity } from './ingredient';
 import type { MicronutrientsTotal } from './utils';
-import type { Category } from './enum_utils';
 
 export interface RecipeCreate {
   title: string;
@@ -27,5 +27,14 @@ export interface Recipe extends RecipeOverview {
 export interface RecipeResponse extends Recipe {
   diet?: DietCreate[] | null;
   ingredient: IngredientQuantity[];
-  micronutrients?: MicronutrientsTotal | {};
+  micronutrients?: MicronutrientsTotal | null;
+}
+
+export interface RecipeFilter {
+  allergies_off?: boolean;
+  dislike_off?: boolean;
+  only_favourite_ingredients?: boolean;
+  only_favourite_diets?: boolean;
+  only_followed_authors?: boolean;
+  only_owned_ingredients?: boolean;
 }
