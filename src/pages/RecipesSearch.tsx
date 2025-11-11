@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { recipesApi } from '../api/endpoints/public/recipes';
-import { recipesApi as recipesApiUser } from '../api/endpoints/user_role/recipes';
+import { recipeApi } from '../api/endpoints/public/recipe';
+import { recipeApi as recipeApiUser } from '../api/endpoints/user_role/recipe';
 import type { RecipeFilter, RecipeOverview } from '../api/models/recipe';
 import { useAuth } from '../auth/useAuth';
 import { settings } from '../config';
@@ -43,13 +43,10 @@ const RecipesSearch: React.FC = () => {
 
         // Use deep search if user is logged in, otherwise use public search
         if (user) {
-          res = await recipesApiUser.deepSearch(searchPhrase || '', filters);
+          res = await recipeApiUser.deep_search(searchPhrase || '', filters);
         } else {
           // Use public search endpoint - TODO: replace with /search endpoint when backend is ready
-          res = await recipesApi.getByPhrase(searchPhrase || '', {
-            page: 1,
-            limit: settings.RECIPES_PAGE_SIZE,
-          });
+          res = await recipeApi.getByPhrase(searchPhrase || '');
         }
 
         if (Array.isArray(res)) {
@@ -107,11 +104,8 @@ const RecipesSearch: React.FC = () => {
         // In normal pagination mode: fetch next page from backend
         const nextPage = page + 1;
         const res = user
-          ? await recipesApiUser.deepSearch(query || '', filters)
-          : await recipesApi.getByPhrase(query || '', {
-              page: nextPage,
-              limit: settings.RECIPES_PAGE_SIZE,
-            });
+          ? await recipeApiUser.deep_search(query || '', filters)
+          : await recipeApi.getByPhrase(query || '');
         if (Array.isArray(res)) {
           setResults((prev) => [...prev, ...res]);
           setDisplayedRecipes((prev) => [...prev, ...res]);

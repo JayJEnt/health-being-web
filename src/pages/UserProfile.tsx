@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { dietFavouriteApi } from '../api/endpoints/user_role/diet_favourite';
 import { ingredientPreferenceApi } from '../api/endpoints/user_role/ingredient_preference';
 import { userOwnerApi } from '../api/endpoints/user_role/user';
+import type { DietFavouriteResponse } from '../api/models/diet_favourite';
 import type { ActivityLevel, Role, Silhouette } from '../api/models/enum_utils';
 import {
   ActivityLevel as ActivityLevelValues,
   Silhouette as SilhouetteTypes,
 } from '../api/models/enum_utils';
-import type { DietFavouriteResponse } from '../api/models/diet_favourite';
 import type { IngredientPreferenceResponse } from '../api/models/ingredient_preference';
 import type { User, UserCreate } from '../api/models/user';
 import { useAuth } from '../auth/useAuth';
@@ -19,7 +19,9 @@ const UserProfile: React.FC = () => {
   const { user } = useAuth();
 
   const [personalData, setPersonalData] = useState<User | null>(null);
-  const [preferedIngredients, setPreferedIngredients] = useState<IngredientPreferenceResponse[]>([]);
+  const [preferedIngredients, setPreferedIngredients] = useState<IngredientPreferenceResponse[]>(
+    [],
+  );
   const [preferedDietTypes, setPreferedDietTypes] = useState<DietFavouriteResponse[]>([]);
 
   const makeDefaultPersonalData = (
@@ -50,9 +52,7 @@ const UserProfile: React.FC = () => {
           dietFavouriteApi.getAll().catch(() => []),
         ]);
 
-        setPersonalData(
-          pd ?? makeDefaultPersonalData(user.id, user.name, user.email, user.role),
-        );
+        setPersonalData(pd ?? makeDefaultPersonalData(user.id, user.name, user.email, user.role));
         setPreferedIngredients(pi ?? []);
         setPreferedDietTypes(dt ?? []);
       } catch (e) {

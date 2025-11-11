@@ -24,12 +24,16 @@ const NavBar: React.FC = () => {
     void navigate('/');
   };
 
-  const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?phrase=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
-    }
+  // const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (searchQuery.trim()) {
+  //     navigate(`/search?phrase=${encodeURIComponent(searchQuery.trim())}`);
+  //     setSearchQuery('');
+  //   }
+  // };
+
+  const handleSearchSubmit = () => {
+    void 0;
   };
 
   return (

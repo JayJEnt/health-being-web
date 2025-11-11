@@ -1,7 +1,7 @@
 import { settings } from '../../../config';
 import { api } from '../../client';
-import type { RecipeCreate, RecipeResponse, RecipeOverview } from '../../models/recipe';
-import type { RecipeFilter } from '../../models/filters'
+import type { RecipeFilter } from '../../models/filters';
+import type { RecipeCreate, RecipeOverview, RecipeResponse } from '../../models/recipe';
 
 export const recipeApi = {
   create: (data: RecipeCreate) => api.post<RecipeResponse>(`${settings.RECIPE_ENDPOINT}`, data),
@@ -11,5 +11,6 @@ export const recipeApi = {
 
   delete: (recipe_id: string) => api.delete(`${settings.RECIPE_ENDPOINT}`, { recipe_id }),
 
-  deep_search: (phrase: string, data: RecipeFilter) => api.post<RecipeOverview>(`${settings.RECIPE_ENDPOINT}/deep_search`, data, { phrase }),
+  deep_search: (phrase: string, data: RecipeFilter) =>
+    api.post<RecipeOverview[]>(`${settings.RECIPE_ENDPOINT}/deep_search`, data, { phrase }),
 };

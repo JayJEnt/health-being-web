@@ -16,11 +16,11 @@ export interface Micronutrients {
 }
 
 export interface MicronutrientsTotal {
-  calories: number | 0.0;
-  protein: number | 0.0;
-  fat: number | 0.0;
-  carbon: number | 0.0;
-  fiber: number | 0.0;
-  sugar: number | 0.0;
-  salt: number | 0.0;
+  calories?: number | null;
+  protein?: number | null;
+  fat?: number | null;
+  carbon?: number | null;
+  fiber?: number | null;
+  sugar?: number | null;
+  salt?: number | null;
 }
