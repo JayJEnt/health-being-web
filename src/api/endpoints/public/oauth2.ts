@@ -5,8 +5,8 @@ import type { User, UserCreate } from '../../models/user';
 import type { Oauth2RequestForm } from '../../models/oauth2_form';
 
 export const oauth2Api = {
-  ourRegister: (user: UserCreate) =>
-    api.post<User>(`${settings.OAUTH2_ENDPOINT}/register`, user),
+  ourRegister: (data: UserCreate) =>
+    api.post<User>(`${settings.OAUTH2_ENDPOINT}/register`, data),
 
   ourLogin: (credentials: Oauth2RequestForm) =>
     api.postForm<Token>(`${settings.OAUTH2_ENDPOINT}/login`, credentials),
