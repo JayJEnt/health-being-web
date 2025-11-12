@@ -22,10 +22,9 @@ const LoginPage: React.FC = () => {
     if (/[A-Z]/.test(pw)) score++;
     if (/[0-9]/.test(pw)) score++;
     if (/[^A-Za-z0-9]/.test(pw)) score++;
-    if (score <= 1) return 'Weak';
-    if (score === 2 || score === 3) return 'Medium';
     if (score === 4) return 'Strong';
-    return 'Weak';
+    else if (score === 2 || score === 3) return 'Medium';
+    else return 'Weak';
   }
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +68,7 @@ const LoginPage: React.FC = () => {
         <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800 dark:text-white">
           Sign up
         </h2>
-        <form onSubmit={void handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
             placeholder="Username"
