@@ -11,6 +11,6 @@ export const recipeApi = {
 
   delete: (recipe_id: string) => api.delete(`${settings.RECIPE_ENDPOINT}`, { recipe_id }),
 
-  deep_search: (phrase: string, data: RecipeFilter) =>
+  deepSearch: (phrase: string, data: RecipeFilter) =>
     api.post<RecipeOverview[]>(`${settings.RECIPE_ENDPOINT}/deep_search`, data, { phrase }),
 };

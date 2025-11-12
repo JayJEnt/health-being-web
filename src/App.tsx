@@ -27,7 +27,7 @@ function App() {
       <main className="pt-16 absolute inset-0">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/search" element={<RecipesSearch />} />
+          <Route path="/search/:phrase" element={<RecipesSearch />} />
           <Route path="/recipe/:id" element={<RecipePage />} />
           <Route
             path="/recipe/submit"
