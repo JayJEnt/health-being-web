@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { recipeApi } from '../api/endpoints/public/recipe';
 import { recipeApi as recipeApiUser } from '../api/endpoints/user_role/recipe';
 import type { RecipeFilter, RecipeOverview } from '../api/models/recipe';
 import { useAuth } from '../auth/useAuth';
 import { settings } from '../config';
+import LoadingComponent from '../components/Loading/LoadingComponent'
 
 const RecipesSearch: React.FC = () => {
   const { user } = useAuth();
-  const [query, setQuery] = useState('');
+  const { phrase } = useParams();
   const [results, setResults] = useState<RecipeOverview[]>([]);
   const [displayedRecipes, setDisplayedRecipes] = useState<RecipeOverview[]>([]);
   const [page, setPage] = useState(1);
@@ -20,7 +22,6 @@ const RecipesSearch: React.FC = () => {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const isLoadingRef = useRef(false);
 
-  // Deep search filters
   const filterLabels: Record<keyof RecipeFilter, string> = {
     allergies_off: 'Exclude allergies',
     dislike_off: 'Exclude dislikes',
@@ -38,32 +39,25 @@ const RecipesSearch: React.FC = () => {
     async (searchPhrase?: string) => {
       setLoading(true);
       setError(null);
+
       try {
         let res: RecipeOverview[];
 
-        // Use deep search if user is logged in, otherwise use public search
-        if (user) {
-          res = await recipeApiUser.deep_search(searchPhrase || '', filters);
-        } else {
-          // Use public search endpoint - TODO: replace with /search endpoint when backend is ready
-          res = await recipeApi.getByPhrase(searchPhrase || '');
-        }
+        res = user
+          ? await recipeApiUser.deepSearch(searchPhrase || '', filters)
+          : await recipeApi.search(searchPhrase || '');
 
         if (Array.isArray(res)) {
           setResults(res);
           setPage(1);
 
-          // If we have fewer results than settings.RECIPES_PAGE_SIZE, enable looping mode
           const shouldLoop = res.length < settings.RECIPES_PAGE_SIZE && res.length > 0;
           setIsLoopingMode(shouldLoop);
+          setDisplayedRecipes(res);
 
           if (shouldLoop) {
-            // In looping mode, display multiple copies to fill the screen
-            setDisplayedRecipes(res);
-            setHasMore(true); // Always has more in looping mode
+            setHasMore(true);
           } else {
-            // In normal pagination mode
-            setDisplayedRecipes(res);
             setHasMore(res.length === settings.RECIPES_PAGE_SIZE);
           }
         }
@@ -77,35 +71,22 @@ const RecipesSearch: React.FC = () => {
     [filters, user],
   );
 
-  useEffect(() => {
-    void loadRecipes();
-  }, [loadRecipes]);
+  useEffect(() => { void loadRecipes(phrase)}, [phrase, loadRecipes]);
 
-  // Debounce search input to avoid too many API calls
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      void loadRecipes(query || undefined);
-    }, 300); // Wait 300ms after last keystroke before searching
-
-    return () => clearTimeout(timer);
-  }, [query, loadRecipes]);
-
-  const loadMore = useCallback(async () => {
+  const loadMore = useCallback(async (searchPhrase?: string) => {
     if (loadingMore || !hasMore || isLoadingRef.current) return;
     isLoadingRef.current = true;
     setLoadingMore(true);
 
     try {
       if (isLoopingMode) {
-        // In looping mode: just append another copy of results (no API call)
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate loading delay
+        await new Promise((resolve) => setTimeout(resolve, 500));
         setDisplayedRecipes((prev) => [...prev, ...results]);
       } else {
-        // In normal pagination mode: fetch next page from backend
         const nextPage = page + 1;
         const res = user
-          ? await recipeApiUser.deep_search(query || '', filters)
-          : await recipeApi.getByPhrase(query || '');
+          ? await recipeApiUser.deepSearch(searchPhrase || '', filters)
+          : await recipeApi.search(searchPhrase || '');
         if (Array.isArray(res)) {
           setResults((prev) => [...prev, ...res]);
           setDisplayedRecipes((prev) => [...prev, ...res]);
@@ -119,9 +100,9 @@ const RecipesSearch: React.FC = () => {
       setLoadingMore(false);
       isLoadingRef.current = false;
     }
-  }, [loadingMore, hasMore, page, query, isLoopingMode, results, user, filters]);
+  }, [loadingMore, hasMore, page, isLoopingMode, results, user, filters]);
 
-  // Infinite scroll: load next page when sentinel is visible
+  // Infinite scroll
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel || displayedRecipes.length === 0) return;
@@ -129,12 +110,12 @@ const RecipesSearch: React.FC = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          void loadMore();
+          void loadMore(phrase);
         }
       },
       {
         threshold: 0.1,
-        rootMargin: '100px', // Start loading before reaching the sentinel
+        rootMargin: '100px',
       },
     );
 
@@ -147,30 +128,10 @@ const RecipesSearch: React.FC = () => {
 
   return (
     <main>
-      <header className="sticky top-0 z-10 w-full bg-white py-6 shadow-md">
-        <div className="flex flex-col gap-4">
-          <div className="px-8">
-            <input
-              id="search"
-              className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-4 text-lg
-                         transition-all focus:border-blue-500 focus:bg-white focus:shadow-sm focus:outline-none
-                         focus:ring-2 focus:ring-blue-100"
-              type="search"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                // Search immediately on empty query to show all recipes
-                if (!e.target.value) {
-                  void loadRecipes();
-                }
-              }}
-              placeholder="Search by name, ingredients or description..."
-              aria-label="Search recipes"
-            />
-          </div>
-
-          {/* Deep search filters - only visible for authenticated users */}
-          {user && (
+      {user && (
+        <header className="sticky top-0 z-10 w-full bg-white py-6 shadow-md">
+          {/* Deep search filters */}
+          <div className="flex flex-col gap-4">
             <div className="px-8">
               <div className="mx-auto max-w-4xl rounded-lg border border-gray-200 bg-gray-50 p-4">
                 <h3 className="mb-3 text-sm font-semibold text-gray-700">Advanced Filters</h3>
@@ -194,17 +155,15 @@ const RecipesSearch: React.FC = () => {
                 </div>
               </div>
             </div>
-          )}
-        </div>
-      </header>
+          </div>
+        </header>
+      )}
 
       <section className="container mx-auto px-4">
-        {loading && (
-          <div className="py-8 text-center text-gray-600">
-            <p>Loading recipes...</p>
-          </div>
-        )}
+        {/* Loading */}
+        {loading && <LoadingComponent>Fetching recipes...</LoadingComponent>}
 
+        {/* Error */}
         {error && (
           <div className="py-8 text-center">
             <p className="mb-4 text-red-600">{error}</p>
@@ -218,12 +177,14 @@ const RecipesSearch: React.FC = () => {
           </div>
         )}
 
+        {/* No results */}
         {!loading && !error && results.length === 0 && (
           <div className="py-8 text-center text-gray-600">
             <p>No recipes found matching your search criteria</p>
           </div>
         )}
 
+        {/* Display found recipes */}
         {!loading && !error && displayedRecipes.length > 0 && (
           <>
             <div
@@ -266,13 +227,8 @@ const RecipesSearch: React.FC = () => {
               ))}
             </div>
 
-            {/* Loading indicator */}
-            {loadingMore && (
-              <div className="py-8 text-center">
-                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-                <p className="mt-2 text-sm text-gray-600">Loading more recipes...</p>
-              </div>
-            )}
+            {/* Loading */}
+            {loadingMore && <LoadingComponent>Fetching recipes...</LoadingComponent>}
 
             {/* Sentinel element for infinite scroll */}
             <div ref={sentinelRef} className="h-20 w-full" aria-hidden="true" />
