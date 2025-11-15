@@ -5,6 +5,7 @@ type Props = {
   children: React.ReactNode;
   className?: string;
   buttonType?: 'submit' | 'cancel' | 'default';
+  disabled?: boolean;
 };
 
 const ButtonComponent: React.FC<Props> = ({
@@ -12,6 +13,7 @@ const ButtonComponent: React.FC<Props> = ({
   children,
   className = '',
   buttonType = 'default',
+  disabled = false,
 }) => {
   const baseStyles = `px-4 py-2 border rounded-md font-semibold`;
 
@@ -26,7 +28,7 @@ const ButtonComponent: React.FC<Props> = ({
   const buttonAttrType = buttonType === 'submit' ? 'submit' : 'button';
 
   return (
-    <button onClick={handler} className={buttonClasses} type={buttonAttrType}>
+    <button onClick={handler} className={buttonClasses} type={buttonAttrType} disabled={disabled}>
       {children}
     </button>
   );

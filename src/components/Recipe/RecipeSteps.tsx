@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import type { RecipeCreate } from '../../api/models/recipe';
 import type { RecipeEditPayload } from '../../pages/Recipe';
+import ButtonComponent from '../GenericComponents/ButtonComponent.tsx';
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
   recipe: T;
@@ -69,13 +70,12 @@ const RecipeSteps = <T extends RecipeCreate | RecipeEditPayload>({
             onChange={(e) => setNewStep(e.target.value)}
             className="flex-1 border rounded px-3 py-2"
           />
-          <button
-            type="button"
-            onClick={addStep}
+          <ButtonComponent
+            handler={addStep}
             className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
           >
             Add
-          </button>
+          </ButtonComponent>
         </div>
       </div>
     );

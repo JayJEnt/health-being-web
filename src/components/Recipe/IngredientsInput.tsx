@@ -8,6 +8,7 @@ import type { Ingredient, IngredientQuantity } from '../../api/models/ingredient
 import type { RecipeCreate } from '../../api/models/recipe';
 import { useDebouncedSearch } from '../../hooks/useDebounceSearchParams';
 import type { RecipeEditPayload } from '../../pages/Recipe';
+import ButtonComponent from '../GenericComponents/ButtonComponent.tsx';
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
   recipe: T;
@@ -173,15 +174,12 @@ const IngredientsInput = <T extends RecipeCreate | RecipeEditPayload>({
             </option>
           ))}
         </select>
-
-        <button
-          type="button"
-          disabled={!canAdd}
-          onClick={onAdd}
+        <ButtonComponent
+          handler={onAdd}
           className={`px-4 py-2 rounded text-white ${canAdd ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-400 cursor-not-allowed'}`}
         >
           Add
-        </button>
+        </ButtonComponent>
       </div>
 
       {!selected && newIngredient.name.trim() !== '' && (
