@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../auth/useAuth';
+import ButtonComponent from '../components/GenericComponents/ButtonComponent.tsx';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -50,12 +51,7 @@ const LoginPage: React.FC = () => {
           />
           <Link to="/register">Don't have an account yet?</Link>
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-          <button
-            type="submit"
-            className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
-          >
-            Login
-          </button>
+          <ButtonComponent buttonType="submit">Login</ButtonComponent>
         </form>
       </div>
     </div>
