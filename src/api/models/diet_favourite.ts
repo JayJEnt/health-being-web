@@ -1,12 +1,12 @@
 export interface DietFavouriteCreate {
-  name: string;
+	name: string;
 }
 
 export interface DietFavouriteResponse extends DietFavouriteCreate {
-  diet_id: number;
+	diet_id: number;
 }
 
 export interface DietFavouriteDelete {
-  user_id: number;
-  diet_id: number;
+	user_id: number;
+	diet_id: number;
 }

@@ -1,0 +1,16 @@
+repos:
+  - repo: local
+    hooks:
+      - id: biome-check
+        name: biome check
+        entry: npx biome check --write
+        language: system
+        pass_filenames: true
+
+  # - repo: local
+  #   hooks:
+  #     - id: frontend-tests
+  #       name: Run frontend test suite
+  #       entry: npm test
+  #       language: system
+  #       pass_filenames: false
