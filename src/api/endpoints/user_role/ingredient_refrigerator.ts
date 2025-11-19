@@ -17,5 +17,7 @@ export const ingredientRefrigeratorApi = {
     api.post<IngredientRefrigeratorCreateResponse>(`${settings.REFRIGERATOR_ENDPOINT}`, data),
 
   delete: (ingredient_id: number) =>
-    api.delete<IngredientRefrigeratorDelete>(`${settings.REFRIGERATOR_ENDPOINT}`, { ingredient_id }),
+    api.delete<IngredientRefrigeratorDelete>(`${settings.REFRIGERATOR_ENDPOINT}`, {
+      ingredient_id,
+    }),
 };

@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
-import type { IngredientRefrigeratorCreate, IngredientRefrigeratorResponse } from '../../api/models/ingredient_refrigerator';
+import { useEffect, useState } from 'react';
+
 import { ingredientRefrigeratorApi } from '../../api/endpoints/user_role/ingredient_refrigerator';
-import { MeasureUnit } from '../../api/models/enum_utils';
+import type { IngredientQuantity } from '../../api/models/ingredient';
+import type {
+  IngredientRefrigeratorCreate,
+  IngredientRefrigeratorResponse,
+} from '../../api/models/ingredient_refrigerator';
+import IngredientsInput from '../Ingredients/IngredientsInput';
+
 const Fridge: React.FC = () => {
   const [productsList, setProductsList] = useState<IngredientRefrigeratorResponse[]>([]);
-  const [newProduct, setNewProduct] = useState<IngredientRefrigeratorCreate>({
-    name: '',
-    amount: 0,
-    measure_unit: '',
-  });
 
   useEffect(() => {
     async function fetchProductsList() {
@@ -19,94 +20,42 @@ const Fridge: React.FC = () => {
         console.log(err);
       }
     }
-    fetchProductsList();
+    void fetchProductsList();
   }, []);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    const { name, value } = e.target;
-    setNewProduct((prev) => ({
-      ...prev,
-      [name]: name === 'amount' ? Number(value) : value,
-    }));
-  }
-
-  async function handleSubmit() {
-    try {
-      const createResponse = await ingredientRefrigeratorApi.create(newProduct);
-      if (createResponse) {
-        setProductsList((prev) => [
-          ...prev,
-          { ...createResponse, ingredient_id: createResponse.id },
-        ]);
-        setNewProduct({
-          name: '',
-          amount: 0,
-          measure_unit: '',
-        });
-      }
-    } catch (err) {
-      console.log(err);
+  const onAdd = async (ingredient: IngredientQuantity) => {
+    const payload: IngredientRefrigeratorCreate = {
+      name: ingredient.name.trim(),
+      amount: ingredient.amount,
+      measure_unit: ingredient.measure_unit,
+    };
+    const created = await ingredientRefrigeratorApi.create(payload);
+    if (created) {
+      setProductsList((prev) => [
+        ...prev,
+        {
+          name: created.name,
+          amount: created.amount,
+          measure_unit: created.measure_unit,
+          ingredient_id: created.id,
+        },
+      ]);
     }
-  }
+  };
 
-  async function handleDelete(id: number) {
-    try {
-      const deleteResponse = await ingredientRefrigeratorApi.delete(id);
-      if (deleteResponse) {
-        const newProductsList = productsList.filter((product) => {
-          product.ingredient_id != id;
-        });
-        setProductsList(newProductsList);
-      }
-    } catch (err) {
-      console.log(err);
+  const onDelete = async (index: number) => {
+    const target = productsList[index];
+    if (!target) return;
+    const ok = await ingredientRefrigeratorApi.delete(target.ingredient_id);
+    if (ok) {
+      setProductsList((prev) => prev.filter((_, i) => i !== index));
     }
-  }
+  };
 
   return (
     <div className="border w-60 lg:col-start-2 p-2">
-      {productsList.map((product, index) => (
-        <div key={index} className="grid grid-cols-2">
-          <span>{product.name}</span>
-          <span>
-            {product.amount} {product.measure_unit}
-          </span>
-          <button onClick={() => handleDelete(product.ingredient_id)}>x</button>
-        </div>
-      ))}
-
       <div className="flex flex-col gap-2 mt-4">
-        <input
-          type="text"
-          name="name"
-          value={newProduct.name}
-          onChange={handleChange}
-          placeholder="Name"
-          className="border rounded p-1"
-        />
-
-        <input
-          type="number"
-          name="amount"
-          value={newProduct.amount}
-          onChange={handleChange}
-          placeholder="Amount"
-          className="border rounded p-1"
-        />
-
-        <select
-          name="measure_unit"
-          value={newProduct.measure_unit}
-          onChange={handleChange}
-          className="border rounded p-1"
-        >
-          {Object.entries(MeasureUnit).map(([key, value]) => (
-            <option key={key} value={value}>
-              {value}
-            </option>
-          ))}
-        </select>
-        <button onClick={handleSubmit}>Add</button>
+        <IngredientsInput items={productsList} onAdd={onAdd} onDelete={onDelete} />
       </div>
     </div>
   );
