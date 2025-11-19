@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
-import { ingredientsApi } from '../../api/endpoints/public/ingredients';
+import { ingredientApi } from '../../api/endpoints/public/ingredient';
 import type { MeasureUnit } from '../../api/models/enum_utils';
 import { MeasureUnit as MU } from '../../api/models/enum_utils';
 import type { Ingredient } from '../../api/models/ingredient';
@@ -23,7 +23,7 @@ export default function IngredientPicker({ value, onChange, disabled }: Props) {
   const fetcher = useCallback(async (q: string) => {
     const query = (q ?? '').trim();
     if (!query) return null;
-    return ingredientsApi.getBySearchPhrase(query);
+    return ingredientApi.getByPhrase(query);
   }, []);
 
   const safeQuery = (value.name ?? '').toString();
