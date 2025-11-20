@@ -8,6 +8,5 @@ export const recipeApi = {
 
   getAll: () => api.get<RecipeOverview[]>(`${settings.RECIPE_ENDPOINT}`),
 
-  search: (phrase: string) =>
-    api.get<RecipeOverview[]>(`${settings.RECIPE_ENDPOINT}`, { phrase }),
+  search: (phrase: string) => api.get<RecipeOverview[]>(`${settings.RECIPE_ENDPOINT}`, { phrase }),
 };

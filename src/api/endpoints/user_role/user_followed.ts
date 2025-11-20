@@ -8,7 +8,8 @@ export const userFollowedApi = {
 
   getAll: () => api.get<FollowsResponse[]>(`${settings.USER_FOLLOWED_ENDPOINT}`),
 
-  create: (data: FollowsCreate) => api.post<FollowsResponse>(`${settings.USER_FOLLOWED_ENDPOINT}`, data),
+  create: (data: FollowsCreate) =>
+    api.post<FollowsResponse>(`${settings.USER_FOLLOWED_ENDPOINT}`, data),
 
   delete: (followed_user_id: number) =>
     api.delete<FollowsDelete>(`${settings.USER_FOLLOWED_ENDPOINT}`, { followed_user_id }),

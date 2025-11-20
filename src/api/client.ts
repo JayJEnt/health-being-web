@@ -14,7 +14,7 @@ interface ApiErrorResponse {
   code?: string | number;
 }
 
-class ApiError extends Error {
+export class ApiError extends Error {
   status?: number;
   code?: string | number;
   cause?: unknown;

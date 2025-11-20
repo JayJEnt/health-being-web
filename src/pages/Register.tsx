@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { oauth2Api } from '../api/endpoints/public/oauth2';
 import type { UserCreate } from '../api/models/user';
 
-const LoginPage: React.FC = () => {
+const RegisterPage: React.FC = () => {
   const [user, setUser] = useState<UserCreate>({
     name: '',
     email: '',
@@ -67,7 +67,7 @@ const LoginPage: React.FC = () => {
         <h2 className="text-2xl font-semibold text-center mb-6 text-gray-800 dark:text-white">
           Sign up
         </h2>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={(e) => void handleSubmit(e)} className="flex flex-col gap-4">
           <input
             type="text"
             placeholder="Username"
@@ -85,7 +85,7 @@ const LoginPage: React.FC = () => {
           <input
             type="password"
             placeholder="Password"
-            value={user.password ?? ""}
+            value={user.password ?? ''}
             onChange={handlePasswordChange}
             className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
           />
@@ -124,4 +124,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default RegisterPage;

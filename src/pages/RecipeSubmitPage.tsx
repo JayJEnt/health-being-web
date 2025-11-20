@@ -2,10 +2,11 @@ import { useState } from 'react';
 
 import { imagesApi } from '../api/endpoints/user_role/images';
 import { recipeApi } from '../api/endpoints/user_role/recipe';
+import { type IngredientQuantity } from '../api/models/ingredient';
 import type { RecipeCreate } from '../api/models/recipe';
+import IngredientsInput from '../components/Ingredients/IngredientsInput';
 import DietTypeInput from '../components/Recipe/DietTypeInput';
 import ImageInput from '../components/Recipe/ImageInput';
-import IngredientsInput from '../components/Recipe/IngredientsInput';
 import RecipeSteps from '../components/Recipe/RecipeSteps';
 
 const RecipeSubmitPage: React.FC = () => {
@@ -17,13 +18,23 @@ const RecipeSubmitPage: React.FC = () => {
     ingredient: [],
     category: 'Snack',
   });
+  const [ingredients, setIngredients] = useState<IngredientQuantity[]>([]);
   const [image, setImage] = useState<File | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  function onIngredientsAdd(ingredientQuantity: IngredientQuantity) {
+    setIngredients((prev) => [...prev, ingredientQuantity]);
+  }
+
+  function onIngredientsDelete(index: number) {
+    setIngredients((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!recipe) return;
 
     try {
+      setRecipe((prev) => ({ ...prev, ingredients: ingredients }));
       const recipeResponse = await recipeApi.create(recipe);
       if (!recipeResponse) return;
       if (image) {
@@ -38,7 +49,8 @@ const RecipeSubmitPage: React.FC = () => {
     } catch (err) {
       console.log(err);
     }
-  };
+  }
+
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Submit a Recipe</h1>
@@ -67,7 +79,11 @@ const RecipeSubmitPage: React.FC = () => {
           />
         </div>
         <DietTypeInput recipe={recipe} setRecipe={setRecipe} />
-        <IngredientsInput recipe={recipe} setRecipe={setRecipe} />
+        <IngredientsInput
+          items={ingredients}
+          onAdd={onIngredientsAdd}
+          onDelete={onIngredientsDelete}
+        />
         <RecipeSteps recipe={recipe} setRecipe={setRecipe} />
 
         <button

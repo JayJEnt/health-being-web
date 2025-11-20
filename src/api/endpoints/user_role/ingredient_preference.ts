@@ -13,10 +13,14 @@ export const ingredientPreferenceApi = {
       ingredient_id,
     }),
 
-  getAll: () => api.get<IngredientPreferenceResponse[]>(`${settings.INGREDIENT_PREFERENCE_ENDPOINT}`),
+  getAll: () =>
+    api.get<IngredientPreferenceResponse[]>(`${settings.INGREDIENT_PREFERENCE_ENDPOINT}`),
 
   create: (data: IngredientPreferenceCreate) =>
-    api.post<IngredientPreferenceCreateResponse>(`${settings.INGREDIENT_PREFERENCE_ENDPOINT}`, data),
+    api.post<IngredientPreferenceCreateResponse>(
+      `${settings.INGREDIENT_PREFERENCE_ENDPOINT}`,
+      data,
+    ),
 
   delete: (ingredient_id: number) =>
     api.delete<IngredientPreferenceDelete>(`${settings.INGREDIENT_PREFERENCE_ENDPOINT}`, {

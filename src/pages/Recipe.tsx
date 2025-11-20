@@ -5,11 +5,12 @@ import { imagesApi } from '../api/endpoints/public/images';
 import { recipeApi } from '../api/endpoints/public/recipe';
 import { imagesApi as imagesApiUser } from '../api/endpoints/user_role/images';
 import { recipeApi as recipesApiUser } from '../api/endpoints/user_role/recipe';
+import type { IngredientQuantity } from '../api/models/ingredient';
 import type { RecipeResponse } from '../api/models/recipe';
 import { useAuth } from '../auth/useAuth';
+import IngredientsInput from '../components/Ingredients/IngredientsInput';
 import DietTypeInput from '../components/Recipe/DietTypeInput';
 import ImageInput from '../components/Recipe/ImageInput';
-import IngredientsInput from '../components/Recipe/IngredientsInput';
 import RecipeOverview from '../components/Recipe/RecipeOverview';
 import RecipeSteps from '../components/Recipe/RecipeSteps';
 
@@ -129,6 +130,20 @@ const RecipePage: React.FC = () => {
     }
   };
 
+  const onIngredientsAdd = (ingredientQuantity: IngredientQuantity) => {
+    setNewRecipe((prev) => ({
+      ...prev,
+      ingredients: [...prev.ingredient, ingredientQuantity],
+    }));
+  };
+
+  const onIngredientsDelete = (index: number) => {
+    setNewRecipe((prev) => ({
+      ...prev,
+      ingredients: prev.ingredient.filter((_, i) => i !== index),
+    }));
+  };
+
   if (!recipe) return <p className="p-8 text-lg">Loading...</p>;
 
   if (isEditing) {
@@ -182,7 +197,11 @@ const RecipePage: React.FC = () => {
           </div>
 
           <div className="flex flex-col gap-6">
-            <IngredientsInput recipe={newRecipe} setRecipe={setNewRecipe} />
+            <IngredientsInput
+              items={newRecipe.ingredient}
+              onAdd={onIngredientsAdd}
+              onDelete={onIngredientsDelete}
+            />
 
             <ImageInput setImage={setNewImageFile} />
           </div>
