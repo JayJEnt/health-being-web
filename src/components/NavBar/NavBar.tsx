@@ -27,7 +27,7 @@ const NavBar: React.FC = () => {
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search/${searchQuery.trim()}`);
+      void navigate(`/search/${searchQuery.trim()}`);
       setSearchQuery('');
     }
   };

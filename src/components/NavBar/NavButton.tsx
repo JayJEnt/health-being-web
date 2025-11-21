@@ -14,10 +14,7 @@ const NavButton: React.FC<NavButtonProps> = ({ icon: Icon, label, to, onClick })
       to={to}
       className={({ isActive }) =>
         `flex items-center gap-4 w-full px-4 py-3 rounded-xl transition-colors
-				${isActive 
-          ? 'text-blue-600 font-semibold' 
-          : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
-        }`
+				${isActive ? 'text-blue-600 font-semibold' : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'}`
       }
       onClick={onClick}
     >

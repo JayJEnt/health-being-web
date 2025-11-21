@@ -1,6 +1,7 @@
 export {
   ArchiveBoxIcon,
   ArrowRightOnRectangleIcon,
+  ChevronDownIcon,
   Cog6ToothIcon,
   HeartIcon,
   HomeIcon,
@@ -10,5 +11,4 @@ export {
   StarIcon,
   UserIcon,
   UserPlusIcon,
-  ChevronDownIcon
 } from '@heroicons/react/24/outline';

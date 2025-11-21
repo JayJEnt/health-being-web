@@ -5,8 +5,8 @@ import { recipeApi } from '../api/endpoints/public/recipe';
 import { recipeApi as recipeApiUser } from '../api/endpoints/user_role/recipe';
 import type { RecipeFilter, RecipeOverview } from '../api/models/recipe';
 import { useAuth } from '../auth/useAuth';
+import LoadingComponent from '../components/Loading/LoadingComponent';
 import { settings } from '../config';
-import LoadingComponent from '../components/Loading/LoadingComponent'
 
 const RecipesSearch: React.FC = () => {
   const { user } = useAuth();
@@ -41,12 +41,9 @@ const RecipesSearch: React.FC = () => {
       setError(null);
 
       try {
-        let res: RecipeOverview[];
-
-        res = user
-          ? await recipeApiUser.deepSearch(searchPhrase || '', filters)
-          : await recipeApi.search(searchPhrase || '');
-
+        const res: RecipeOverview[] = await (user
+          ? recipeApiUser.deepSearch(searchPhrase ?? '', filters)
+          : recipeApi.search(searchPhrase ?? ''));
         if (Array.isArray(res)) {
           setResults(res);
           setPage(1);
@@ -71,36 +68,41 @@ const RecipesSearch: React.FC = () => {
     [filters, user],
   );
 
-  useEffect(() => { void loadRecipes(phrase)}, [phrase, loadRecipes]);
+  useEffect(() => {
+    void loadRecipes(phrase);
+  }, [phrase, loadRecipes]);
 
-  const loadMore = useCallback(async (searchPhrase?: string) => {
-    if (loadingMore || !hasMore || isLoadingRef.current) return;
-    isLoadingRef.current = true;
-    setLoadingMore(true);
+  const loadMore = useCallback(
+    async (searchPhrase?: string) => {
+      if (loadingMore || !hasMore || isLoadingRef.current) return;
+      isLoadingRef.current = true;
+      setLoadingMore(true);
 
-    try {
-      if (isLoopingMode) {
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        setDisplayedRecipes((prev) => [...prev, ...results]);
-      } else {
-        const nextPage = page + 1;
-        const res = user
-          ? await recipeApiUser.deepSearch(searchPhrase || '', filters)
-          : await recipeApi.search(searchPhrase || '');
-        if (Array.isArray(res)) {
-          setResults((prev) => [...prev, ...res]);
-          setDisplayedRecipes((prev) => [...prev, ...res]);
-          setPage(nextPage);
-          setHasMore(res.length === settings.RECIPES_PAGE_SIZE);
+      try {
+        if (isLoopingMode) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          setDisplayedRecipes((prev) => [...prev, ...results]);
+        } else {
+          const nextPage = page + 1;
+          const res = user
+            ? await recipeApiUser.deepSearch(searchPhrase || '', filters)
+            : await recipeApi.search(searchPhrase || '');
+          if (Array.isArray(res)) {
+            setResults((prev) => [...prev, ...res]);
+            setDisplayedRecipes((prev) => [...prev, ...res]);
+            setPage(nextPage);
+            setHasMore(res.length === settings.RECIPES_PAGE_SIZE);
+          }
         }
+      } catch (err) {
+        console.error('Failed to load more recipes', err);
+      } finally {
+        setLoadingMore(false);
+        isLoadingRef.current = false;
       }
-    } catch (err) {
-      console.error('Failed to load more recipes', err);
-    } finally {
-      setLoadingMore(false);
-      isLoadingRef.current = false;
-    }
-  }, [loadingMore, hasMore, page, isLoopingMode, results, user, filters]);
+    },
+    [loadingMore, hasMore, page, isLoopingMode, results, user, filters],
+  );
 
   // Infinite scroll
   useEffect(() => {
@@ -124,7 +126,7 @@ const RecipesSearch: React.FC = () => {
     return () => {
       observer.disconnect();
     };
-  }, [displayedRecipes, loadMore]);
+  }, [displayedRecipes, loadMore, phrase]);
 
   return (
     <main>

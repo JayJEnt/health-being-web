@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { oauth2Api } from '../api/endpoints/public/oauth2';
 import { tokenDataApi } from '../api/endpoints/user_role/token_data';
+import type { Oauth2RequestForm } from '../api/models/oauth2_form';
 import type { Token } from '../api/models/token';
 import type { User } from '../api/models/user';
-import type { Oauth2RequestForm } from '../api/models/oauth2_form';
+import { settings } from '../config';
 import { isToken } from '../utils';
 import type { AuthState } from './auth';
 import { AuthContext, type AuthContextValue } from './context';
-import { settings } from '../config';
 
 // Provider
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -72,31 +72,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   // login: set state -> save token -> get user
-  const login = useCallback<AuthContextValue['login']>(
-    async (credentials: Oauth2RequestForm) => {
-      setState((s) => ({ ...s, status: 'loading' }));
-      try {
-        const token = await oauth2Api.ourLogin(credentials);
+  const login = useCallback<AuthContextValue['login']>(async (credentials: Oauth2RequestForm) => {
+    setState((s) => ({ ...s, status: 'loading' }));
+    try {
+      const token = await oauth2Api.ourLogin(credentials);
 
-        localStorage.setItem(settings.AUTH_TOKEN_KEY, JSON.stringify(token));
-        const user = await tokenDataApi.getUser();
-        
-        setState((s) => ({ ...s, token, user, status: 'authenticated' }));
-        return true;
-      } catch (err) {
-        console.error('Login error:', err);
-        localStorage.removeItem(settings.AUTH_TOKEN_KEY);
-        setState((s) => ({
-          ...s,
-          token: null,
-          user: null,
-          status: 'unauthenticated',
-        }));
-        return false;
-      }
-    },
-    [],
-  );
+      localStorage.setItem(settings.AUTH_TOKEN_KEY, JSON.stringify(token));
+      const user = await tokenDataApi.getUser();
+
+      setState((s) => ({ ...s, token, user, status: 'authenticated' }));
+      return true;
+    } catch (err) {
+      console.error('Login error:', err);
+      localStorage.removeItem(settings.AUTH_TOKEN_KEY);
+      setState((s) => ({
+        ...s,
+        token: null,
+        user: null,
+        status: 'unauthenticated',
+      }));
+      return false;
+    }
+  }, []);
 
   // logout: clear state -> clear localStorage
   const logout = useCallback(() => {
