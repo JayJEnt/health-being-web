@@ -4,6 +4,7 @@ import { imagesApi } from '../api/endpoints/user_role/images';
 import { recipeApi } from '../api/endpoints/user_role/recipe';
 import { type IngredientQuantity } from '../api/models/ingredient';
 import type { RecipeCreate } from '../api/models/recipe';
+import ButtonComponent from '../components/GenericComponents/ButtonComponent';
 import IngredientsInput from '../components/Ingredients/IngredientsInput';
 import DietTypeInput from '../components/Recipe/DietTypeInput';
 import ImageInput from '../components/Recipe/ImageInput';
@@ -86,12 +87,12 @@ const RecipeSubmitPage: React.FC = () => {
         />
         <RecipeSteps recipe={recipe} setRecipe={setRecipe} />
 
-        <button
-          type="submit"
+        <ButtonComponent
+          buttonType="submit"
           className="bg-blue-700 text-white font-semibold py-3 px-6 rounded hover:bg-blue-800 self-start"
         >
           Submit Recipe
-        </button>
+        </ButtonComponent>
       </form>
     </div>
   );

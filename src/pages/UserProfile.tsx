@@ -12,6 +12,7 @@ import {
 import type { IngredientPreferenceResponse } from '../api/models/ingredient_preference';
 import type { User, UserCreate } from '../api/models/user';
 import { useAuth } from '../auth/useAuth';
+import ButtonComponent from '../components/GenericComponents/ButtonComponent';
 import PreferedDietTypesInput from '../components/User/PreferedDietTypesInput';
 import PreferedIngredientInput from '../components/User/PreferedIngredientInput';
 
@@ -166,12 +167,12 @@ const UserProfile: React.FC = () => {
       </div>
 
       <div>
-        <button
-          type="submit"
+        <ButtonComponent
+          buttonType="submit"
           className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded"
         >
           Save Settings
-        </button>
+        </ButtonComponent>
       </div>
     </form>
   );

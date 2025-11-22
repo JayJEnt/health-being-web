@@ -5,6 +5,7 @@ import { recipeApi } from '../api/endpoints/public/recipe';
 import { recipeApi as recipeApiUser } from '../api/endpoints/user_role/recipe';
 import type { RecipeFilter, RecipeOverview } from '../api/models/recipe';
 import { useAuth } from '../auth/useAuth';
+import ButtonComponent from '../components/GenericComponents/ButtonComponent';
 import LoadingComponent from '../components/Loading/LoadingComponent';
 import { settings } from '../config';
 
@@ -169,13 +170,13 @@ const RecipesSearch: React.FC = () => {
         {error && (
           <div className="py-8 text-center">
             <p className="mb-4 text-red-600">{error}</p>
-            <button
-              onClick={() => void loadRecipes()}
+            <ButtonComponent
+              handler={() => loadRecipes}
               className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors
                          hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
             >
               Try again
-            </button>
+            </ButtonComponent>
           </div>
         )}
 
