@@ -1,8 +1,8 @@
 import { settings } from '../../../config';
 import { api } from '../../client';
+import type { Oauth2RequestForm } from '../../models/oauth2_form';
 import type { Token } from '../../models/token';
 import type { User, UserCreate } from '../../models/user';
-import type { Oauth2RequestForm } from '../../models/oauth2_form';
 
 export const oauth2Api = {
   ourRegister: (data: UserCreate) =>
