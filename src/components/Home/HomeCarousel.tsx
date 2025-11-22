@@ -26,8 +26,8 @@ const HomeCarousel: React.FC = () => {
   return (
     <div className="flex flex-row gap-4 p-8">
       <ArrowLeftIcon onClick={() => handleCarouselLeft()} className="h-6" />
-      {carouselTiles.map((tile, index) => (
-        <HomeCarouselTile key={index} img={tile.img} name={tile.name} kcal={tile.kcal} />
+      {carouselTiles.map((tile) => (
+        <HomeCarouselTile key={tile.name} img={tile.img} name={tile.name} kcal={tile.kcal} />
       ))}
       <ArrowRightIcon onClick={() => handleCarouselRight()} className="h-6" />
     </div>

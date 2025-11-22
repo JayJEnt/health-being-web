@@ -1,15 +1,14 @@
-# Health-being Web App (Frontend)
+# Health-being Web App
 
 [![React](https://img.shields.io/badge/react-18-blue)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/typescript-4.9%2B-blue)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/tailwindcss-4.x-38b2ac)](https://tailwindcss.com/)
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ---
 
 ## 📌 Table of Contents
 
-- [Health-being Web App (Frontend)](#health-being-web-app-frontend)
+- [Health-being Web App](#health-being-web-app)
   - [📌 Table of Contents](#-table-of-contents)
   - [🛠 Prerequisites](#-prerequisites)
   - [🚀 Setup](#-setup)
@@ -46,6 +45,8 @@ npm install
 ```
 
 ### 3. Set Biome as default formater
+
+Install Biome from extenstions
 
 Save this at .vscode/settings.json
 ```bash

@@ -1,5 +1,5 @@
 import type { AxiosInstance, AxiosRequestConfig } from 'axios';
-import axios, { AxiosError } from 'axios';
+import axios, { type AxiosError } from 'axios';
 
 import { settings } from '../config';
 import { isToken } from '../utils';

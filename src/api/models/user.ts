@@ -1,5 +1,4 @@
-import type { Role } from './enum_utils';
-import type { ActivityLevel, Silhouette } from './enum_utils';
+import type { ActivityLevel, Role, Silhouette } from './enum_utils';
 
 export interface UserData {
   weight?: number | null;

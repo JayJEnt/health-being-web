@@ -47,7 +47,7 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
         <div className="lg:col-span-2 flex flex-col gap-6">
           <img
             src={imageUrl ? imageUrl : '/PlaceHolder.png'}
-            alt="Zdjęcie przepisu"
+            alt="Recipe"
             className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow border"
           />
           <div className="flex justify-between">
@@ -55,6 +55,7 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
             <div>
               {handleEdit && (
                 <button
+                  type="button"
                   onClick={handleEdit}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                 >
@@ -63,6 +64,7 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
               )}
               {user && user.id !== recipe.author_id && (
                 <button
+                  type="button"
                   className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                   onClick={toggleLiked}
                 >
@@ -79,9 +81,9 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
           <div>
             <h2 className="text-xl font-semibold mb-2">Diet types:</h2>
             <ul className="flex flex-wrap gap-2">
-              {recipe.diet?.map((diet, index) => (
+              {recipe.diet?.map((diet) => (
                 <li
-                  key={index}
+                  key={diet.name}
                   className="px-3 py-1 bg-green-100 dark:bg-green-800 text-sm rounded-full"
                 >
                   {diet.name}
@@ -103,13 +105,13 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
 
           {recipe.instructions && recipe.instructions.length > 0 && (
             <ol className="px-5 py-4 space-y-4">
-              {recipe.instructions.map((step, index) => (
-                <li key={index} className="flex items-start gap-3">
+              {recipe.instructions.map((step, idx) => (
+                <li key={`${idx}-${step.slice(0, 40)}`} className="flex items-start gap-3">
                   <span
                     className="flex-none w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-semibold
                        grid place-items-center mt-0.5"
                   >
-                    {index + 1}
+                    {idx + 1}
                   </span>
                   <p className="text-gray-700 dark:text-gray-200 leading-relaxed">{step}</p>
                 </li>

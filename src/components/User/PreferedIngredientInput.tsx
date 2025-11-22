@@ -3,8 +3,7 @@ import { useCallback, useState } from 'react';
 
 import { ingredientApi } from '../../api/endpoints/public/ingredient';
 import { ingredientPreferenceApi } from '../../api/endpoints/user_role/ingredient_preference';
-import { Preference } from '../../api/models/enum_utils';
-import { Preference as PreferenceValues } from '../../api/models/enum_utils';
+import { type Preference, Preference as PreferenceValues } from '../../api/models/enum_utils';
 import type { Ingredient } from '../../api/models/ingredient';
 import type {
   IngredientPreferenceCreate,

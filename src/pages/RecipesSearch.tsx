@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { recipeApi } from '../api/endpoints/public/recipe';
@@ -31,9 +32,13 @@ const RecipesSearch: React.FC = () => {
     only_owned_ingredients: 'Owned ingredients',
   };
 
-  const [filters, setFilters] = useState<RecipeFilter>(() =>
-    Object.keys(filterLabels).reduce((acc, key) => ({ ...acc, [key]: false }), {} as RecipeFilter),
-  );
+  const [filters, setFilters] = useState<RecipeFilter>(() => {
+    const initial = {} as RecipeFilter;
+    (Object.keys(filterLabels) as Array<keyof RecipeFilter>).forEach((key) => {
+      initial[key] = false;
+    });
+    return initial;
+  });
 
   const loadRecipes = useCallback(
     async (searchPhrase?: string) => {
@@ -170,6 +175,7 @@ const RecipesSearch: React.FC = () => {
           <div className="py-8 text-center">
             <p className="mb-4 text-red-600">{error}</p>
             <button
+              type="button"
               onClick={() => void loadRecipes()}
               className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors
                          hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
@@ -189,22 +195,20 @@ const RecipesSearch: React.FC = () => {
         {/* Display found recipes */}
         {!loading && !error && displayedRecipes.length > 0 && (
           <>
-            <div
-              role="list"
+            <ul
               aria-label="Recipe grid"
               className="mx-auto mt-8 grid max-w-7xl grid-cols-3 gap-6 p-4"
             >
               {displayedRecipes.map((recipe, index) => (
-                <article
+                <li
                   key={`${recipe.id}-${index}`}
                   className="group relative aspect-square cursor-pointer overflow-hidden rounded-xl
-                           transition-all duration-300 hover:scale-[1.02] hover:shadow-lg
-                           animate-fade-in"
+										transition-all duration-300 hover:scale-[1.02] hover:shadow-lg
+										animate-fade-in"
                   style={{
                     animationDelay: `${(index % (isLoopingMode ? results.length : settings.RECIPES_PAGE_SIZE)) * 50}ms`,
                   }}
                   aria-labelledby={`title-${recipe.id}-${index}`}
-                  tabIndex={0}
                 >
                   <img
                     src={`/api/recipes/${recipe.id}/image`}
@@ -214,20 +218,20 @@ const RecipesSearch: React.FC = () => {
                   />
                   <div
                     className="absolute inset-0 flex flex-col justify-end bg-gradient-to-b from-transparent
-                                via-black/60 to-black/90 p-6 text-white opacity-0 transition-all duration-300
-                                group-hover:opacity-100"
+										via-black/60 to-black/90 p-6 text-white opacity-0 transition-all duration-300
+										group-hover:opacity-100"
                   >
                     <h2
                       id={`title-${recipe.id}-${index}`}
                       className="mb-2 translate-y-5 text-xl font-semibold opacity-0 transition-all duration-300
-                               group-hover:translate-y-0 group-hover:opacity-100"
+											group-hover:translate-y-0 group-hover:opacity-100"
                     >
                       {recipe.title}
                     </h2>
                   </div>
-                </article>
+                </li>
               ))}
-            </div>
+            </ul>
 
             {/* Loading */}
             {loadingMore && <LoadingComponent>Fetching recipes...</LoadingComponent>}

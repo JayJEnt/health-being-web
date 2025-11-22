@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { imagesApi } from '../api/endpoints/user_role/images';
 import { recipeApi } from '../api/endpoints/user_role/recipe';
-import { type IngredientQuantity } from '../api/models/ingredient';
+import type { IngredientQuantity } from '../api/models/ingredient';
 import type { RecipeCreate } from '../api/models/recipe';
 import IngredientsInput from '../components/Ingredients/IngredientsInput';
 import DietTypeInput from '../components/Recipe/DietTypeInput';
@@ -58,8 +58,11 @@ const RecipeSubmitPage: React.FC = () => {
       <form className="flex flex-col gap-8" onSubmit={void handleSubmit}>
         <ImageInput setImage={setImage} />
         <div>
-          <label className="block text-lg font-semibold mb-1">Recipe Name</label>
+          <label htmlFor="title" className="block text-lg font-semibold mb-1">
+            Recipe Title
+          </label>
           <input
+            id="title"
             type="text"
             value={recipe.title}
             onChange={(e) => setRecipe({ ...recipe, title: e.target.value })}
@@ -69,8 +72,11 @@ const RecipeSubmitPage: React.FC = () => {
         </div>
 
         <div>
-          <label className="block text-lg font-semibold mb-1">Description</label>
+          <label htmlFor="description" className="block text-lg font-semibold mb-1">
+            Description
+          </label>
           <textarea
+            id="description"
             rows={4}
             value={recipe.description}
             onChange={(e) => setRecipe({ ...recipe, description: e.target.value })}

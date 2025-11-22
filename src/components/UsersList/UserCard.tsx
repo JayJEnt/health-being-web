@@ -64,12 +64,14 @@ const UserCard: React.FC<Props> = ({ user, deleteHandler }) => {
           />
           <div className="flex gap-2">
             <button
+              type="button"
               className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
               onClick={void handleSave}
             >
               Save
             </button>
             <button
+              type="button"
               className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
               onClick={handleCancel}
             >
@@ -85,12 +87,14 @@ const UserCard: React.FC<Props> = ({ user, deleteHandler }) => {
           <div className="text-sm text-gray-600">Role: {user.role}</div>
           <div className="flex gap-4">
             <button
+              type="button"
               className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mt-2"
               onClick={() => setIsEditing(true)}
             >
               Edit
             </button>
             <button
+              type="button"
               className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 mt-2"
               onClick={() => deleteHandler(user)}
             >

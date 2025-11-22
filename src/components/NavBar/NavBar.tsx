@@ -59,6 +59,7 @@ const NavBar: React.FC = () => {
         {/* Profile Dropdown */}
         <div className="relative">
           <button
+            type="button"
             onClick={() => {
               setSettingsDropdown(false);
               setUserDropdown((prev) => !prev);
@@ -122,6 +123,7 @@ const NavBar: React.FC = () => {
         {/* Settings Dropdown */}
         <div className="relative">
           <button
+            type="button"
             onClick={() => {
               setUserDropdown(false);
               setSettingsDropdown((prev) => !prev);

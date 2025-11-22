@@ -165,6 +165,7 @@ const RecipePage: React.FC = () => {
               />
               <div className="flex gap-2">
                 <button
+                  type="button"
                   disabled={isSaving}
                   className="bg-blue-700 text-white px-4 py-2 rounded-xl hover:bg-blue-600 disabled:opacity-60"
                   onClick={void handleSave}
@@ -172,6 +173,7 @@ const RecipePage: React.FC = () => {
                   {isSaving ? 'Saving...' : 'Save'}
                 </button>
                 <button
+                  type="button"
                   className="bg-red-700 text-white px-4 py-2 rounded-xl hover:bg-red-600"
                   onClick={handleCancel}
                 >

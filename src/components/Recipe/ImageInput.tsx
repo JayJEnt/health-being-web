@@ -27,8 +27,11 @@ const ImageInput: React.FC<Props> = ({ setImage }) => {
 
   return (
     <div>
-      <label className="block text-lg font-semibold mb-2">Recipe Image</label>
+      <label htmlFor="image" className="block text-lg font-semibold mb-2">
+        Recipe Image
+      </label>
       <input
+        id="image"
         type="file"
         accept="image/*"
         onChange={handleImageChange}

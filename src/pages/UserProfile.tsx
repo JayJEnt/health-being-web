@@ -4,7 +4,7 @@ import { dietFavouriteApi } from '../api/endpoints/user_role/diet_favourite';
 import { ingredientPreferenceApi } from '../api/endpoints/user_role/ingredient_preference';
 import { userOwnerApi } from '../api/endpoints/user_role/user';
 import type { DietFavouriteResponse } from '../api/models/diet_favourite';
-import type { ActivityLevel, Role, Silhouette } from '../api/models/enum_utils';
+import type { ActivityLevel, Silhouette } from '../api/models/enum_utils';
 import {
   ActivityLevel as ActivityLevelValues,
   Silhouette as SilhouetteTypes,
@@ -24,23 +24,6 @@ const UserProfile: React.FC = () => {
   );
   const [preferedDietTypes, setPreferedDietTypes] = useState<DietFavouriteResponse[]>([]);
 
-  const makeDefaultPersonalData = (
-    id: number,
-    username: string,
-    email: string,
-    role: Role,
-  ): User => ({
-    id: id,
-    name: username,
-    email: email,
-    role: role,
-    age: null,
-    height: null,
-    weight: null,
-    silhouette: SilhouetteTypes.ectomorph as Silhouette,
-    activity_level: ActivityLevelValues.light as ActivityLevel,
-  });
-
   useEffect(() => {
     if (!user?.id) return;
 
@@ -52,17 +35,16 @@ const UserProfile: React.FC = () => {
           dietFavouriteApi.getAll().catch(() => []),
         ]);
 
-        setPersonalData(pd ?? makeDefaultPersonalData(user.id, user.name, user.email, user.role));
+        setPersonalData(pd ?? user);
         setPreferedIngredients(pi ?? []);
         setPreferedDietTypes(dt ?? []);
       } catch (e) {
         console.error(e);
-        setPersonalData(makeDefaultPersonalData(user.id, user.name, user.email, user.role));
       }
     };
 
     void load();
-  }, [user?.id]);
+  }, [user]);
 
   const setData = <K extends keyof User>(name: K, value: User[K]) => {
     setPersonalData((prev) => (prev ? { ...prev, [name]: value } : prev));
@@ -88,8 +70,11 @@ const UserProfile: React.FC = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label className="block font-medium mb-1">Age</label>
+          <label htmlFor="age" className="block font-medium mb-1">
+            Age
+          </label>
           <input
+            id="age"
             type="number"
             value={personalData?.age ?? ''}
             onChange={(e) => setData('age', toNumOrNull(e.target.value))}
@@ -98,8 +83,11 @@ const UserProfile: React.FC = () => {
         </div>
 
         <div>
-          <label className="block font-medium mb-1">Height (cm)</label>
+          <label htmlFor="height" className="block font-medium mb-1">
+            Height (cm)
+          </label>
           <input
+            id="height"
             type="number"
             value={personalData?.height ?? ''}
             onChange={(e) => setData('height', toNumOrNull(e.target.value))}
@@ -108,8 +96,11 @@ const UserProfile: React.FC = () => {
         </div>
 
         <div>
-          <label className="block font-medium mb-1">Weight (kg)</label>
+          <label htmlFor="weight" className="block font-medium mb-1">
+            Weight (kg)
+          </label>
           <input
+            id="weight"
             type="number"
             value={personalData?.weight ?? ''}
             onChange={(e) => setData('weight', toNumOrNull(e.target.value))}
@@ -119,8 +110,11 @@ const UserProfile: React.FC = () => {
       </div>
 
       <div>
-        <label className="block font-medium mb-1">Activity Level</label>
+        <label htmlFor="activity_level" className="block font-medium mb-1">
+          Activity Level
+        </label>
         <select
+          id="activity_level"
           value={personalData?.activity_level ?? ''}
           onChange={(e) =>
             setData('activity_level', e.target.value ? (e.target.value as ActivityLevel) : null)
@@ -137,8 +131,11 @@ const UserProfile: React.FC = () => {
       </div>
 
       <div>
-        <label className="block font-medium mb-1">Body Type</label>
+        <label htmlFor="silhouette" className="block font-medium mb-1">
+          Body Type
+        </label>
         <select
+          id="silhouette"
           value={personalData?.silhouette ?? ''}
           onChange={(e) =>
             setData('silhouette', e.target.value ? (e.target.value as Silhouette) : null)

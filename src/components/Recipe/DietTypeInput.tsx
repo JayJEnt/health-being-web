@@ -52,15 +52,15 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
       <h2 className="text-xl font-semibold mb-2">Diet Types</h2>
 
       <div className="flex flex-wrap gap-2 mb-3">
-        {recipe.diet?.map((diet, index) => (
+        {recipe.diet?.map((diet) => (
           <span
-            key={index}
+            key={diet.name}
             className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
           >
             {diet.name}
             <button
               type="button"
-              onClick={() => removeDietType(index)}
+              onClick={() => removeDietType(recipe.diet?.indexOf(diet) ?? 0)}
               className="ml-2 text-blue-600 hover:text-blue-900 font-bold"
             >
               ×

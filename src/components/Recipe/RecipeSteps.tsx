@@ -44,7 +44,10 @@ const RecipeSteps = <T extends RecipeCreate | RecipeEditPayload>({
 
         <ol className="list-decimal list-inside space-y-1 mb-3 text-sm">
           {recipe.instructions.map((step, index) => (
-            <li key={index} className="flex items-start justify-between gap-3">
+            <li
+              key={`${index}-${step.slice(0, 40)}`}
+              className="flex items-start justify-between gap-3"
+            >
               <span className="flex-1">
                 {index + 1}. {step}
               </span>
