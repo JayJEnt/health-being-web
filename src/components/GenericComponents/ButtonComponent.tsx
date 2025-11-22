@@ -6,6 +6,8 @@ type Props = {
   className?: string;
   buttonType?: 'submit' | 'cancel' | 'default';
   disabled?: boolean;
+  'aria-label'?: string;
+  title?: string;
 };
 
 const ButtonComponent: React.FC<Props> = ({
@@ -14,6 +16,7 @@ const ButtonComponent: React.FC<Props> = ({
   className = '',
   buttonType = 'default',
   disabled = false,
+  ...rest
 }) => {
   const baseStyles = `px-4 py-2 border rounded-md font-semibold`;
 
@@ -28,7 +31,13 @@ const ButtonComponent: React.FC<Props> = ({
   const buttonAttrType = buttonType === 'submit' ? 'submit' : 'button';
 
   return (
-    <button onClick={handler} className={buttonClasses} type={buttonAttrType} disabled={disabled}>
+    <button
+      type={buttonAttrType}
+      onClick={handler}
+      className={buttonClasses}
+      disabled={disabled}
+      {...rest}
+    >
       {children}
     </button>
   );

@@ -1,4 +1,5 @@
 import type { IngredientQuantity } from '../../api/models/ingredient';
+import ButtonComponent from '../GenericComponents/ButtonComponent';
 
 type Props = {
   items: IngredientQuantity[];
@@ -22,19 +23,15 @@ export default function IngredientsList({
             <span className="font-medium">{it.name}</span>
             <span>{Number.isFinite(it.amount) ? it.amount : 0}</span>
             <span>{it.measure_unit ?? ''}</span>
-            <button
-              type="button"
-              onClick={() => void onDelete(index)}
+            <ButtonComponent
+              handler={() => void onDelete(index)}
               disabled={deletingIndex === index}
               className={`ml-2 font-bold px-2 rounded ${
                 deletingIndex === index ? 'text-gray-400' : 'text-red-600 hover:text-red-800'
               }`}
-              aria-busy={deletingIndex === index}
-              aria-label={`Delete ${it.name}`}
-              title="Delete"
             >
               ×
-            </button>
+            </ButtonComponent>
           </div>
         ))}
       </div>

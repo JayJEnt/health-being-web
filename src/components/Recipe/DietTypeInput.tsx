@@ -6,6 +6,7 @@ import type { DietResponse } from '../../api/models/diet';
 import type { RecipeCreate } from '../../api/models/recipe';
 import { useDebouncedSearch } from '../../hooks/useDebounceSearchParams';
 import type { RecipeEditPayload } from '../../pages/Recipe';
+import ButtonComponent from '../GenericComponents/ButtonComponent';
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
   recipe: T;
@@ -58,13 +59,12 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
             className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
           >
             {diet.name}
-            <button
-              type="button"
-              onClick={() => removeDietType(index)}
+            <ButtonComponent
+              handler={() => removeDietType(index)}
               className="ml-2 text-blue-600 hover:text-blue-900 font-bold"
             >
               ×
-            </button>
+            </ButtonComponent>
           </span>
         ))}
       </div>
@@ -84,13 +84,12 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
           {loading && <div className="px-3 py-2 text-sm text-gray-500">Loading...</div>}
           {error && <div className="px-3 py-2 text-sm text-red-500">{error.message}</div>}
           {data && (
-            <button
-              type="button"
-              onClick={() => addDietType(data)}
+            <ButtonComponent
+              handler={() => addDietType(data)}
               className="block w-full text-left px-3 py-2 hover:bg-gray-100"
             >
               {data.name}
-            </button>
+            </ButtonComponent>
           )}
         </div>
       )}

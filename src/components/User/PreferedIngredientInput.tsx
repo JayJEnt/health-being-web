@@ -11,6 +11,7 @@ import type {
   IngredientPreferenceResponse,
 } from '../../api/models/ingredient_preference';
 import { useDebouncedSearch } from '../../hooks/useDebounceSearchParams';
+import ButtonComponent from '../GenericComponents/ButtonComponent';
 
 type Props = {
   preferedIngredients: IngredientPreferenceResponse[];
@@ -82,13 +83,12 @@ const PreferedIngredientInput: React.FC<Props> = ({
               <span className="mr-2">
                 {ingredient.name} <span className="italic text-xs">({ingredient.preference})</span>
               </span>
-              <button
-                type="button"
-                onClick={() => void removePreferedIngredient(ingredient.ingredient_id)}
+              <ButtonComponent
+                handler={() => void removePreferedIngredient(ingredient.ingredient_id)}
                 className="ml-1 text-green-600 hover:text-green-800 dark:text-green-200 dark:hover:text-white font-bold"
               >
                 ×
-              </button>
+              </ButtonComponent>
             </span>
           ))}
         </div>
@@ -116,13 +116,12 @@ const PreferedIngredientInput: React.FC<Props> = ({
         {loading && <div>Loading...</div>}
         {error && <div className="text-red-600">{error.message}</div>}
         {!loading && !error && data && (
-          <button
-            type="button"
-            onClick={() => void addPreferedIngredient(data, preference)}
+          <ButtonComponent
+            handler={() => void addPreferedIngredient(data, preference)}
             className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
           >
             Add {data.name}
-          </button>
+          </ButtonComponent>
         )}
       </div>
     </div>

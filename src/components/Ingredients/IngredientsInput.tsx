@@ -4,6 +4,7 @@ import { ApiError } from '../../api/client';
 import type { MeasureUnit } from '../../api/models/enum_utils';
 import { MeasureUnit as MU } from '../../api/models/enum_utils';
 import type { IngredientQuantity } from '../../api/models/ingredient';
+import ButtonComponent from '../GenericComponents/ButtonComponent';
 import IngredientPicker, { type IngredientSelection } from './IngredientPicker';
 import IngredientsList from './IngredientsList';
 
@@ -85,17 +86,15 @@ export default function IngredientsInput({ items, onAdd, onDelete, title = 'Ingr
 
       <IngredientPicker value={selection} onChange={setSelection} disabled={adding} />
 
-      <button
-        type="button"
+      <ButtonComponent
         disabled={!canAdd || adding}
-        onClick={() => void handleAdd()}
+        handler={() => void handleAdd()}
         className={`mt-2 px-4 py-2 rounded text-white ${
           !canAdd || adding ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
         }`}
-        aria-busy={adding}
       >
         {adding ? 'Adding…' : 'Add'}
-      </button>
+      </ButtonComponent>
 
       {errorMsg && <div className="mt-2 text-sm text-red-600">{errorMsg}</div>}
     </div>

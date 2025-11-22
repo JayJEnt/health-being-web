@@ -5,6 +5,7 @@ import type { MeasureUnit } from '../../api/models/enum_utils';
 import { MeasureUnit as MU } from '../../api/models/enum_utils';
 import type { Ingredient } from '../../api/models/ingredient';
 import { useDebouncedSearch } from '../../hooks/useDebounceSearchParams';
+import ButtonComponent from '../GenericComponents/ButtonComponent';
 
 export type IngredientSelection = {
   ingredient: Ingredient | null;
@@ -70,13 +71,12 @@ export default function IngredientPicker({ value, onChange, disabled }: Props) {
           className={`border rounded px-3 py-2 w-full ${value.ingredient ? 'bg-gray-100 cursor-default' : ''}`}
         />
         {value.ingredient && (
-          <button
-            type="button"
-            onClick={clear}
+          <ButtonComponent
+            handler={clear}
             className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-blue-700 hover:underline"
           >
             Change
-          </button>
+          </ButtonComponent>
         )}
       </div>
 
@@ -115,14 +115,13 @@ export default function IngredientPicker({ value, onChange, disabled }: Props) {
           )}
 
           {results.map((ing) => (
-            <button
+            <ButtonComponent
               key={ing.name}
-              type="button"
-              onClick={() => onSelect(ing)}
               className="block w-full text-left px-3 py-2 hover:bg-gray-100"
+              handler={() => onSelect(ing)}
             >
               {ing.name}
-            </button>
+            </ButtonComponent>
           ))}
         </div>
       )}

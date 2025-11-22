@@ -49,15 +49,14 @@ const RecipeSteps = <T extends RecipeCreate | RecipeEditPayload>({
               <span className="flex-1">
                 {index + 1}. {step}
               </span>
-              <button
-                type="button"
-                onClick={() => deleteStep(index)}
+              <ButtonComponent
+                handler={() => deleteStep(index)}
                 className="shrink-0 bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 text-xs"
                 aria-label={`Delete step ${index + 1}`}
                 title="Delete step"
               >
                 Delete
-              </button>
+              </ButtonComponent>
             </li>
           ))}
         </ol>

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import type { User } from '../../api/models/user';
 import * as Icons from '../../assets/icons';
 import { useAuth } from '../../auth/useAuth';
+import ButtonComponent from '../GenericComponents/ButtonComponent';
 import NavButton from './NavButton';
 
 const NavBar: React.FC = () => {
@@ -58,8 +59,8 @@ const NavBar: React.FC = () => {
 
         {/* Profile Dropdown */}
         <div className="relative">
-          <button
-            onClick={() => {
+          <ButtonComponent
+            handler={() => {
               setSettingsDropdown(false);
               setUserDropdown((prev) => !prev);
             }}
@@ -69,7 +70,7 @@ const NavBar: React.FC = () => {
             <Icons.ChevronDownIcon
               className={`w-4 h-4 transition-transform ${userDropdown ? 'rotate-180' : ''}`}
             />
-          </button>
+          </ButtonComponent>
 
           {userDropdown && (
             <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg flex flex-col py-2 z-50">
@@ -121,8 +122,8 @@ const NavBar: React.FC = () => {
 
         {/* Settings Dropdown */}
         <div className="relative">
-          <button
-            onClick={() => {
+          <ButtonComponent
+            handler={() => {
               setUserDropdown(false);
               setSettingsDropdown((prev) => !prev);
             }}
@@ -132,7 +133,7 @@ const NavBar: React.FC = () => {
             <Icons.ChevronDownIcon
               className={`w-4 h-4 transition-transform ${settingsDropdown ? 'rotate-180' : ''}`}
             />
-          </button>
+          </ButtonComponent>
 
           {settingsDropdown && (
             <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg flex flex-col py-2 z-50">
