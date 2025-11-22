@@ -8,6 +8,7 @@ import { recipeApi as recipesApiUser } from '../api/endpoints/user_role/recipe';
 import type { IngredientQuantity } from '../api/models/ingredient';
 import type { RecipeResponse } from '../api/models/recipe';
 import { useAuth } from '../auth/useAuth';
+import ButtonComponent from '../components/GenericComponents/ButtonComponent';
 import IngredientsInput from '../components/Ingredients/IngredientsInput';
 import DietTypeInput from '../components/Recipe/DietTypeInput';
 import ImageInput from '../components/Recipe/ImageInput';
@@ -164,19 +165,19 @@ const RecipePage: React.FC = () => {
                 onChange={(e) => setNewRecipe((prev) => ({ ...prev, title: e.target.value }))}
               />
               <div className="flex gap-2">
-                <button
+                <ButtonComponent
                   disabled={isSaving}
                   className="bg-blue-700 text-white px-4 py-2 rounded-xl hover:bg-blue-600 disabled:opacity-60"
-                  onClick={void handleSave}
+                  handler={void handleSave}
                 >
                   {isSaving ? 'Saving...' : 'Save'}
-                </button>
-                <button
+                </ButtonComponent>
+                <ButtonComponent
                   className="bg-red-700 text-white px-4 py-2 rounded-xl hover:bg-red-600"
-                  onClick={handleCancel}
+                  handler={handleCancel}
                 >
                   Cancel
-                </button>
+                </ButtonComponent>
               </div>
             </div>
 

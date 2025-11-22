@@ -4,6 +4,7 @@ import { recipeFavouriteApi } from '../../api/endpoints/user_role/recipe_favouri
 import type { RecipeResponse } from '../../api/models/recipe';
 import type { RecipeFavouriteCreate } from '../../api/models/recipe_favourite';
 import { useAuth } from '../../auth/useAuth';
+import ButtonComponent from '../GenericComponents/ButtonComponent.tsx';
 
 type Props = {
   recipe: RecipeResponse;
@@ -54,23 +55,23 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
             <h1 className="text-3xl font-bold">{recipe.title}</h1>
             <div>
               {handleEdit && (
-                <button
-                  onClick={handleEdit}
+                <ButtonComponent
+                  handler={handleEdit}
                   className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                 >
                   Edit
-                </button>
+                </ButtonComponent>
               )}
               {user && user.id !== recipe.author_id && (
-                <button
+                <ButtonComponent
                   className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-                  onClick={toggleLiked}
+                  handler={toggleLiked}
                 >
                   <span className={isLiked ? 'text-red-600' : 'text-white'}>
                     {isLiked ? '❤️' : '🤍'}
                   </span>
                   Like
-                </button>
+                </ButtonComponent>
               )}
             </div>
           </div>
