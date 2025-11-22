@@ -47,7 +47,7 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
         <div className="lg:col-span-2 flex flex-col gap-6">
           <img
             src={imageUrl ? imageUrl : '/PlaceHolder.png'}
-            alt="Zdjęcie przepisu"
+            alt="Recipe"
             className="w-full h-auto max-h-[500px] object-cover rounded-2xl shadow border"
           />
           <div className="flex justify-between">

@@ -14,7 +14,7 @@ const HomeCarouselTile: React.FC<HomeCarouselTileProps> = ({ img, name, kcal }) 
         className="w-auto rounded-lg 
                 border border-amber-300"
         src={img}
-        alt="Recipe Image"
+        alt="Recipe"
       />
       <span
         className="

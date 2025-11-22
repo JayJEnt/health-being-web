@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { imagesApi } from '../api/endpoints/user_role/images';
 import { recipeApi } from '../api/endpoints/user_role/recipe';
-import { type IngredientQuantity } from '../api/models/ingredient';
+import type { IngredientQuantity } from '../api/models/ingredient';
 import type { RecipeCreate } from '../api/models/recipe';
 import IngredientsInput from '../components/Ingredients/IngredientsInput';
 import DietTypeInput from '../components/Recipe/DietTypeInput';

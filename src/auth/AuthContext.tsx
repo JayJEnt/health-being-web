@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { oauth2Api } from '../api/endpoints/public/oauth2';
 import { tokenDataApi } from '../api/endpoints/user_role/token_data';
