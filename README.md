@@ -9,19 +9,23 @@
 
 ## 📌 Table of Contents
 
-- [Prerequisites](#-prerequisites)
-- [Setup](#-setup)
-- [Available Scripts](#-available-scripts)
-- [Project Structure](#-project-structure)
-- [Styling](#-styling)
-- [License](#-license)
+- [Health-being Web App (Frontend)](#health-being-web-app-frontend)
+  - [📌 Table of Contents](#-table-of-contents)
+  - [🛠 Prerequisites](#-prerequisites)
+  - [🚀 Setup](#-setup)
+    - [1. Clone the Repository](#1-clone-the-repository)
+    - [2. Install dependencies](#2-install-dependencies)
+    - [3. Set Biome as default formater](#3-set-biome-as-default-formater)
+    - [4. Run app in dev mode](#4-run-app-in-dev-mode)
+  - [📁 Project Structure](#-project-structure)
+  - [🎨 Styling](#-styling)
 
 ---
 
 ## 🛠 Prerequisites
 
 - Node.js `>=18`
-- npm `>=9` (lub `pnpm`, `yarn` jeśli preferujesz)
+- npm `>=9`
 - [Vite](https://vitejs.dev/)
 
 ---
@@ -39,27 +43,26 @@ cd health-being-frontend
 
 ```bash
 npm install
-# lub
-yarn install
 ```
 
-### 3. Run app in dev mode
+### 3. Set Biome as default formater
+
+Save this at .vscode/settings.json
+```bash
+{
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.formatOnSave": true
+}
+```
+Press Ctr + Shift + P -> Biome: Restart (or just reopen repo)
+
+### 4. Run app in dev mode
 
 ```bash
 npm run dev
 ```
 
 You can access it at: [http://localhost:5173](http://localhost:5173)
-
----
-
-## ▶ Available Scripts
-
-| Script            | Działanie                  |
-| ----------------- | -------------------------- |
-| `npm run dev`     | Start dev server           |
-| `npm run build`   | Builds app for prod        |
-| `npm run preview` | local app preview for prod |
 
 ---
 
@@ -80,9 +83,3 @@ src/
 ## 🎨 Styling
 
 [Tailwind CSS](https://tailwindcss.com/) – utility-first CSS framework.
-
----
-
-## 📜 License
-
-MIT © JayJEnt
