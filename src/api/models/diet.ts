@@ -1,7 +1,7 @@
 export interface DietCreate {
-  name: string;
+	name: string;
 }
 
 export interface DietResponse extends DietCreate {
-  id: number;
+	id: number;
 }
