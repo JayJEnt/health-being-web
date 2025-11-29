@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../features/authentication/useAuth";
 import { dietFavouriteApi } from "../shared/api/endpoints/user_role/diet_favourite";
 import { ingredientPreferenceApi } from "../shared/api/endpoints/user_role/ingredient_preference";
 import { userOwnerApi } from "../shared/api/endpoints/user_role/user";
@@ -13,6 +12,7 @@ import type { IngredientPreferenceResponse } from "../shared/api/models/ingredie
 import type { User, UserCreate } from "../shared/api/models/user";
 import PreferedDietTypesInput from "../shared/components/Inputs/PreferedDietTypesInput";
 import PreferedIngredientInput from "../shared/components/Inputs/PreferedIngredientInput";
+import { useAuth } from "../shared/hooks/useAuth";
 
 const UserProfile: React.FC = () => {
 	const { user } = useAuth();

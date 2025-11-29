@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { useAuth } from "../features/authentication/useAuth";
+import { useAuth } from "../shared/hooks/useAuth";
 
 const LoginPage: React.FC = () => {
 	const [email, setEmail] = useState("");

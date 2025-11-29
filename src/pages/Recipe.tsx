@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../features/authentication/useAuth";
 import RecipeOverview from "../features/recipe/RecipeOverview";
 import RecipeSteps from "../features/recipe/RecipeSteps";
 import { imagesApi } from "../shared/api/endpoints/public/images";
@@ -12,6 +11,7 @@ import type { RecipeResponse } from "../shared/api/models/recipe";
 import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
 import ImageInput from "../shared/components/Inputs/ImageInput";
 import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
+import { useAuth } from "../shared/hooks/useAuth";
 
 export type RecipeEditPayload = Omit<RecipeResponse, "id">;
 

@@ -1,12 +1,12 @@
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAuth } from "../features/authentication/useAuth";
 import { recipeApi } from "../shared/api/endpoints/public/recipe";
 import { recipeApi as recipeApiUser } from "../shared/api/endpoints/user_role/recipe";
 import type { RecipeFilter, RecipeOverview } from "../shared/api/models/recipe";
 import LoadingComponent from "../shared/components/Loading/LoadingComponent";
 import { settings } from "../shared/config";
+import { useAuth } from "../shared/hooks/useAuth";
 
 const RecipesSearch: React.FC = () => {
 	const { user } = useAuth();
