@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-
-import { userAdminApi } from "../api/endpoints/admin_role/user";
-import type { User } from "../api/models/user";
-import UserCard from "../components/UsersList/UserCard";
+import UserCard from "../features/user/UserCard";
+import { userAdminApi } from "../shared/api/endpoints/admin_role/user";
+import type { User } from "../shared/api/models/user";
 
 const UsersList: React.FC = () => {
 	const [usersList, setUsersList] = useState<User[]>([]);

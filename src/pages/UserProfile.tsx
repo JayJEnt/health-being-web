@@ -1,19 +1,18 @@
 import { useEffect, useState } from "react";
-
-import { dietFavouriteApi } from "../api/endpoints/user_role/diet_favourite";
-import { ingredientPreferenceApi } from "../api/endpoints/user_role/ingredient_preference";
-import { userOwnerApi } from "../api/endpoints/user_role/user";
-import type { DietFavouriteResponse } from "../api/models/diet_favourite";
-import type { ActivityLevel, Silhouette } from "../api/models/enum_utils";
+import { dietFavouriteApi } from "../shared/api/endpoints/user_role/diet_favourite";
+import { ingredientPreferenceApi } from "../shared/api/endpoints/user_role/ingredient_preference";
+import { userOwnerApi } from "../shared/api/endpoints/user_role/user";
+import type { DietFavouriteResponse } from "../shared/api/models/diet_favourite";
+import type { ActivityLevel, Silhouette } from "../shared/api/models/enum_utils";
 import {
 	ActivityLevel as ActivityLevelValues,
 	Silhouette as SilhouetteTypes,
-} from "../api/models/enum_utils";
-import type { IngredientPreferenceResponse } from "../api/models/ingredient_preference";
-import type { User, UserCreate } from "../api/models/user";
-import { useAuth } from "../auth/useAuth";
-import PreferedDietTypesInput from "../components/User/PreferedDietTypesInput";
-import PreferedIngredientInput from "../components/User/PreferedIngredientInput";
+} from "../shared/api/models/enum_utils";
+import type { IngredientPreferenceResponse } from "../shared/api/models/ingredient_preference";
+import type { User, UserCreate } from "../shared/api/models/user";
+import PreferedDietTypesInput from "../shared/components/Inputs/PreferedDietTypesInput";
+import PreferedIngredientInput from "../shared/components/Inputs/PreferedIngredientInput";
+import { useAuth } from "../shared/hooks/useAuth";
 
 const UserProfile: React.FC = () => {
 	const { user } = useAuth();

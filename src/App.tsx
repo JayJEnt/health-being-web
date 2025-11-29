@@ -1,16 +1,15 @@
 import { Route, Routes } from "react-router-dom";
-
-import { useAuth } from "./auth/useAuth.ts";
-import NavBar from "./components/NavBar/NavBar.tsx";
+import NavigationBar from "./features/navigation_bar/NavigationBar.tsx";
 import EmailCallbackPage from "./pages/EmailCallback.tsx";
 import Home from "./pages/Home.tsx";
 import LoginPage from "./pages/Login.tsx";
 import RecipePage from "./pages/Recipe.tsx";
-import RecipeSubmitPage from "./pages/RecipeSubmitPage.tsx";
+import RecipeSubmitPage from "./pages/RecipeSubmit.tsx";
 import RecipesSearch from "./pages/RecipesSearch.tsx";
 import RegisterPage from "./pages/Register.tsx";
 import UserProfile from "./pages/UserProfile.tsx";
 import UsersList from "./pages/UsersList.tsx";
+import { useAuth } from "./shared/hooks/useAuth.ts";
 
 function App() {
 	const { status } = useAuth();
@@ -23,7 +22,7 @@ function App() {
 
 	return (
 		<div className="grid grid-cols-[auto_1fr] gap-4 min-h-screen">
-			<NavBar />
+			<NavigationBar />
 			<main className="pt-16 absolute inset-0">
 				<Routes>
 					<Route path="/" element={<Home />} />
