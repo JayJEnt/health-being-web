@@ -15,9 +15,8 @@ const LoginPage: React.FC = () => {
   const handleGoogleLogin = async () => {
     try {
       const response = await oauth2Api.externalLogin('google');
-      const data = response as unknown as { url: string };
-      if (data.url) {
-        window.location.href = data.url;
+      if (response.url) {
+        window.location.href = response.url;
       }
     } catch (err) {
       console.error('Failed to initialize Google login', err);
