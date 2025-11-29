@@ -1,6 +1,6 @@
 import { createContext } from "react";
 
-import type { Oauth2RequestForm } from "../api/models/oauth2_form";
+import type { Oauth2RequestForm } from "../../shared/api/models/oauth2_form";
 import type { AuthState } from "./auth";
 
 export type AuthContextValue = AuthState & {

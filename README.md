@@ -16,7 +16,6 @@
     - [2. Install dependencies](#2-install-dependencies)
     - [3. Set Biome as default formater](#3-set-biome-as-default-formater)
     - [4. Run app in dev mode](#4-run-app-in-dev-mode)
-  - [📁 Project Structure](#-project-structure)
   - [🎨 Styling](#-styling)
 
 ---
@@ -64,20 +63,6 @@ npm run dev
 ```
 
 You can access it at: [http://localhost:5173](http://localhost:5173)
-
----
-
-## 📁 Project Structure
-
-```
-src/
-├─ assets/           # images, icons, etc...
-├─ components/       # UI components
-├─ hooks/            # custom hooks
-├─ pages/            # routing pages
-├─ App.tsx
-└─ main.tsx
-```
 
 ---
 

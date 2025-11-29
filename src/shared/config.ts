@@ -5,7 +5,6 @@ class Settings {
 
 	DIET_ENDPOINT: string = "/diet";
 	USER_FOLLOWED_ENDPOINT: string = "/user_followed";
-	RECIPES_PAGE_SIZE: number = 18;
 	IMAGES_UPLOAD_ENDPOINT: string = "/images/upload";
 	IMAGES_DOWNLOAD_ENDPOINT: string = "/images/download";
 	INGREDIENT_ENDPOINT: string = "/ingredient";
@@ -19,6 +18,8 @@ class Settings {
 	USER_ENDPOINT: string = "/user";
 	USER_OWNER_ENDPOINT: string = "/user/owner";
 	VITAMIN_ENDPOINT: string = "/vitamin";
+
+	RECIPES_PAGE_SIZE: number = 18;
 
 	AUTH_TOKEN_KEY: string = "app.auth.token";
 }

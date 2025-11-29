@@ -1,13 +1,12 @@
 import { useState } from "react";
-
-import { imagesApi } from "../api/endpoints/user_role/images";
-import { recipeApi } from "../api/endpoints/user_role/recipe";
-import type { IngredientQuantity } from "../api/models/ingredient";
-import type { RecipeCreate } from "../api/models/recipe";
-import IngredientsInput from "../components/Ingredients/IngredientsInput";
-import DietTypeInput from "../components/Recipe/DietTypeInput";
-import ImageInput from "../components/Recipe/ImageInput";
-import RecipeSteps from "../components/Recipe/RecipeSteps";
+import RecipeSteps from "../features/recipe/RecipeSteps";
+import { imagesApi } from "../shared/api/endpoints/user_role/images";
+import { recipeApi } from "../shared/api/endpoints/user_role/recipe";
+import type { IngredientQuantity } from "../shared/api/models/ingredient";
+import type { RecipeCreate } from "../shared/api/models/recipe";
+import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
+import ImageInput from "../shared/components/Inputs/ImageInput";
+import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
 
 const RecipeSubmitPage: React.FC = () => {
 	const [recipe, setRecipe] = useState<RecipeCreate>({

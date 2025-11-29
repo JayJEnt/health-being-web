@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-
+import { isLoggedIn } from "../../features/authentication/utils";
 import { tokenDataApi } from "../api/endpoints/user_role/token_data";
-import { isLoggedIn } from "../utils";
 
 export function useIsAdmin() {
 	const [isAdmin, setIsAdmin] = useState(false);

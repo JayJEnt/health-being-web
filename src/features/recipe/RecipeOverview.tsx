@@ -1,9 +1,9 @@
 import type { Dispatch, SetStateAction } from "react";
 
-import { recipeFavouriteApi } from "../../api/endpoints/user_role/recipe_favourite";
-import type { RecipeResponse } from "../../api/models/recipe";
-import type { RecipeFavouriteCreate } from "../../api/models/recipe_favourite";
-import { useAuth } from "../../auth/useAuth";
+import { recipeFavouriteApi } from "../../shared/api/endpoints/user_role/recipe_favourite";
+import type { RecipeResponse } from "../../shared/api/models/recipe";
+import type { RecipeFavouriteCreate } from "../../shared/api/models/recipe_favourite";
+import { useAuth } from "../authentication/useAuth";
 
 type Props = {
 	recipe: RecipeResponse;

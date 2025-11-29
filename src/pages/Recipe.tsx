@@ -1,18 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-
-import { imagesApi } from "../api/endpoints/public/images";
-import { recipeApi } from "../api/endpoints/public/recipe";
-import { imagesApi as imagesApiUser } from "../api/endpoints/user_role/images";
-import { recipeApi as recipesApiUser } from "../api/endpoints/user_role/recipe";
-import type { IngredientQuantity } from "../api/models/ingredient";
-import type { RecipeResponse } from "../api/models/recipe";
-import { useAuth } from "../auth/useAuth";
-import IngredientsInput from "../components/Ingredients/IngredientsInput";
-import DietTypeInput from "../components/Recipe/DietTypeInput";
-import ImageInput from "../components/Recipe/ImageInput";
-import RecipeOverview from "../components/Recipe/RecipeOverview";
-import RecipeSteps from "../components/Recipe/RecipeSteps";
+import { useAuth } from "../features/authentication/useAuth";
+import RecipeOverview from "../features/recipe/RecipeOverview";
+import RecipeSteps from "../features/recipe/RecipeSteps";
+import { imagesApi } from "../shared/api/endpoints/public/images";
+import { recipeApi } from "../shared/api/endpoints/public/recipe";
+import { imagesApi as imagesApiUser } from "../shared/api/endpoints/user_role/images";
+import { recipeApi as recipesApiUser } from "../shared/api/endpoints/user_role/recipe";
+import type { IngredientQuantity } from "../shared/api/models/ingredient";
+import type { RecipeResponse } from "../shared/api/models/recipe";
+import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
+import ImageInput from "../shared/components/Inputs/ImageInput";
+import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
 
 export type RecipeEditPayload = Omit<RecipeResponse, "id">;
 

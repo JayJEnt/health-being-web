@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { oauth2Api } from "../api/endpoints/public/oauth2";
-import type { UserCreate } from "../api/models/user";
+import { oauth2Api } from "../shared/api/endpoints/public/oauth2";
+import type { UserCreate } from "../shared/api/models/user";
 
 const RegisterPage: React.FC = () => {
 	const [user, setUser] = useState<UserCreate>({

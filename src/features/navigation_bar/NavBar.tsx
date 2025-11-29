@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import type { User } from "../../api/models/user";
-import * as Icons from "../../assets/icons";
-import { useAuth } from "../../auth/useAuth";
+import type { User } from "../../shared/api/models/user";
+import * as Icons from "../../shared/assets/icons";
+import { useAuth } from "../authentication/useAuth";
 import NavButton from "./NavButton";
 
 const NavBar: React.FC = () => {

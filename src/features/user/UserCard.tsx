@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import { api } from "../../api/client";
-import type { User } from "../../api/models/user";
+import { api } from "../../shared/api/client";
+import type { User } from "../../shared/api/models/user";
 
 type Props = {
 	user: User;

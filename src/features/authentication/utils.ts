@@ -1,4 +1,4 @@
-import type { Token } from "./api/models/token";
+import type { Token } from "../../shared/api/models/token";
 
 export function isLoggedIn(): boolean {
 	const token = localStorage.getItem("token");

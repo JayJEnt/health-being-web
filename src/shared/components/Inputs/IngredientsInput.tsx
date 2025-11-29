@@ -4,8 +4,8 @@ import { ApiError } from "../../api/client";
 import type { MeasureUnit } from "../../api/models/enum_utils";
 import { MeasureUnit as MU } from "../../api/models/enum_utils";
 import type { IngredientQuantity } from "../../api/models/ingredient";
-import IngredientPicker, { type IngredientSelection } from "./IngredientPicker";
-import IngredientsList from "./IngredientsList";
+import IngredientPicker, { type IngredientSelection } from "../Ingredients/IngredientPicker";
+import IngredientsList from "../Ingredients/IngredientsList";
 
 type Props = {
 	items: IngredientQuantity[];

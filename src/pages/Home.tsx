@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-
-import { tokenDataApi } from "../api/endpoints/user_role/token_data.ts";
-import type { User } from "../api/models/user.ts";
-import Fridge from "../components/Fridge/Fridge.tsx";
-import HomeCarousel from "../components/Home/HomeCarousel.tsx";
+import Fridge from "../features/fridge/Fridge.tsx";
+import HomeCarousel from "../features/home/HomeCarousel.tsx";
+import { tokenDataApi } from "../shared/api/endpoints/user_role/token_data.ts";
+import type { User } from "../shared/api/models/user.ts";
 
 const Home: React.FC = () => {
 	const [user, setUser] = useState<User | null>(null);

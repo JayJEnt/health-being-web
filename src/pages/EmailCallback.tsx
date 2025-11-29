@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { oauth2Api } from "../api/endpoints/public/oauth2";
-import { settings } from "../config";
+import { oauth2Api } from "../shared/api/endpoints/public/oauth2";
+import { settings } from "../shared/config";
 
 const EmailCallbackPage: React.FC = () => {
 	const { token } = useParams();

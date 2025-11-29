@@ -1,5 +1,5 @@
-import type { Token } from "../api/models/token";
-import type { User } from "../api/models/user";
+import type { Token } from "../../shared/api/models/token";
+import type { User } from "../../shared/api/models/user";
 
 export type AuthStatus = "idle" | "loading" | "authenticated" | "unauthenticated";
 

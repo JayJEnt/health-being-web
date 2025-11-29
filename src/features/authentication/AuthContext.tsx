@@ -1,15 +1,15 @@
 import type React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { oauth2Api } from "../api/endpoints/public/oauth2";
-import { tokenDataApi } from "../api/endpoints/user_role/token_data";
-import type { Oauth2RequestForm } from "../api/models/oauth2_form";
-import type { Token } from "../api/models/token";
-import type { User } from "../api/models/user";
-import { settings } from "../config";
-import { isToken } from "../utils";
+import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
+import { tokenDataApi } from "../../shared/api/endpoints/user_role/token_data";
+import type { Oauth2RequestForm } from "../../shared/api/models/oauth2_form";
+import type { Token } from "../../shared/api/models/token";
+import type { User } from "../../shared/api/models/user";
+import { settings } from "../../shared/config";
 import type { AuthState } from "./auth";
 import { AuthContext, type AuthContextValue } from "./context";
+import { isToken } from "./utils";
 
 // Provider
 export function AuthProvider({ children }: { children: React.ReactNode }) {

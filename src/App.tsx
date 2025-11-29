@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router-dom";
 
-import { useAuth } from "./auth/useAuth.ts";
-import NavBar from "./components/NavBar/NavBar.tsx";
+import { useAuth } from "./features/authentication/useAuth.ts";
+import NavBar from "./features/navigation_bar/NavBar.tsx";
 import EmailCallbackPage from "./pages/EmailCallback.tsx";
 import Home from "./pages/Home.tsx";
 import LoginPage from "./pages/Login.tsx";
 import RecipePage from "./pages/Recipe.tsx";
-import RecipeSubmitPage from "./pages/RecipeSubmitPage.tsx";
+import RecipeSubmitPage from "./pages/RecipeSubmit.tsx";
 import RecipesSearch from "./pages/RecipesSearch.tsx";
 import RegisterPage from "./pages/Register.tsx";
 import UserProfile from "./pages/UserProfile.tsx";
