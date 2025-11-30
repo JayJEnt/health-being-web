@@ -7,7 +7,7 @@ import {
 	UserPlusIcon,
 } from "../../../shared/assets/icons";
 
-import NavButton from "./NavButton";
+import GenericButton from "../../../shared/components/Generic/Button";
 
 interface UserDropdownProps {
 	isOpen: boolean;
@@ -28,36 +28,57 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
 }) => {
 	return (
 		<div className="relative">
-			<button
-				type="button"
-				onClick={toggle}
-				className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
-			>
+			<GenericButton type="dropdown" onClick={toggle}>
 				<UserIcon className="w-6 h-6" />
 				<ChevronDownIcon className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
-			</button>
+			</GenericButton>
 
 			{isOpen && (
 				<div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg flex flex-col py-2 z-50">
 					{!isAuthenticated ? (
 						<>
-							<NavButton
+							<GenericButton
+								type="dropdown"
+								as="NavLink"
 								icon={ArrowRightOnRectangleIcon}
 								label="Login"
 								to="/login"
 								onClick={close}
 							/>
-							<NavButton icon={UserPlusIcon} label="Register" to="/register" onClick={close} />
+							<GenericButton
+								type="dropdown"
+								as="NavLink"
+								icon={UserPlusIcon}
+								label="Register"
+								to="/register"
+								onClick={close}
+							/>
 						</>
 					) : (
 						<>
-							<NavButton icon={UserIcon} label="My Profile" to="/user" onClick={close} />
+							<GenericButton
+								type="dropdown"
+								as="NavLink"
+								icon={UserIcon}
+								label="My Profile"
+								to="/user"
+								onClick={close}
+							/>
 
 							{isAdmin && (
-								<NavButton icon={UserIcon} label="Users" to="/users_list" onClick={close} />
+								<GenericButton
+									type="dropdown"
+									as="NavLink"
+									icon={UserIcon}
+									label="Users"
+									to="/users_list"
+									onClick={close}
+								/>
 							)}
 
-							<NavButton
+							<GenericButton
+								type="dropdown"
+								as="NavLink"
 								icon={ArrowRightOnRectangleIcon}
 								label="Logout"
 								to="/"

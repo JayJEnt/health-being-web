@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 
 import { oauth2Api } from "../shared/api/endpoints/public/oauth2";
 import type { UserCreate } from "../shared/api/models/user";
+import GenericButton from "../shared/components/Generic/Button";
 
 const RegisterPage: React.FC = () => {
 	const [user, setUser] = useState<UserCreate>({
@@ -112,12 +113,7 @@ const RegisterPage: React.FC = () => {
 
 					<Link to="/login">Already have an account?</Link>
 					{error && <p className="text-red-500 text-sm text-center">{error}</p>}
-					<button
-						type="submit"
-						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
-					>
-						Register
-					</button>
+					<GenericButton type="submit">Register</GenericButton>
 				</form>
 			</div>
 		</div>

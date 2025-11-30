@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import GenericButton from "../shared/components/Generic/Button";
 import { useAuth } from "../shared/hooks/useAuth";
 
 const LoginPage: React.FC = () => {
@@ -50,12 +50,7 @@ const LoginPage: React.FC = () => {
 					/>
 					<Link to="/register">Don't have an account yet?</Link>
 					{error && <p className="text-red-500 text-sm text-center">{error}</p>}
-					<button
-						type="submit"
-						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
-					>
-						Login
-					</button>
+					<GenericButton type="submit">Login</GenericButton>
 				</form>
 			</div>
 		</div>

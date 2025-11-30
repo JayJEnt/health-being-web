@@ -10,6 +10,7 @@ import {
 } from "../shared/api/models/enum_utils";
 import type { IngredientPreferenceResponse } from "../shared/api/models/ingredient_preference";
 import type { User, UserCreate } from "../shared/api/models/user";
+import GenericButton from "../shared/components/Generic/Button";
 import PreferedDietTypesInput from "../shared/components/Inputs/PreferedDietTypesInput";
 import PreferedIngredientInput from "../shared/components/Inputs/PreferedIngredientInput";
 import { useAuth } from "../shared/hooks/useAuth";
@@ -162,12 +163,7 @@ const UserProfile: React.FC = () => {
 			</div>
 
 			<div>
-				<button
-					type="submit"
-					className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded"
-				>
-					Save Settings
-				</button>
+				<GenericButton type="submit">Save Settings</GenericButton>
 			</div>
 		</form>
 	);
