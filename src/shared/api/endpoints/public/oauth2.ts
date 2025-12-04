@@ -1,6 +1,7 @@
 import { settings } from "../../../config";
 import { api } from "../../client";
 import type { Oauth2RequestForm } from "../../models/oauth2_form";
+import type { RedirectResponse } from "../../models/redirect_response";
 import type { Token } from "../../models/token";
 import type { User, UserCreate } from "../../models/user";
 
@@ -16,5 +17,5 @@ export const oauth2Api = {
 	verifyEmail: () => api.get<User>(`${settings.OAUTH2_ENDPOINT}/verify_email`),
 
 	externalLogin: (provider: string) =>
-		api.get<Token>(`${settings.OAUTH2_ENDPOINT}/login`, { provider }),
+		api.get<RedirectResponse>(`${settings.OAUTH2_ENDPOINT}/login`, { provider }),
 };
