@@ -1,6 +1,6 @@
-import { settings } from "../../config";
+import { settings } from "../config";
 
-export const handleToken = (token: string): void => {
+export const saveToken = (token: string): void => {
 	try {
 		localStorage.setItem(
 			settings.AUTH_TOKEN_KEY,

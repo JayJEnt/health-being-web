@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import NavigationBar from "./features/navigation_bar/NavigationBar.tsx";
-import EmailCallbackPage from "./pages/EmailCallback.tsx";
+import EmailCallbackPage from "./pages/callbacks/EmailCallback.tsx";
+import GoogleCallbackPage from "./pages/callbacks/GoogleCallback.tsx";
 import Home from "./pages/Home.tsx";
 import LoginPage from "./pages/Login.tsx";
 import RecipePage from "./pages/Recipe.tsx";
@@ -10,8 +11,6 @@ import RegisterPage from "./pages/Register.tsx";
 import UserProfile from "./pages/UserProfile.tsx";
 import UsersList from "./pages/UsersList.tsx";
 import { useAuth } from "./shared/hooks/useAuth.ts";
-import GoogleCallbackPage from './pages/GoogleCallback.tsx';
-
 
 function App() {
 	const { status } = useAuth();
@@ -37,7 +36,7 @@ function App() {
 					<Route path="/user" element={isAuthenticated ? <UserProfile /> : <LoginPage />} />
 
 					<Route path="/email_callback/:token" element={<EmailCallbackPage />} />
-          <Route path="/google_callback" element={<GoogleCallbackPage />} />
+					<Route path="/google_callback" element={<GoogleCallbackPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
 					<Route path="/users_list" element={<UsersList />} />
