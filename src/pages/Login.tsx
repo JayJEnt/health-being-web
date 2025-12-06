@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { oauth2Api } from "../shared/api/endpoints/public/oauth2";
+import { GoogleIcon } from "../shared/assets/GoogleIcon";
 import { useAuth } from "../shared/hooks/useAuth";
 
 const LoginPage: React.FC = () => {
@@ -9,6 +10,18 @@ const LoginPage: React.FC = () => {
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 	const { login } = useAuth();
+
+	const handleGoogleLogin = async () => {
+		try {
+			const response = await oauth2Api.externalLogin("google");
+			if (response.url) {
+				window.location.href = response.url;
+			}
+		} catch (err) {
+			console.error("Failed to initialize Google login", err);
+			setError("Failed to initialize Google login");
+		}
+	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -55,6 +68,24 @@ const LoginPage: React.FC = () => {
 						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
 					>
 						Login
+					</button>
+
+					<div className="relative my-4">
+						<div className="absolute inset-0 flex items-center">
+							<div className="w-full border-t border-gray-300 dark:border-gray-600"></div>
+						</div>
+						<div className="relative flex justify-center text-sm">
+							<span className="px-2 bg-white dark:bg-gray-800 text-gray-500">Or continue with</span>
+						</div>
+					</div>
+
+					<button
+						type="button"
+						onClick={() => void handleGoogleLogin()}
+						className="flex items-center justify-center gap-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition"
+					>
+						<GoogleIcon className="w-5 h-5" />
+						<span>Sign in with Google</span>
 					</button>
 				</form>
 			</div>
