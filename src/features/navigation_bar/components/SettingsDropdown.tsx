@@ -1,8 +1,8 @@
 import type React from "react";
 
 import { ChevronDownIcon, Cog6ToothIcon } from "../../../shared/assets/icons";
-
 import GenericButton from "../../../shared/components/Generic/Button";
+import NavButton from "./NavButton";
 
 interface Props {
 	isOpen: boolean;
@@ -20,14 +20,7 @@ const SettingsDropdown: React.FC<Props> = ({ isOpen, toggle, close }) => {
 
 			{isOpen && (
 				<div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg flex flex-col py-2 z-50">
-					<GenericButton
-						type="dropdown"
-						as="NavLink"
-						icon={Cog6ToothIcon}
-						label="Settings"
-						to="/settings"
-						onClick={close}
-					/>
+					<NavButton icon={Cog6ToothIcon} label="Settings" to="/settings" onClick={close} />
 				</div>
 			)}
 		</div>

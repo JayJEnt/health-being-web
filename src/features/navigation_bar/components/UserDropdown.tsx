@@ -6,8 +6,8 @@ import {
 	UserIcon,
 	UserPlusIcon,
 } from "../../../shared/assets/icons";
-
-import GenericButton from "../../../shared/components/Generic/Button";
+import GenericButton from "../../../shared/components/Generic/Button.tsx";
+import NavButton from "./NavButton";
 
 interface UserDropdownProps {
 	isOpen: boolean;
@@ -37,48 +37,23 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
 				<div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg flex flex-col py-2 z-50">
 					{!isAuthenticated ? (
 						<>
-							<GenericButton
-								type="dropdown"
-								as="NavLink"
+							<NavButton
 								icon={ArrowRightOnRectangleIcon}
 								label="Login"
 								to="/login"
 								onClick={close}
 							/>
-							<GenericButton
-								type="dropdown"
-								as="NavLink"
-								icon={UserPlusIcon}
-								label="Register"
-								to="/register"
-								onClick={close}
-							/>
+							<NavButton icon={UserPlusIcon} label="Register" to="/register" onClick={close} />
 						</>
 					) : (
 						<>
-							<GenericButton
-								type="dropdown"
-								as="NavLink"
-								icon={UserIcon}
-								label="My Profile"
-								to="/user"
-								onClick={close}
-							/>
+							<NavButton icon={UserIcon} label="My Profile" to="/user" onClick={close} />
 
 							{isAdmin && (
-								<GenericButton
-									type="dropdown"
-									as="NavLink"
-									icon={UserIcon}
-									label="Users"
-									to="/users_list"
-									onClick={close}
-								/>
+								<NavButton icon={UserIcon} label="Users" to="/users_list" onClick={close} />
 							)}
 
-							<GenericButton
-								type="dropdown"
-								as="NavLink"
+							<NavButton
 								icon={ArrowRightOnRectangleIcon}
 								label="Logout"
 								to="/"
