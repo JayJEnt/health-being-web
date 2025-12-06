@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
-import { saveToken } from "../../shared/hooks/saveToken";
+import { storeToken } from "../../shared/hooks/storeToken";
 
 const EmailCallbackPage: React.FC = () => {
 	const { token } = useParams();
@@ -12,7 +12,7 @@ const EmailCallbackPage: React.FC = () => {
 
 	useEffect(() => {
 		if (!token) return;
-		saveToken(token);
+		storeToken(token);
 		setMessage("");
 		setError("");
 

@@ -1,6 +1,6 @@
 import { settings } from "../config";
 
-export const saveToken = (token: string): void => {
+export const storeToken = (token: string): void => {
 	try {
 		localStorage.setItem(
 			settings.AUTH_TOKEN_KEY,
@@ -10,6 +10,6 @@ export const saveToken = (token: string): void => {
 			}),
 		);
 	} catch (err) {
-		throw new Error(`Failed to save token, ERROR: ${(err as Error).message}`);
+		throw new Error(`Failed to store token, ERROR: ${(err as Error).message}`);
 	}
 };

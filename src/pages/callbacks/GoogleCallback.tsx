@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { saveToken } from "../../shared/hooks/saveToken";
+import { storeToken } from "../../shared/hooks/storeToken";
 
 const GoogleCallbackPage: React.FC = () => {
 	const [message, setMessage] = useState("Processing login...");
@@ -14,7 +14,7 @@ const GoogleCallbackPage: React.FC = () => {
 		}
 
 		try {
-			saveToken(token);
+			storeToken(token);
 			setMessage("Login successful! You can now navigate to the application.");
 		} catch (err) {
 			setError((err as Error).message);
