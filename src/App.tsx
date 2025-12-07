@@ -1,13 +1,15 @@
 import { Route, Routes } from "react-router-dom";
 import NavigationBar from "./features/navigation_bar/NavigationBar.tsx";
-import EmailCallbackPage from "./pages/callbacks/EmailCallback.tsx";
-import GoogleCallbackPage from "./pages/callbacks/GoogleCallback.tsx";
+import ForgotPassPage from "./pages/authorization/ForgotPass.tsx";
+import LoginPage from "./pages/authorization/Login.tsx";
+import RegisterPage from "./pages/authorization/Register.tsx";
+import EmailCallbackPage from "./pages/callback/EmailCallback.tsx";
+import ForgotPassCallbackPage from "./pages/callback/ForgotPassCallback.tsx";
+import GoogleCallbackPage from "./pages/callback/GoogleCallback.tsx";
 import Home from "./pages/Home.tsx";
-import LoginPage from "./pages/Login.tsx";
 import RecipePage from "./pages/Recipe.tsx";
 import RecipeSubmitPage from "./pages/RecipeSubmit.tsx";
 import RecipesSearch from "./pages/RecipesSearch.tsx";
-import RegisterPage from "./pages/Register.tsx";
 import UserProfile from "./pages/UserProfile.tsx";
 import UsersList from "./pages/UsersList.tsx";
 import { useAuth } from "./shared/hooks/useAuth.ts";
@@ -35,10 +37,16 @@ function App() {
 					/>
 					<Route path="/user" element={isAuthenticated ? <UserProfile /> : <LoginPage />} />
 
+					{/* Callback routes */}
 					<Route path="/email_callback/:token" element={<EmailCallbackPage />} />
 					<Route path="/google_callback" element={<GoogleCallbackPage />} />
+					<Route path="/forgot_password_callback/:token" element={<ForgotPassCallbackPage />} />
+
+					{/* Authorization routes */}
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
+					<Route path="/forgot_password" element={<ForgotPassPage />} />
+
 					<Route path="/users_list" element={<UsersList />} />
 				</Routes>
 			</main>

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import checkPasswordStrength from "../features/register_password/checkPasswordStrength";
-import RegisterPassword from "../features/register_password/RegisterPassword";
-import { oauth2Api } from "../shared/api/endpoints/public/oauth2";
-import type { UserCreate } from "../shared/api/models/user";
+
+import checkPasswordStrength from "../../features/register_password/checkPasswordStrength";
+import RegisterPassword from "../../features/register_password/RegisterPassword";
+
+import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
+import type { UserCreate } from "../../shared/api/models/user";
 
 const RegisterPage: React.FC = () => {
 	const [user, setUser] = useState<UserCreate>({
@@ -84,7 +86,10 @@ const RegisterPage: React.FC = () => {
 					/>
 
 					<Link to="/login">Already have an account?</Link>
-					{error && <p className="text-red-500 text-sm text-center">{error}</p>}
+					<Link to="/forgot_password">Forgot your password?</Link>
+
+					{error ?? <p className="text-red-500 text-sm text-center">{error}</p>}
+
 					<button
 						type="submit"
 						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"

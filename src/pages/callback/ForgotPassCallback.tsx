@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 
 import checkPasswordStrength from "../../features/register_password/checkPasswordStrength";
 import RegisterPassword from "../../features/register_password/RegisterPassword";
+
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
 import { storeToken } from "../../shared/hooks/storeToken";
 
@@ -46,7 +47,7 @@ const ForgotPassCallbackPage: React.FC = () => {
 			return;
 		}
 		try {
-			await oauth2Api.sendVerificationEmail(password); // Fix this line to call the correct API for password reset
+			await oauth2Api.verifyPasswordChange(password);
 			setMessage("Password have been changed.");
 		} catch (err: unknown) {
 			setError(`Unknown error occured: ${String(err)}`);
@@ -71,16 +72,18 @@ const ForgotPassCallbackPage: React.FC = () => {
 						}
 						onRepeatPasswordChange={(value) => setRepeatPassword(value)}
 					/>
+
 					{error ? (
 						<p className="text-red-500 text-sm text-center">{error}</p>
 					) : (
 						(message ?? <p className="text-green-500 text-sm text-center">{message}</p>)
 					)}
+
 					<button
 						type="submit"
 						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
 					>
-						Register
+						Set Password
 					</button>
 				</form>
 			</div>

@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { storeToken } from "../../shared/hooks/storeToken";
 
 const GoogleCallbackPage: React.FC = () => {
-	const [message, setMessage] = useState("Processing login...");
-	const [error, setError] = useState("");
+	const [message, setMessage] = useState<string>("Processing login...");
+	const [error, setError] = useState<string>("");
 	const token = new URLSearchParams(window.location.search).get("token");
 
 	useEffect(() => {

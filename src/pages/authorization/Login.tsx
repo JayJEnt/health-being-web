@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { oauth2Api } from "../shared/api/endpoints/public/oauth2";
-import { GoogleIcon } from "../shared/assets/GoogleIcon";
-import { useAuth } from "../shared/hooks/useAuth";
+
+import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
+import { GoogleIcon } from "../../shared/assets/GoogleIcon";
+import { useAuth } from "../../shared/hooks/useAuth";
 
 const LoginPage: React.FC = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [error, setError] = useState("");
+	const [email, setEmail] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
+	const [error, setError] = useState<string>("");
 	const navigate = useNavigate();
 	const { login } = useAuth();
 
@@ -62,6 +63,7 @@ const LoginPage: React.FC = () => {
 						className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
 					/>
 					<Link to="/register">Don't have an account yet?</Link>
+					<Link to="/forgot_password">Forgot your password?</Link>
 					{error && <p className="text-red-500 text-sm text-center">{error}</p>}
 					<button
 						type="submit"

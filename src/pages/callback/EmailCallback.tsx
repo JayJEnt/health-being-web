@@ -6,9 +6,9 @@ import { storeToken } from "../../shared/hooks/storeToken";
 
 const EmailCallbackPage: React.FC = () => {
 	const { token } = useParams();
-	const [email, setEmail] = useState("");
-	const [error, setError] = useState("");
-	const [message, setMessage] = useState("");
+	const [email, setEmail] = useState<string>("");
+	const [error, setError] = useState<string>("");
+	const [message, setMessage] = useState<string>("");
 
 	useEffect(() => {
 		if (!token) return;
