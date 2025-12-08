@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
 
-const ForgotPassPage: React.FC = () => {
+const ForgotPasswordPage: React.FC = () => {
 	const [email, setEmail] = useState<string>("");
 	const [error, setError] = useState<string>("");
 	const [message, setMessage] = useState<string>("");
@@ -65,4 +65,4 @@ const ForgotPassPage: React.FC = () => {
 	);
 };
 
-export default ForgotPassPage;
+export default ForgotPasswordPage;

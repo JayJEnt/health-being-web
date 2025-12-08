@@ -1,26 +1,23 @@
 import { useEffect, useState } from "react";
 
-import { storeToken } from "../../shared/hooks/storeToken";
+import {
+	getTokenFromLocalStorage,
+	useSaveTokenFromQueryToLocalStorage,
+} from "../../shared/hooks/token";
 
 const GoogleCallbackPage: React.FC = () => {
 	const [message, setMessage] = useState<string>("Processing login...");
 	const [error, setError] = useState<string>("");
-	const token = new URLSearchParams(window.location.search).get("token");
+	useSaveTokenFromQueryToLocalStorage();
 
 	useEffect(() => {
+		const token = getTokenFromLocalStorage();
 		if (!token) {
-			setError("No token provided in the callback URL.");
+			setError("Could not login.");
 			return;
 		}
-
-		try {
-			storeToken(token);
-			setMessage("Login successful! You can now navigate to the application.");
-		} catch (err) {
-			setError((err as Error).message);
-			setMessage("");
-		}
-	}, [token]);
+		setMessage("Login successful! You can now navigate to the application.");
+	}, []);
 
 	return (
 		<div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">

@@ -1,24 +1,18 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useState } from "react";
 
 import checkPasswordStrength from "../../features/register_password/checkPasswordStrength";
 import RegisterPassword from "../../features/register_password/RegisterPassword";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
-import { storeToken } from "../../shared/hooks/storeToken";
+import { useSaveTokenFromQueryToLocalStorage } from "../../shared/hooks/token";
 
-const ForgotPassCallbackPage: React.FC = () => {
-	const { token } = useParams();
+const PasswordCallbackPage: React.FC = () => {
 	const [password, setPassword] = useState<string>("");
 	const [repeatPassword, setRepeatPassword] = useState<string>("");
 	const [passwordStrength, setPasswordStrength] = useState<string>("");
 	const [error, setError] = useState<string>("");
 	const [message, setMessage] = useState<string>("");
-
-	useEffect(() => {
-		if (!token) return;
-		storeToken(token);
-	}, [token]);
+	useSaveTokenFromQueryToLocalStorage();
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = e.target.value;
@@ -50,7 +44,8 @@ const ForgotPassCallbackPage: React.FC = () => {
 			await oauth2Api.verifyPasswordChange(password);
 			setMessage("Password have been changed.");
 		} catch (err: unknown) {
-			setError(`Unknown error occured: ${String(err)}`);
+			console.error(err);
+			setError("Could not reset password.");
 		}
 	};
 
@@ -91,4 +86,4 @@ const ForgotPassCallbackPage: React.FC = () => {
 	);
 };
 
-export default ForgotPassCallbackPage;
+export default PasswordCallbackPage;
