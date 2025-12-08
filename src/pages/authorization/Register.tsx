@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { oauth2Api } from "../shared/api/endpoints/public/oauth2";
-import type { UserCreate } from "../shared/api/models/user";
+import checkPasswordStrength from "../../features/register_password/checkPasswordStrength";
+import RegisterPassword from "../../features/register_password/RegisterPassword";
+
+import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
+import type { UserCreate } from "../../shared/api/models/user";
 
 const RegisterPage: React.FC = () => {
 	const [user, setUser] = useState<UserCreate>({
@@ -11,20 +14,8 @@ const RegisterPage: React.FC = () => {
 		password: "",
 	});
 	const [repeatPassword, setRepeatPassword] = useState<string>("");
-	const [error, setError] = useState("");
+	const [error, setError] = useState<string>("");
 	const [passwordStrength, setPasswordStrength] = useState<string>("");
-
-	function checkPasswordStrength(pw: string): string {
-		if (pw.length < 8) return "Too short";
-		let score = 0;
-		if (/[a-z]/.test(pw)) score++;
-		if (/[A-Z]/.test(pw)) score++;
-		if (/[0-9]/.test(pw)) score++;
-		if (/[^A-Za-z0-9]/.test(pw)) score++;
-		if (score === 4) return "Strong";
-		else if (score === 2 || score === 3) return "Medium";
-		else return "Weak";
-	}
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = e.target.value;
@@ -82,36 +73,23 @@ const RegisterPage: React.FC = () => {
 						onChange={(e) => setUser((user) => ({ ...user, email: e.target.value }))}
 						className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
 					/>
-					<input
-						type="password"
-						placeholder="Password"
-						value={user.password ?? ""}
-						onChange={handlePasswordChange}
-						className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
-					/>
-					{user.password && (
-						<div
-							className={`text-sm mt-[-8px] mb-2 ${
-								passwordStrength === "Strong"
-									? "text-green-600"
-									: passwordStrength === "Medium"
-										? "text-yellow-600"
-										: "text-red-600"
-							}`}
-						>
-							Password strength: {passwordStrength}
-						</div>
-					)}
-					<input
-						type="password"
-						placeholder="Repeat password"
-						value={repeatPassword}
-						onChange={(e) => setRepeatPassword(e.target.value)}
-						className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
+					<RegisterPassword
+						password={user.password || ""}
+						repeatPassword={repeatPassword}
+						passwordStrength={passwordStrength}
+						onPasswordChange={(value) =>
+							handlePasswordChange({
+								target: { value },
+							} as React.ChangeEvent<HTMLInputElement>)
+						}
+						onRepeatPasswordChange={(value) => setRepeatPassword(value)}
 					/>
 
 					<Link to="/login">Already have an account?</Link>
-					{error && <p className="text-red-500 text-sm text-center">{error}</p>}
+					<Link to="/forgot_password">Forgot your password?</Link>
+
+					{error ?? <p className="text-red-500 text-sm text-center">{error}</p>}
+
 					<button
 						type="submit"
 						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
