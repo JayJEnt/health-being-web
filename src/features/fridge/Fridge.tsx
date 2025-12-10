@@ -6,7 +6,8 @@ import type {
 	IngredientRefrigeratorCreate,
 	IngredientRefrigeratorResponse,
 } from "../../shared/api/models/ingredient_refrigerator";
-import IngredientsInput from "../../shared/components/Inputs/IngredientsInput";
+import { IngredientsAddForm } from "../../shared/components/Ingredients/IngredientAddForm";
+import IngredientsList from "../../shared/components/Ingredients/IngredientsList";
 
 const Fridge: React.FC = () => {
 	const [productsList, setProductsList] = useState<IngredientRefrigeratorResponse[]>([]);
@@ -53,7 +54,8 @@ const Fridge: React.FC = () => {
 	};
 	return (
 		<div className="w-full flex justify-center py-6 bg-white">
-			<IngredientsInput items={productsList} onAdd={onAdd} onDelete={onDelete} />
+			<IngredientsList items={productsList} onDelete={onDelete} />
+			<IngredientsAddForm onAdd={onAdd} />
 			<div className="w-full max-w-[760px] px-2 sm:px-4 lg:px-0 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-2 lg:gap-0">
 				{/* ================= KOMORA ================= */}
 				<div className="relative w-[260px] sm:w-[320px] md:w-[348px] lg:w-[376px] h-[480px] sm:h-[560px] md:h-[620px] lg:h-[646px] lg:mr-[-14px] z-20 scale-95 sm:scale-100">
