@@ -54,8 +54,6 @@ const Fridge: React.FC = () => {
 	};
 	return (
 		<div className="w-full flex justify-center py-6 bg-white">
-			<IngredientsList items={productsList} onDelete={onDelete} />
-			<IngredientsAddForm onAdd={onAdd} />
 			<div className="w-full max-w-[760px] px-2 sm:px-4 lg:px-0 flex flex-col lg:flex-row items-center lg:items-start justify-center gap-2 lg:gap-0">
 				{/* ================= KOMORA ================= */}
 				<div className="relative w-[260px] sm:w-[320px] md:w-[348px] lg:w-[376px] h-[480px] sm:h-[560px] md:h-[620px] lg:h-[646px] lg:mr-[-14px] z-20 scale-95 sm:scale-100">
@@ -65,7 +63,7 @@ const Fridge: React.FC = () => {
 					</div>
 
 					{/* KORPUS */}
-					<div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 w-[92%] max-w-[348px] h-[calc(100%-32px)] bg-gradient-to-br from-slate-300 via-slate-400 to-slate-500 border-l-4 border-r-4 border-slate-600 shadow-2xl overflow-hidden">
+					<div className="absolute top-6 left-1/2 -translate-x-1/2 w-[92%] max-w-[348px] h-[calc(100%-32px)] bg-gradient-to-br from-slate-300 via-slate-400 to-slate-500 border-l-4 border-r-4 border-slate-600 shadow-2xl overflow-hidden">
 						<div className="absolute inset-2 bg-gradient-to-br from-slate-300 to-slate-200 shadow-[inset_0_10px_18px_rgba(0,0,0,.20)]" />
 						<div className="absolute inset-[10px] sm:inset-[12px] bg-gradient-to-br from-slate-200 to-slate-100 border border-slate-300 shadow-[inset_0_8px_14px_rgba(0,0,0,.16)]">
 							{/* Górna półka */}
@@ -98,6 +96,18 @@ const Fridge: React.FC = () => {
 								<div className="absolute top-[34px] sm:top-[44px] md:top-[50px] left-1/2 -translate-x-1/2 w-20 sm:w-24 h-6 sm:h-7 bg-slate-300 rounded-full border border-slate-400 shadow-inner" />
 							</div>
 						</div>
+
+						{/* OVERLAY Z LISTĄ NA WIERZCHU KOMORY */}
+						<div className="absolute inset-[6%]  z-40 flex items-start justify-center px-2">
+							<div className="w-full max-h-full overflow-y-auto">
+								<IngredientsList
+									items={productsList}
+									onDelete={onDelete}
+									title="In fridge"
+									variant={"fridge"}
+								/>
+							</div>
+						</div>
 					</div>
 
 					{/* DOLNA BELKA */}
@@ -121,8 +131,6 @@ const Fridge: React.FC = () => {
 				<div className="relative mt-4 lg:mt-[6px] lg:ml-[-2px] z-30 w-[260px] sm:w-[320px] md:w-[348px] h-[480px] sm:h-[560px] md:h-[620px] bg-gradient-to-br from-slate-300 via-slate-400 to-slate-500 border-4 border-slate-600 shadow-2xl overflow-hidden">
 					<div className="absolute inset-2 bg-gradient-to-br from-slate-300 to-slate-200 shadow-[inset_0_10px_18px_rgba(0,0,0,.20)]">
 						<div className="absolute inset-[8px] sm:inset-[10px] bg-gradient-to-br from-slate-100 to-white border-2 border-white rounded-xl shadow-[inset_0_4px_12px_rgba(0,0,0,.12)]">
-							{/* PÓŁKI NA DRZWIACH */}
-
 							{/* Górna mała półka */}
 							<div className="absolute top-3 left-3 right-3 h-[70px] sm:h-[85px] md:h-[90px] bg-gradient-to-b from-white to-slate-50 border-2 border-slate-200 rounded-lg shadow-md">
 								<div className="absolute bottom-0 left-0 right-0 h-7 sm:h-8 bg-gradient-to-b from-slate-100 to-slate-200 border-t-2 border-slate-300 rounded-b-lg" />
@@ -142,6 +150,13 @@ const Fridge: React.FC = () => {
 							<div className="absolute top-[290px] sm:top-[350px] md:top-[378px] left-3 right-3 bottom-3 bg-gradient-to-b from-white to-slate-50 border-2 border-slate-200 rounded-lg shadow-md">
 								<div className="absolute bottom-0 left-0 right-0 h-7 sm:h-8 bg-gradient-to-b from-slate-100 to-slate-200 border-t-2 border-slate-300 rounded-b-lg" />
 							</div>
+						</div>
+					</div>
+
+					{/* OVERLAY Z FORMULARZEM NA WIERZCHU DRZWI */}
+					<div className="absolute inset-[14%] sm:inset-[12%] md:inset-[11%] z-40 flex items-start justify-center px-3">
+						<div className="w-full max-h-full overflow-y-auto">
+							<IngredientsAddForm onAdd={onAdd} variant={"fridge"} />
 						</div>
 					</div>
 				</div>
