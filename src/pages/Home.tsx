@@ -23,29 +23,38 @@ const Home: React.FC = () => {
 	}, []);
 
 	return (
-		<div className="flex p-20">
-			<div>
+		<div className="flex flex-col xl:flex-row p-4 sm:p-6 lg:p-20 gap-8 xl:gap-12">
+			<div className="w-full xl:w-1/2">
 				<h1
-					className="lg:text-5xl
-            text-light-main-text dark:bg-dark-main-text "
+					className="
+          text-2xl sm:text-3xl lg:text-5xl font-semibold
+          text-light-main-text dark:text-dark-main-text
+        "
 				>
 					Welcome, {user ? `${user.name.charAt(0).toUpperCase()}${user.name.slice(1)}!` : ""}
 				</h1>
 
-				<div className="p-20">
-					<h2>Favourite recipes</h2>
-					<HomeCarousel /** there will be api link passed down as an argument**/ />
+				<div className="mt-6 sm:mt-8 lg:mt-10 p-0 sm:p-4 lg:p-8 space-y-8">
+					<section>
+						<h2 className="text-lg sm:text-xl font-semibold mb-3">Favourite recipes</h2>
+						<HomeCarousel />
+					</section>
 
-					<span>Recently cooked</span>
-					<HomeCarousel /** there will be api link passed down as an argument**/ />
+					<section>
+						<span className="block text-base sm:text-lg font-semibold mb-3">Recently cooked</span>
+						<HomeCarousel />
+					</section>
 
-					<span>From your igredients</span>
-					<HomeCarousel /** there will be api link passed down as an argument**/ />
+					<section>
+						<span className="block text-base sm:text-lg font-semibold mb-3">
+							From your ingredients
+						</span>
+						<HomeCarousel />
+					</section>
 				</div>
 			</div>
 
-			{/* Right: Fridge */}
-			<div className="ml-auto flex flex-row gap-4 items-center">
+			<div className="w-full xl:w-1/2 flex justify-center xl:justify-end items-center">
 				<Fridge />
 			</div>
 		</div>
