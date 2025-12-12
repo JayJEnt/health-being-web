@@ -21,12 +21,12 @@ const GenericButton: React.FC<Props> = ({
 	onClick = () => {},
 	children,
 	className = "",
-	type = "button",
+	type,
 	disabled = false,
 	...rest
 }) => {
 	const buttonAttrType = type === "submit" ? "submit" : "button";
-	const buttonClassName = `${buttonStylesMap[type] || ""} ${className}`;
+	const buttonClassName = type ? buttonStylesMap[type] : className;
 
 	return (
 		<button
