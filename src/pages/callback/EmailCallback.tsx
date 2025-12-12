@@ -1,37 +1,20 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 
-import { oauth2Api } from "../shared/api/endpoints/public/oauth2";
-import { settings } from "../shared/config";
+import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
+import { useSaveTokenFromQueryToLocalStorage } from "../../shared/hooks/token";
 
 const EmailCallbackPage: React.FC = () => {
-	const { token } = useParams();
-	const [email, setEmail] = useState("");
-	const [error, setError] = useState("");
-	const [message, setMessage] = useState("");
+	const [email, setEmail] = useState<string>("");
+	const [error, setError] = useState<string>("");
+	const [message, setMessage] = useState<string>("");
+	useSaveTokenFromQueryToLocalStorage();
 
 	useEffect(() => {
-		if (!token) return;
-		localStorage.setItem(
-			settings.AUTH_TOKEN_KEY,
-			JSON.stringify({
-				access_token: token,
-				token_type: "Bearer",
-			}),
-		);
-		setMessage("");
-		setError("");
-
-		const authenticate = async () => {
-			try {
-				await oauth2Api.verifyEmail();
-				setMessage("Email succesfully verified!");
-			} catch {
-				setError("Couldn't authenticate!");
-			}
-		};
-		void authenticate();
-	}, [token]);
+		oauth2Api
+			.verifyEmail()
+			.then(() => setMessage("Email succesfully verified!"))
+			.catch(() => setError("Could not verify email."));
+	}, []);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -47,7 +30,8 @@ const EmailCallbackPage: React.FC = () => {
 			await oauth2Api.sendVerificationEmail(email);
 			setMessage("Email have been sent.");
 		} catch (err: unknown) {
-			setError(`Unknown error occured: ${String(err)}`);
+			console.error(err);
+			setError("Could not send verification email.");
 		}
 	};
 
@@ -70,6 +54,7 @@ const EmailCallbackPage: React.FC = () => {
 						<button
 							type="submit"
 							className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
+							onClick={handleSubmit}
 						>
 							Send new authentication link
 						</button>
