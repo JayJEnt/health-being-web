@@ -4,7 +4,7 @@ const buttonStylesMap = {
 	submit:
 		"bg-blue-600 hover:bg-blue-700 text-white text-center font-semibold px-6 py-2 rounded flex items-center justify-center",
 	cancel: "bg-red-400 text-white",
-	button: "bg-gray-100 text-black",
+	button: "text-black",
 } as const;
 
 type Props = {
@@ -14,7 +14,9 @@ type Props = {
 	type?: keyof typeof buttonStylesMap;
 	disabled?: boolean;
 	"aria-label"?: string;
+	"aria-busy"?: boolean | "true" | "false";
 	title?: string;
+	key?: string;
 };
 
 const GenericButton: React.FC<Props> = ({

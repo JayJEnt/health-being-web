@@ -4,6 +4,7 @@ import checkPasswordStrength from "../../features/register_password/checkPasswor
 import RegisterPassword from "../../features/register_password/RegisterPassword";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
+import GenericButton from "../../shared/components/Generic/Button";
 import { useSaveTokenFromQueryToLocalStorage } from "../../shared/hooks/token";
 
 const PasswordCallbackPage: React.FC = () => {
@@ -74,12 +75,7 @@ const PasswordCallbackPage: React.FC = () => {
 						(message ?? <p className="text-green-500 text-sm text-center">{message}</p>)
 					)}
 
-					<button
-						type="submit"
-						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
-					>
-						Set Password
-					</button>
+					<GenericButton type="submit">Set Password</GenericButton>
 				</form>
 			</div>
 		</div>
