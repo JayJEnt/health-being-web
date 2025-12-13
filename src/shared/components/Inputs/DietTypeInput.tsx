@@ -5,6 +5,7 @@ import { dietApi } from "../../api/endpoints/public/diet";
 import type { DietResponse } from "../../api/models/diet";
 import type { RecipeCreate } from "../../api/models/recipe";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
+import GenericButton from "../Generic/Button";
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
 	recipe: T;
@@ -57,13 +58,13 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
 						className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"
 					>
 						{diet.name}
-						<button
+						<GenericButton
 							type="button"
 							onClick={() => removeDietType(recipe.diet?.indexOf(diet) ?? 0)}
 							className="ml-2 text-blue-600 hover:text-blue-900 font-bold"
 						>
 							×
-						</button>
+						</GenericButton>
 					</span>
 				))}
 			</div>
@@ -83,13 +84,13 @@ const DietTypeInput = <T extends RecipeCreate | RecipeEditPayload>({
 					{loading && <div className="px-3 py-2 text-sm text-gray-500">Loading...</div>}
 					{error && <div className="px-3 py-2 text-sm text-red-500">{error.message}</div>}
 					{data && (
-						<button
+						<GenericButton
 							type="button"
 							onClick={() => addDietType(data)}
 							className="block w-full text-left px-3 py-2 hover:bg-gray-100"
 						>
 							{data.name}
-						</button>
+						</GenericButton>
 					)}
 				</div>
 			)}

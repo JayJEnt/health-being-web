@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import GenericButton from "../../shared/components/Generic/Button";
 import {
 	getTokenFromLocalStorage,
 	useSaveTokenFromQueryToLocalStorage,
@@ -30,15 +30,14 @@ const GoogleCallbackPage: React.FC = () => {
 					<div className="text-green-500 mb-4">{message}</div>
 				)}
 
-				<button
+				<GenericButton
 					type="submit"
 					onClick={() => {
 						window.location.href = "/";
 					}}
-					className="bg-blue-700 hover:bg-blue-600 text-white px-6 py-2 rounded-xl transition mt-4"
 				>
 					Go to Home
-				</button>
+				</GenericButton>
 			</div>
 		</div>
 	);

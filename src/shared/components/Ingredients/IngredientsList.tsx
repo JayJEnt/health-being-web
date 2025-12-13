@@ -1,4 +1,5 @@
 import type { IngredientQuantity } from "../../api/models/ingredient";
+import GenericButton from "../Generic/Button";
 
 type Variant = "default" | "fridge";
 
@@ -60,7 +61,7 @@ export default function IngredientsList({
 							{Number.isFinite(it.amount) ? it.amount : 0} {it.measure_unit ?? ""}
 						</span>
 
-						<button
+						<GenericButton
 							type="button"
 							onClick={() => void onDelete(index)}
 							disabled={deletingIndex === index}
@@ -69,7 +70,7 @@ export default function IngredientsList({
 							aria-label={`Delete ${it.name}`}
 						>
 							×
-						</button>
+						</GenericButton>
 					</div>
 				))}
 			</div>

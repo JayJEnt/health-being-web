@@ -10,6 +10,7 @@ import { imagesApi as imagesApiUser } from "../shared/api/endpoints/user_role/im
 import { recipeApi as recipesApiUser } from "../shared/api/endpoints/user_role/recipe";
 import type { IngredientQuantity } from "../shared/api/models/ingredient";
 import type { RecipeResponse } from "../shared/api/models/recipe";
+import GenericButton from "../shared/components/Generic/Button";
 import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
 import ImageInput from "../shared/components/Inputs/ImageInput";
 import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
@@ -165,21 +166,12 @@ const RecipePage: React.FC = () => {
 								onChange={(e) => setNewRecipe((prev) => ({ ...prev, title: e.target.value }))}
 							/>
 							<div className="flex gap-2">
-								<button
-									type="button"
-									disabled={isSaving}
-									className="bg-blue-700 text-white px-4 py-2 rounded-xl hover:bg-blue-600 disabled:opacity-60"
-									onClick={void handleSave}
-								>
+								<GenericButton type="button" disabled={isSaving} onClick={handleSave}>
 									{isSaving ? "Saving..." : "Save"}
-								</button>
-								<button
-									type="button"
-									className="bg-red-700 text-white px-4 py-2 rounded-xl hover:bg-red-600"
-									onClick={handleCancel}
-								>
+								</GenericButton>
+								<GenericButton type="button" onClick={handleCancel}>
 									Cancel
-								</button>
+								</GenericButton>
 							</div>
 						</div>
 
