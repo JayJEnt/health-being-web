@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { Link } from "react-router-dom";
 
 import checkPasswordStrength from "../../features/register_password/checkPasswordStrength";
@@ -17,6 +18,7 @@ const RegisterPage: React.FC = () => {
 	const [repeatPassword, setRepeatPassword] = useState<string>("");
 	const [error, setError] = useState<string>("");
 	const [passwordStrength, setPasswordStrength] = useState<string>("");
+	const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = e.target.value;
@@ -41,9 +43,13 @@ const RegisterPage: React.FC = () => {
 			);
 			return;
 		}
+		if (!captchaToken) {
+			setError("Please complete the captcha.");
+			return;
+		}
 		try {
 			console.log("Registering user:", user);
-			const res = await oauth2Api.ourRegister(user);
+			const res = await oauth2Api.ourRegister(user, captchaToken);
 			console.log(res);
 			setError("");
 			alert("Registered successfully!");
@@ -85,6 +91,12 @@ const RegisterPage: React.FC = () => {
 						}
 						onRepeatPasswordChange={(value) => setRepeatPassword(value)}
 					/>
+					<div className="flex justify-center">
+						<ReCAPTCHA
+							sitekey="6LfARyosAAAAAMKXlkV2yCToNnVcfHL5nGNOlxuG"
+							onChange={(token) => setCaptchaToken(token)}
+						/>
+					</div>
 
 					<Link to="/login">Already have an account?</Link>
 					<Link to="/forgot_password">Forgot your password?</Link>
