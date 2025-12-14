@@ -51,7 +51,7 @@ const ForgotPasswordPage: React.FC = () => {
 					{error ? (
 						<p className="text-red-500 text-sm text-center">{error}</p>
 					) : (
-						(message ?? <p className="text-green-500 text-sm text-center">{message}</p>)
+						<p className="text-green-500 text-sm text-center">{message}</p>
 					)}
 
 					<GenericButton type="submit">Send Reset Link</GenericButton>

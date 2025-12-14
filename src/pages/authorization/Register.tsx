@@ -6,8 +6,10 @@ import checkPasswordStrength from "../../features/register_password/checkPasswor
 import RegisterPassword from "../../features/register_password/RegisterPassword";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
+
 import GenericButton from "../../shared/components/Generic/Button";
 import type { UserCreate } from "../../shared/models/user";
+import { settings } from "../../shared/config";
 
 const RegisterPage: React.FC = () => {
 	const [user, setUser] = useState<UserCreate>({
@@ -18,16 +20,17 @@ const RegisterPage: React.FC = () => {
 	const [repeatPassword, setRepeatPassword] = useState<string>("");
 	const [error, setError] = useState<string>("");
 	const [passwordStrength, setPasswordStrength] = useState<string>("");
-	const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+	const [captchaToken, setCaptchaToken] = useState<string>("");
 
-	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const val = e.target.value;
-		setUser((user) => ({ ...user, password: val }));
-		setPasswordStrength(checkPasswordStrength(val));
+	const handlePasswordChange = (value: string) => {
+		setUser((user) => ({ ...user, password: value }));
+		setPasswordStrength(checkPasswordStrength(value));
 	};
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setError("");
+
 		if (!user.name || !user.email || !user.password) {
 			setError("Please enter username, email and password.");
 			return;
@@ -36,8 +39,7 @@ const RegisterPage: React.FC = () => {
 			setError("Passwords do not match.");
 			return;
 		}
-		const strength = checkPasswordStrength(user.password);
-		if (strength === "Too short" || strength === "Weak") {
+		if (passwordStrength === "Too short" || passwordStrength === "Weak") {
 			setError(
 				"Password is too weak. Use at least 8 characters, upper and lower case, number and special character.",
 			);
@@ -84,24 +86,18 @@ const RegisterPage: React.FC = () => {
 						password={user.password || ""}
 						repeatPassword={repeatPassword}
 						passwordStrength={passwordStrength}
-						onPasswordChange={(value) =>
-							handlePasswordChange({
-								target: { value },
-							} as React.ChangeEvent<HTMLInputElement>)
-						}
+						onPasswordChange={(value) => handlePasswordChange(value)}
 						onRepeatPasswordChange={(value) => setRepeatPassword(value)}
 					/>
-					<div className="flex justify-center">
-						<ReCAPTCHA
-							sitekey="6LfARyosAAAAAMKXlkV2yCToNnVcfHL5nGNOlxuG"
-							onChange={(token) => setCaptchaToken(token)}
-						/>
-					</div>
+					<ReCAPTCHA
+						sitekey={settings.RECAPTCHA_SITE_KEY}
+						onChange={(token) => setCaptchaToken(token || "")}
+					/>
 
 					<Link to="/login">Already have an account?</Link>
 					<Link to="/forgot_password">Forgot your password?</Link>
 
-					{error ?? <p className="text-red-500 text-sm text-center">{error}</p>}
+					{error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
 					<GenericButton type="submit">Register</GenericButton>
 				</form>
