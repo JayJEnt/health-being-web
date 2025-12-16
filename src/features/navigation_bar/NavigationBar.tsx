@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import type { User } from "../../shared/api/models/user";
 import { HomeIcon, PlusIcon } from "../../shared/assets/icons";
 import { useAuth } from "../../shared/hooks/useAuth";
+import type { User } from "../../shared/models/user";
 
 import NavButton from "./components/NavButton";
 import SearchBar from "./components/SearchBar";

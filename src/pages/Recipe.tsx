@@ -8,13 +8,13 @@ import { imagesApi } from "../shared/api/endpoints/public/images";
 import { recipeApi } from "../shared/api/endpoints/public/recipe";
 import { imagesApi as imagesApiUser } from "../shared/api/endpoints/user_role/images";
 import { recipeApi as recipesApiUser } from "../shared/api/endpoints/user_role/recipe";
-import type { IngredientQuantity } from "../shared/api/models/ingredient";
-import type { RecipeResponse } from "../shared/api/models/recipe";
 import GenericButton from "../shared/components/Generic/Button";
 import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
 import ImageInput from "../shared/components/Inputs/ImageInput";
 import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
 import { useAuth } from "../shared/hooks/useAuth";
+import type { IngredientQuantity } from "../shared/models/ingredient";
+import type { RecipeResponse } from "../shared/models/recipe";
 
 export type RecipeEditPayload = Omit<RecipeResponse, "id">;
 

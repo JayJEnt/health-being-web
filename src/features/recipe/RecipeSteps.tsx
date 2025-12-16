@@ -1,8 +1,8 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import type { RecipeEditPayload } from "../../pages/Recipe";
-import type { RecipeCreate } from "../../shared/api/models/recipe";
 import GenericButton from "../../shared/components/Generic/Button";
+import type { RecipeCreate } from "../../shared/models/recipe";
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
 	recipe: T;

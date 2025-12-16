@@ -1,6 +1,6 @@
 import { settings } from "../../../config";
+import type { FollowsCreate, FollowsDelete, FollowsResponse } from "../../../models/user_followed";
 import { api } from "../../client";
-import type { FollowsCreate, FollowsDelete, FollowsResponse } from "../../models/user_followed";
 
 export const userFollowedApi = {
 	getById: (followed_user_id: number) =>

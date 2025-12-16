@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 
 import { ApiError } from "../../api/client";
-import type { MeasureUnit } from "../../api/models/enum_utils";
-import { MeasureUnit as MU } from "../../api/models/enum_utils";
-import type { IngredientQuantity } from "../../api/models/ingredient";
+import type { MeasureUnit } from "../../models/enum_utils";
+import { MeasureUnit as MU } from "../../models/enum_utils";
+import type { IngredientQuantity } from "../../models/ingredient";
 import IngredientPicker, { type IngredientSelection } from "../Ingredients/IngredientPicker";
 
 type Variant = "default" | "fridge";

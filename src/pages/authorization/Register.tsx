@@ -5,8 +5,8 @@ import checkPasswordStrength from "../../features/register_password/checkPasswor
 import RegisterPassword from "../../features/register_password/RegisterPassword";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
-import type { UserCreate } from "../../shared/api/models/user";
 import GenericButton from "../../shared/components/Generic/Button";
+import type { UserCreate } from "../../shared/models/user";
 
 const RegisterPage: React.FC = () => {
 	const [user, setUser] = useState<UserCreate>({

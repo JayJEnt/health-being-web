@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
 import GenericButton from "../../shared/components/Generic/Button";
-import { useSaveTokenFromQueryToLocalStorage } from "../../shared/hooks/token";
+import { useSaveQueryTokenToStorage } from "../../shared/hooks/useToken";
 
 const EmailCallbackPage: React.FC = () => {
 	const [email, setEmail] = useState<string>("");
 	const [error, setError] = useState<string>("");
 	const [message, setMessage] = useState<string>("");
-	useSaveTokenFromQueryToLocalStorage();
+	useSaveQueryTokenToStorage();
 
 	useEffect(() => {
 		oauth2Api

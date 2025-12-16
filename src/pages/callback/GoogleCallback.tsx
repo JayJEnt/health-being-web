@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import GenericButton from "../../shared/components/Generic/Button";
-import {
-	getTokenFromLocalStorage,
-	useSaveTokenFromQueryToLocalStorage,
-} from "../../shared/hooks/token";
+import { getTokenFromStorage, useSaveQueryTokenToStorage } from "../../shared/hooks/useToken";
 
 const GoogleCallbackPage: React.FC = () => {
 	const [message, setMessage] = useState<string>("Processing login...");
 	const [error, setError] = useState<string>("");
-	useSaveTokenFromQueryToLocalStorage();
+	useSaveQueryTokenToStorage();
 
 	useEffect(() => {
-		const token = getTokenFromLocalStorage();
+		const token = getTokenFromStorage();
 		if (!token) {
 			setError("Could not login.");
 			return;

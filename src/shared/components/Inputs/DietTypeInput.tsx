@@ -2,9 +2,9 @@ import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useState } from "react";
 import type { RecipeEditPayload } from "../../../pages/Recipe";
 import { dietApi } from "../../api/endpoints/public/diet";
-import type { DietResponse } from "../../api/models/diet";
-import type { RecipeCreate } from "../../api/models/recipe";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
+import type { DietResponse } from "../../models/diet";
+import type { RecipeCreate } from "../../models/recipe";
 import GenericButton from "../Generic/Button";
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {

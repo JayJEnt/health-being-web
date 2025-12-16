@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
 import { ingredientRefrigeratorApi } from "../../shared/api/endpoints/user_role/ingredient_refrigerator";
-import type { IngredientQuantity } from "../../shared/api/models/ingredient";
+import { IngredientsAddForm } from "../../shared/components/Ingredients/IngredientAddForm";
+import IngredientsList from "../../shared/components/Ingredients/IngredientsList";
+import type { IngredientQuantity } from "../../shared/models/ingredient";
 import type {
 	IngredientRefrigeratorCreate,
 	IngredientRefrigeratorResponse,
-} from "../../shared/api/models/ingredient_refrigerator";
-import { IngredientsAddForm } from "../../shared/components/Ingredients/IngredientAddForm";
-import IngredientsList from "../../shared/components/Ingredients/IngredientsList";
+} from "../../shared/models/ingredient_refrigerator";
 
 const Fridge: React.FC = () => {
 	const [productsList, setProductsList] = useState<IngredientRefrigeratorResponse[]>([]);

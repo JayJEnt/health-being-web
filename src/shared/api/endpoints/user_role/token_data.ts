@@ -1,7 +1,7 @@
 import { settings } from "../../../config";
+import type { Token } from "../../../models/token";
+import type { User } from "../../../models/user";
 import { api } from "../../client";
-import type { Token } from "../../models/token";
-import type { User } from "../../models/user";
 
 export const tokenDataApi = {
 	getUser: () => api.get<User>(`${settings.TOKEN_DATA_ENDPOINT}`),

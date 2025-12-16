@@ -1,6 +1,6 @@
 import { settings } from "../../../config";
+import type { RecipeOverview, RecipeResponse } from "../../../models/recipe";
 import { api } from "../../client";
-import type { RecipeOverview, RecipeResponse } from "../../models/recipe";
 
 export const recipeApi = {
 	getById: (recipe_id: string) =>

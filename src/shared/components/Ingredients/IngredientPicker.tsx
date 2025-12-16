@@ -1,10 +1,10 @@
 import { useCallback, useId, useMemo } from "react";
 
 import { ingredientApi } from "../../api/endpoints/public/ingredient";
-import type { MeasureUnit } from "../../api/models/enum_utils";
-import { MeasureUnit as MU } from "../../api/models/enum_utils";
-import type { Ingredient } from "../../api/models/ingredient";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
+import type { MeasureUnit } from "../../models/enum_utils";
+import { MeasureUnit as MU } from "../../models/enum_utils";
+import type { Ingredient } from "../../models/ingredient";
 import GenericButton from "../Generic/Button";
 
 export type IngredientSelection = {
