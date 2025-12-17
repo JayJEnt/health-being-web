@@ -1,103 +1,102 @@
-import type React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
 
 import { oauth2Api } from "../api/endpoints/public/oauth2";
 import { tokenDataApi } from "../api/endpoints/user_role/token_data";
 import { settings } from "../config";
-import { clearTokenFromStorage, getTokenFromStorage, parseToken } from "../hooks/useToken";
+import type { AuthContextType, AuthState } from "../models/authContext";
 import type { Oauth2RequestForm } from "../models/oauth2_form";
 import type { Token } from "../models/token";
 import type { User } from "../models/user";
-import type { AuthState } from "./authContext";
-import { AuthContext, type AuthContextType } from "./authContext";
+import { clearTokenFromStorage, getTokenFromStorage, parseToken } from "./handleToken";
+
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
 	const [state, setState] = useState<AuthState>({
 		token: null,
-		user: null,
-		status: "loading",
+		user: undefined,
 	});
 
-	useEffect(() => {
-		const init = async () => {
-			const token: Token | null = getTokenFromStorage();
-			if (!token) {
-				setState((s) => ({ ...s, status: "unauthenticated" }));
-				return;
-			}
-			try {
-				const user: User = await tokenDataApi.getUser();
-				setState((s) => ({ ...s, user, status: "authenticated" }));
-				return;
-			} catch (err) {
-				console.log(err);
-				clearTokenFromStorage();
-				setState((s) => ({ ...s, status: "unauthenticated" }));
-			}
-		};
-		void init();
+	const logout = useCallback<AuthContextType["logout"]>(async () => {
+		clearTokenFromStorage();
+		setState((prev) => ({
+			...prev,
+			token: null,
+			user: null,
+		}));
 	}, []);
 
-	const handleLogin = useCallback<AuthContextType["handleLogin"]>(
+	const login = useCallback<AuthContextType["login"]>(
 		async (credentials: Oauth2RequestForm) => {
-			setState((s) => ({ ...s, status: "loading" }));
+			setState((prev) => ({ ...prev, user: undefined }));
 			try {
 				const token = await oauth2Api.ourLogin(credentials);
 
 				localStorage.setItem(settings.AUTH_TOKEN_KEY, JSON.stringify(token));
 				const user = await tokenDataApi.getUser();
 
-				setState((s) => ({ ...s, token, user, status: "authenticated" }));
+				setState((prev) => ({ ...prev, token, user }));
 			} catch (err) {
 				console.error("Login error:", err);
-				localStorage.removeItem(settings.AUTH_TOKEN_KEY);
-				setState((s) => ({
-					...s,
-					token: null,
-					user: null,
-					status: "unauthenticated",
-				}));
+				logout();
 			}
 		},
-		[],
+		[logout],
 	);
 
-	const handleLogout = useCallback<AuthContextType["handleLogout"]>(async () => {
-		localStorage.removeItem(settings.AUTH_TOKEN_KEY);
-		setState((s) => ({
-			...s,
-			token: null,
-			user: null,
-			status: "unauthenticated",
-		}));
-	}, []);
-
-	// Synchronization between tabs
 	useEffect(() => {
-		const onStorage = (e: StorageEvent) => {
-			if (e.key !== settings.AUTH_TOKEN_KEY) return;
-			if (!e.newValue) {
-				handleLogout();
-				return;
-			}
-			const token: Token | null = parseToken(e.newValue);
+		async function initAuthState() {
+			const token: Token | null = getTokenFromStorage();
 			if (!token) {
-				handleLogout();
+				logout();
 				return;
 			}
-			setState((s) => ({ ...s, token, status: "authenticated" }));
-		};
+			try {
+				const user: User = await tokenDataApi.getUser();
+				setState((prev) => ({ ...prev, token, user }));
+				return;
+			} catch (err) {
+				console.log("Login error:", err);
+				logout();
+			}
+		}
+		initAuthState();
+	}, [logout]);
+
+	useEffect(() => {
+		async function onStorage(event: StorageEvent) {
+			if (event.key !== settings.AUTH_TOKEN_KEY) return;
+			if (!event.newValue) {
+				logout();
+				return;
+			}
+
+			const token: Token | null = parseToken(event.newValue);
+			if (!token) {
+				logout();
+				return;
+			}
+
+			try {
+				const user: User = await tokenDataApi.getUser();
+				setState((prev) => ({ ...prev, token, user }));
+				return;
+			} catch (err) {
+				console.log("Login error:", err);
+				logout();
+			}
+		}
 		window.addEventListener("storage", onStorage);
 		return () => window.removeEventListener("storage", onStorage);
-	}, [handleLogout]);
+	}, [logout]);
 
 	const value = useMemo<AuthContextType>(() => {
 		return {
 			...state,
-			handleLogin,
-			handleLogout,
+			login,
+			logout,
 		};
-	}, [state, handleLogin, handleLogout]);
+	}, [state, login, logout]);
 
 	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

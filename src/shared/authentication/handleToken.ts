@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { settings } from "../config";
 import type { Token } from "../models/token";
 
@@ -54,21 +52,4 @@ export function isToken(value: unknown): value is Token {
 	const token = value as Record<string, unknown>;
 
 	return typeof token.access_token === "string" && typeof token.token_type === "string";
-}
-
-export function useQueryToken(): string | null {
-	const { search } = useLocation();
-	if (!search) return null;
-
-	const token = new URLSearchParams(search).get("token");
-	return token;
-}
-
-export function useSaveQueryTokenToStorage(): void {
-	const token: string | null = useQueryToken();
-
-	useEffect(() => {
-		if (!token) return;
-		saveTokenToStorage(token);
-	}, [token]);
 }

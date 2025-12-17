@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { getTokenFromStorage } from "../../shared/authentication/handleToken";
 import GenericButton from "../../shared/components/Generic/Button";
-import { getTokenFromStorage, useSaveQueryTokenToStorage } from "../../shared/hooks/useToken";
+import { useSaveQueryTokenToStorage } from "../../shared/hooks/useQueryToken";
 
 const GoogleCallbackPage: React.FC = () => {
 	const [message, setMessage] = useState<string>("Processing login...");

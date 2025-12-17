@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
 import { HomeIcon, PlusIcon } from "../../shared/assets/icons";
 import { useAuth } from "../../shared/hooks/useAuth";
 import type { User } from "../../shared/models/user";
@@ -10,14 +11,13 @@ import SettingsDropdown from "./components/SettingsDropdown";
 import UserDropdown from "./components/UserDropdown";
 
 const NavigationBar: React.FC = () => {
-	const { status, user, logout } = useAuth() as {
+	const { user, logout } = useAuth() as {
 		logout: () => void;
-		status: string;
 		user: User;
 	};
 
 	const navigate = useNavigate();
-	const isAuthenticated = status === "authenticated";
+	const isAuthenticated = user !== null && user !== undefined;
 
 	const [openDropdown, setOpenDropdown] = useState<"user" | "settings" | null>(null);
 
@@ -33,7 +33,7 @@ const NavigationBar: React.FC = () => {
 
 			<div className="ml-auto flex flex-row gap-4 items-center">
 				<NavButton icon={HomeIcon} label="Home" to="/" />
-				<NavButton icon={PlusIcon} label="Submit Recipe" to="/recipe/submit" />
+				<NavButton icon={PlusIcon} label="Submit Recipe" to="user/recipe/submit" />
 
 				<UserDropdown
 					isOpen={openDropdown === "user"}

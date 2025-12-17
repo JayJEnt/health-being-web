@@ -1,7 +1,8 @@
 import type { AxiosInstance, AxiosRequestConfig } from "axios";
 import axios, { type AxiosError } from "axios";
+import { getTokenFromStorage } from "../authentication/handleToken";
 import { settings } from "../config";
-import { getTokenFromStorage } from "../hooks/useToken";
+
 import type { Token } from "../models/token";
 
 type Params = Record<string, unknown>;

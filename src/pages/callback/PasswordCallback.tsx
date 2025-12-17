@@ -5,7 +5,7 @@ import RegisterPassword from "../../features/register_password/RegisterPassword"
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
 import GenericButton from "../../shared/components/Generic/Button";
-import { useSaveQueryTokenToStorage } from "../../shared/hooks/useToken";
+import { useSaveQueryTokenToStorage } from "../../shared/hooks/useQueryToken";
 
 const PasswordCallbackPage: React.FC = () => {
 	const [password, setPassword] = useState<string>("");
