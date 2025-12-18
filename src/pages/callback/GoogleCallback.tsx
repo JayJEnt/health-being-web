@@ -29,6 +29,7 @@ const GoogleCallbackPage: React.FC = () => {
 				)}
 
 				<GenericButton
+					className="mx-auto"
 					type="submit"
 					onClick={() => {
 						window.location.href = "/";

@@ -23,7 +23,7 @@ const RegisterPassword: React.FC<RegisterPasswordProps> = ({
 				className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
 			/>
 
-			{password && (
+			{passwordStrength && (
 				<div
 					className={`text-sm mt-[-8px] mb-2 ${
 						passwordStrength === "Strong"

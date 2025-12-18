@@ -6,7 +6,8 @@ import type { User, UserCreate } from "../../../models/user";
 import { api } from "../../client";
 
 export const oauth2Api = {
-	ourRegister: (data: UserCreate) => api.post<User>(`${settings.OAUTH2_ENDPOINT}/register`, data),
+	ourRegister: (data: UserCreate, captchaToken: string) =>
+		api.post<User>(`${settings.OAUTH2_ENDPOINT}/register`, data, { captcha_token: captchaToken }),
 
 	ourLogin: (credentials: Oauth2RequestForm) =>
 		api.postForm<Token>(`${settings.OAUTH2_ENDPOINT}/login`, credentials),
