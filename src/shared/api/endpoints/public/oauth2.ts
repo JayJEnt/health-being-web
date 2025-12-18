@@ -1,9 +1,9 @@
 import { settings } from "../../../config";
+import type { Oauth2RequestForm } from "../../../models/oauth2_form";
+import type { RedirectResponse } from "../../../models/redirect_response";
+import type { Token } from "../../../models/token";
+import type { User, UserCreate } from "../../../models/user";
 import { api } from "../../client";
-import type { Oauth2RequestForm } from "../../models/oauth2_form";
-import type { RedirectResponse } from "../../models/redirect_response";
-import type { Token } from "../../models/token";
-import type { User, UserCreate } from "../../models/user";
 
 export const oauth2Api = {
 	ourRegister: (data: UserCreate) => api.post<User>(`${settings.OAUTH2_ENDPOINT}/register`, data),

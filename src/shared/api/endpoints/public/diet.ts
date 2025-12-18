@@ -1,6 +1,6 @@
 import { settings } from "../../../config";
+import type { DietResponse } from "../../../models/diet";
 import { api } from "../../client";
-import type { DietResponse } from "../../models/diet";
 
 export const dietApi = {
 	getByName: (name: string, signal?: AbortSignal) =>

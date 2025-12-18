@@ -5,7 +5,7 @@ import RegisterPassword from "../../features/register_password/RegisterPassword"
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
 import GenericButton from "../../shared/components/Generic/Button";
-import { useSaveTokenFromQueryToLocalStorage } from "../../shared/hooks/token";
+import { useSaveQueryTokenToStorage } from "../../shared/hooks/useQueryToken";
 
 const PasswordCallbackPage: React.FC = () => {
 	const [password, setPassword] = useState<string>("");
@@ -13,7 +13,7 @@ const PasswordCallbackPage: React.FC = () => {
 	const [passwordStrength, setPasswordStrength] = useState<string>("");
 	const [error, setError] = useState<string>("");
 	const [message, setMessage] = useState<string>("");
-	useSaveTokenFromQueryToLocalStorage();
+	useSaveQueryTokenToStorage();
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = e.target.value;

@@ -1,6 +1,6 @@
 import { settings } from "../../../config";
+import type { User, UserCreate } from "../../../models/user";
 import { api } from "../../client";
-import type { User, UserCreate } from "../../models/user";
 
 export const userOwnerApi = {
 	get: () => api.get<User>(`${settings.USER_OWNER_ENDPOINT}`),

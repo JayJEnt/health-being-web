@@ -1,6 +1,6 @@
 import { settings } from "../../../config";
+import type { Vitamin } from "../../../models/vitamin";
 import { api } from "../../client";
-import type { Vitamin } from "../../models/vitamin";
 
 export const vitaminApi = {
 	getByName: (name: string) => api.get<Vitamin>(`${settings.VITAMIN_ENDPOINT}`, { name }),

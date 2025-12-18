@@ -1,11 +1,11 @@
 import { settings } from "../../../config";
-import { api } from "../../client";
-import type { Recipe } from "../../models/recipe";
+import type { Recipe } from "../../../models/recipe";
 import type {
 	RecipeFavouriteCreate,
 	RecipeFavouriteDelete,
 	RecipeFavouriteResponse,
-} from "../../models/recipe_favourite";
+} from "../../../models/recipe_favourite";
+import { api } from "../../client";
 
 export const recipeFavouriteApi = {
 	getById: (recipe_id: number) =>

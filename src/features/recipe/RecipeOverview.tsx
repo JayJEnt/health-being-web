@@ -1,10 +1,10 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import { recipeFavouriteApi } from "../../shared/api/endpoints/user_role/recipe_favourite";
-import type { RecipeResponse } from "../../shared/api/models/recipe";
-import type { RecipeFavouriteCreate } from "../../shared/api/models/recipe_favourite";
 import GenericButton from "../../shared/components/Generic/Button";
 import { useAuth } from "../../shared/hooks/useAuth";
+import type { RecipeResponse } from "../../shared/models/recipe";
+import type { RecipeFavouriteCreate } from "../../shared/models/recipe_favourite";
 
 type Props = {
 	recipe: RecipeResponse;

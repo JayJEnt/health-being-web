@@ -1,11 +1,11 @@
 import { settings } from "../../../config";
-import { api } from "../../client";
-import type { DietResponse } from "../../models/diet";
+import type { DietResponse } from "../../../models/diet";
 import type {
 	DietFavouriteCreate,
 	DietFavouriteDelete,
 	DietFavouriteResponse,
-} from "../../models/diet_favourite";
+} from "../../../models/diet_favourite";
+import { api } from "../../client";
 
 export const dietFavouriteApi = {
 	getById: (diet_id: number) =>

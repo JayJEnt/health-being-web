@@ -52,9 +52,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
 						<>
 							<NavButton icon={UserIcon} label="My Profile" to="/user" onClick={close} />
 
-							{isAdmin && (
-								<NavButton icon={UserIcon} label="Users" to="/users_list" onClick={close} />
-							)}
+							{isAdmin && <NavButton icon={UserIcon} label="Users" to="/admin/" onClick={close} />}
 
 							<NavButton
 								icon={ArrowRightOnRectangleIcon}

@@ -1,4 +1,4 @@
-import type { IngredientQuantity } from "../../api/models/ingredient";
+import type { IngredientQuantity } from "../../models/ingredient";
 import GenericButton from "../Generic/Button";
 
 type Variant = "default" | "fridge";

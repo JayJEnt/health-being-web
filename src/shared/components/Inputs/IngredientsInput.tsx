@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { ApiError } from "../../api/client";
-import type { IngredientQuantity } from "../../api/models/ingredient";
+import type { IngredientQuantity } from "../../models/ingredient";
 import { IngredientsAddForm } from "../Ingredients/IngredientAddForm";
 import IngredientsList from "../Ingredients/IngredientsList";
 

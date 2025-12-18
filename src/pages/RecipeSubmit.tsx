@@ -4,12 +4,12 @@ import RecipeSteps from "../features/recipe/RecipeSteps";
 
 import { imagesApi } from "../shared/api/endpoints/user_role/images";
 import { recipeApi } from "../shared/api/endpoints/user_role/recipe";
-import type { IngredientQuantity } from "../shared/api/models/ingredient";
-import type { RecipeCreate } from "../shared/api/models/recipe";
 import GenericButton from "../shared/components/Generic/Button";
 import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
 import ImageInput from "../shared/components/Inputs/ImageInput";
 import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
+import type { IngredientQuantity } from "../shared/models/ingredient";
+import type { RecipeCreate } from "../shared/models/recipe";
 
 const RecipeSubmitPage: React.FC = () => {
 	const [recipe, setRecipe] = useState<RecipeCreate>({

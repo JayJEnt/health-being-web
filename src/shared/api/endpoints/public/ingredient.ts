@@ -1,6 +1,6 @@
 import { settings } from "../../../config";
+import type { Ingredient, IngredientResponse } from "../../../models/ingredient";
 import { api } from "../../client";
-import type { Ingredient, IngredientResponse } from "../../models/ingredient";
 
 export const ingredientApi = {
 	getByName: (name: string, signal?: AbortSignal) =>

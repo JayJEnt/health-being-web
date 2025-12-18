@@ -1,11 +1,11 @@
 import { settings } from "../../../config";
-import { api } from "../../client";
 import type {
 	IngredientPreferenceCreate,
 	IngredientPreferenceCreateResponse,
 	IngredientPreferenceDelete,
 	IngredientPreferenceResponse,
-} from "../../models/ingredient_preference";
+} from "../../../models/ingredient_preference";
+import { api } from "../../client";
 
 export const ingredientPreferenceApi = {
 	getById: (ingredient_id: number) =>

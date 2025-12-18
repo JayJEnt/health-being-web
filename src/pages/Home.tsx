@@ -4,7 +4,7 @@ import Fridge from "../features/fridge/Fridge.tsx";
 import HomeCarousel from "../features/home/HomeCarousel.tsx";
 
 import { tokenDataApi } from "../shared/api/endpoints/user_role/token_data.ts";
-import type { User } from "../shared/api/models/user.ts";
+import type { User } from "../shared/models/user.ts";
 
 const Home: React.FC = () => {
 	const [user, setUser] = useState<User | null>(null);

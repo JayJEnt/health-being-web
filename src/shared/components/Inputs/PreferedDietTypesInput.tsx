@@ -3,9 +3,9 @@ import { useCallback, useState } from "react";
 
 import { dietApi } from "../../api/endpoints/public/diet";
 import { dietFavouriteApi } from "../../api/endpoints/user_role/diet_favourite";
-import type { DietResponse } from "../../api/models/diet";
-import type { DietFavouriteCreate, DietFavouriteResponse } from "../../api/models/diet_favourite";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
+import type { DietResponse } from "../../models/diet";
+import type { DietFavouriteCreate, DietFavouriteResponse } from "../../models/diet_favourite";
 import GenericButton from "../Generic/Button";
 
 type Props = {

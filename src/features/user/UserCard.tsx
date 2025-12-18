@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 import { api } from "../../shared/api/client";
-import type { User } from "../../shared/api/models/user";
 import GenericButton from "../../shared/components/Generic/Button";
+import type { User } from "../../shared/models/user";
 
 type Props = {
 	user: User;

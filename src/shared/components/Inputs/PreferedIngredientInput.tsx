@@ -3,13 +3,13 @@ import { useCallback, useState } from "react";
 
 import { ingredientApi } from "../../api/endpoints/public/ingredient";
 import { ingredientPreferenceApi } from "../../api/endpoints/user_role/ingredient_preference";
-import { type Preference, Preference as PreferenceValues } from "../../api/models/enum_utils";
-import type { Ingredient } from "../../api/models/ingredient";
+import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
+import { type Preference, Preference as PreferenceValues } from "../../models/enum_utils";
+import type { Ingredient } from "../../models/ingredient";
 import type {
 	IngredientPreferenceCreate,
 	IngredientPreferenceResponse,
-} from "../../api/models/ingredient_preference";
-import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
+} from "../../models/ingredient_preference";
 import GenericButton from "../Generic/Button";
 
 type Props = {

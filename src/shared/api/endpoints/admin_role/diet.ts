@@ -1,6 +1,6 @@
 import { settings } from "../../../config";
+import type { DietCreate, DietResponse } from "../../../models/diet";
 import { api } from "../../client";
-import type { DietCreate, DietResponse } from "../../models/diet";
 
 export const dietAdminApi = {
 	create: (data: DietCreate) => api.post<DietResponse>(`${settings.DIET_ENDPOINT}`, data),

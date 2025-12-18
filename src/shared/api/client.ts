@@ -1,8 +1,9 @@
 import type { AxiosInstance, AxiosRequestConfig } from "axios";
 import axios, { type AxiosError } from "axios";
-import { isToken } from "../../features/authentication/utils";
+import { getTokenFromStorage } from "../authentication/handleToken";
 import { settings } from "../config";
-import type { Token } from "./models/token";
+
+import type { Token } from "../models/token";
 
 type Params = Record<string, unknown>;
 type FormLike = Record<string, string | number | boolean | null | undefined>;
@@ -40,18 +41,12 @@ export class ApiClient {
 			baseURL: settings.API_BASE_URL,
 			headers: { "Content-Type": "application/json" },
 		});
-		let token: Token | null = null;
+
 		this.client.interceptors.request.use((config) => {
-			const rawToken = localStorage.getItem(settings.AUTH_TOKEN_KEY);
-			if (rawToken) {
-				const parsed: unknown = JSON.parse(rawToken);
-				if (isToken(parsed)) {
-					token = parsed;
-				} else {
-					token = null;
-				}
+			const token: Token | null = getTokenFromStorage();
+			if (token) {
 				config.headers = config.headers ?? {};
-				config.headers.Authorization = `Bearer ${token?.access_token}`;
+				config.headers.Authorization = `Bearer ${token.access_token}`;
 			}
 			return config;
 		});
@@ -59,6 +54,7 @@ export class ApiClient {
 		this.client.interceptors.response.use(
 			(res) => res,
 			(err) => {
+				console.error("API Error:", err);
 				throw this.handleError(err);
 			},
 		);

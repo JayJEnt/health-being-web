@@ -34,10 +34,11 @@ const LoginPage: React.FC = () => {
 			return;
 		}
 
-		const ok = await login({ email, password });
-		if (ok) {
+		try {
+			await login({ email, password });
 			void navigate("/");
-		} else {
+		} catch (err) {
+			console.error("Login failed", err);
 			setError("Login failed. Check your credentials.");
 		}
 	};
