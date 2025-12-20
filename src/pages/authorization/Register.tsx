@@ -8,8 +8,8 @@ import RegisterPassword from "../../features/register_password/RegisterPassword"
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
 
 import GenericButton from "../../shared/components/Generic/Button";
-import type { UserCreate } from "../../shared/models/user";
 import { settings } from "../../shared/config";
+import type { UserCreate } from "../../shared/models/user";
 
 const RegisterPage: React.FC = () => {
 	const [user, setUser] = useState<UserCreate>({
@@ -53,7 +53,6 @@ const RegisterPage: React.FC = () => {
 			console.log("Registering user:", user);
 			const res = await oauth2Api.ourRegister(user, captchaToken);
 			console.log(res);
-			setError("");
 			alert("Registered successfully!");
 		} catch (err) {
 			console.error("Registration error:", err);

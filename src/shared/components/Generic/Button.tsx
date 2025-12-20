@@ -3,7 +3,8 @@ import type React from "react";
 const buttonStylesMap = {
 	submit:
 		"bg-blue-600 hover:bg-blue-700 text-white text-center font-semibold px-6 py-2 rounded flex items-center justify-center",
-	cancel: "bg-red-400 text-white",
+	cancel: "ml-2 font-bold px-2 rounded text-red-600 hover:text-red-800 disabled:text-gray-400",
+	add: "bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700",
 	button: "text-black",
 } as const;
 
@@ -29,6 +30,7 @@ const GenericButton: React.FC<Props> = ({
 }) => {
 	const buttonAttrType = type === "submit" ? "submit" : "button";
 	const buttonClassName = buttonStylesMap[type];
+	const defaultChildren = type === "cancel" ? "×" : null;
 
 	return (
 		<button
@@ -38,7 +40,7 @@ const GenericButton: React.FC<Props> = ({
 			disabled={disabled}
 			{...rest}
 		>
-			{children}
+			{defaultChildren ? defaultChildren : children}
 		</button>
 	);
 };

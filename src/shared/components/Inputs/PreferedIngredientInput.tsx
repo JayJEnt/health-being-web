@@ -83,12 +83,9 @@ const PreferedIngredientInput: React.FC<Props> = ({
 								{ingredient.name} <span className="italic text-xs">({ingredient.preference})</span>
 							</span>
 							<GenericButton
-								type="button"
+								type="cancel"
 								onClick={() => void removePreferedIngredient(ingredient.ingredient_id)}
-								className="ml-1 text-green-600 hover:text-green-800 dark:text-green-200 dark:hover:text-white font-bold"
-							>
-								×
-							</GenericButton>
+							/>
 						</span>
 					))}
 				</div>

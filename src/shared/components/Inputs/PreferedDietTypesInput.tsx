@@ -62,12 +62,9 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
 						>
 							{dietType.name}
 							<GenericButton
-								type="button"
+								type="cancel"
 								onClick={() => void removePreferedDietType(dietType.diet_id)}
-								className="ml-2 text-purple-600 hover:text-purple-800 dark:text-purple-200 dark:hover:text-white font-bold"
-							>
-								×
-							</GenericButton>
+							/>
 						</span>
 					))}
 				</div>

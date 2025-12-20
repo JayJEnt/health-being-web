@@ -4,8 +4,8 @@ import RegisterPage from "../pages/authorization/Register.tsx";
 import EmailCallbackPage from "../pages/callback/EmailCallback.tsx";
 import GoogleCallbackPage from "../pages/callback/GoogleCallback.tsx";
 import Home from "../pages/Home.tsx";
-import RecipePage from "../pages/Recipe.tsx";
 import RecipesSearch from "../pages/RecipesSearch.tsx";
+import RecipePage from "../pages/recipes/Recipe.tsx";
 
 function PublicRoutes() {
 	return (

@@ -1,20 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-
-import RecipeOverview from "../features/recipe/RecipeOverview";
-import RecipeSteps from "../features/recipe/RecipeSteps";
-
-import { imagesApi } from "../shared/api/endpoints/public/images";
-import { recipeApi } from "../shared/api/endpoints/public/recipe";
-import { imagesApi as imagesApiUser } from "../shared/api/endpoints/user_role/images";
-import { recipeApi as recipesApiUser } from "../shared/api/endpoints/user_role/recipe";
-import GenericButton from "../shared/components/Generic/Button";
-import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
-import ImageInput from "../shared/components/Inputs/ImageInput";
-import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
-import { useAuth } from "../shared/hooks/useAuth";
-import type { IngredientQuantity } from "../shared/models/ingredient";
-import type { RecipeResponse } from "../shared/models/recipe";
+import { imagesApi } from "../../shared/api/endpoints/public/images";
+import { recipeApi } from "../../shared/api/endpoints/public/recipe";
+import { imagesApi as imagesApiUser } from "../../shared/api/endpoints/user_role/images";
+import { recipeApi as recipesApiUser } from "../../shared/api/endpoints/user_role/recipe";
+import GenericButton from "../../shared/components/Generic/Button";
+import ImageInput from "../../shared/components/Inputs/ImageInput";
+import IngredientsInput from "../../shared/components/Inputs/IngredientsInput";
+import { useAuth } from "../../shared/hooks/useAuth";
+import type { IngredientQuantity } from "../../shared/models/ingredient";
+import type { RecipeResponse } from "../../shared/models/recipe";
+import RecipeView from "./RecipeView";
 
 export type RecipeEditPayload = Omit<RecipeResponse, "id">;
 
@@ -187,8 +183,8 @@ const RecipePage: React.FC = () => {
 							}
 						/>
 
-						<DietTypeInput recipe={newRecipe} setRecipe={setNewRecipe} />
-						<RecipeSteps recipe={newRecipe} setRecipe={setNewRecipe} />
+						{/* <DietTypeInput recipe={newRecipe} setRecipe={setNewRecipe} /> */}
+						{/* <RecipeSteps recipe={newRecipe} setRecipe={setNewRecipe} /> */}
 					</div>
 
 					<div className="flex flex-col gap-6">
@@ -206,7 +202,7 @@ const RecipePage: React.FC = () => {
 	}
 
 	return (
-		<RecipeOverview
+		<RecipeView
 			recipe={recipe}
 			imageUrl={imageUrl}
 			isLiked={isLiked}

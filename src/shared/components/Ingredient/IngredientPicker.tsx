@@ -51,8 +51,6 @@ export default function IngredientPicker({
 	const { data, loading, error } = useDebouncedSearch<Ingredient | Ingredient[] | null>({
 		query: safeQuery,
 		fetcher,
-		delay: 300,
-		minLength: 1,
 	});
 
 	const results: Ingredient[] = useMemo(() => {
@@ -92,7 +90,7 @@ export default function IngredientPicker({
 					<div className="relative">
 						<input
 							type="text"
-							placeholder="e.g. Carrots"
+							placeholder="e.g. Carrot"
 							value={value.name ?? ""}
 							onChange={(e) => onName(e.target.value)}
 							readOnly={!!value.ingredient}

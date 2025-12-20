@@ -4,7 +4,7 @@ import { ApiError } from "../../api/client";
 import type { MeasureUnit } from "../../models/enum_utils";
 import { MeasureUnit as MU } from "../../models/enum_utils";
 import type { IngredientQuantity } from "../../models/ingredient";
-import IngredientPicker, { type IngredientSelection } from "../Ingredients/IngredientPicker";
+import IngredientPicker, { type IngredientSelection } from "./IngredientPicker";
 
 type Variant = "default" | "fridge";
 

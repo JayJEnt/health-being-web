@@ -1,15 +1,15 @@
 import { useState } from "react";
+import DietsEditor from "../../features/recipe_form/components/DietEditor";
+import InstructionsEditor from "../../features/recipe_form/components/InstructionsEditor";
 
-import RecipeSteps from "../features/recipe/RecipeSteps";
-
-import { imagesApi } from "../shared/api/endpoints/user_role/images";
-import { recipeApi } from "../shared/api/endpoints/user_role/recipe";
-import GenericButton from "../shared/components/Generic/Button";
-import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
-import ImageInput from "../shared/components/Inputs/ImageInput";
-import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
-import type { IngredientQuantity } from "../shared/models/ingredient";
-import type { RecipeCreate } from "../shared/models/recipe";
+import { imagesApi } from "../../shared/api/endpoints/user_role/images";
+import { recipeApi } from "../../shared/api/endpoints/user_role/recipe";
+import GenericButton from "../../shared/components/Generic/Button";
+import ImageInput from "../../shared/components/Inputs/ImageInput";
+import IngredientsInput from "../../shared/components/Inputs/IngredientsInput";
+import type { DietCreate } from "../../shared/models/diet";
+import type { IngredientQuantity } from "../../shared/models/ingredient";
+import type { RecipeCreate } from "../../shared/models/recipe";
 
 const RecipeSubmitPage: React.FC = () => {
 	const [recipe, setRecipe] = useState<RecipeCreate>({
@@ -22,6 +22,8 @@ const RecipeSubmitPage: React.FC = () => {
 	});
 	const [ingredients, setIngredients] = useState<IngredientQuantity[]>([]);
 	const [image, setImage] = useState<File | null>(null);
+	const [instructions, setInstructions] = useState<string[]>([]);
+	const [diet, setDiet] = useState<DietCreate[]>([]);
 
 	function onIngredientsAdd(ingredientQuantity: IngredientQuantity) {
 		setIngredients((prev) => [...prev, ingredientQuantity]);
@@ -33,11 +35,13 @@ const RecipeSubmitPage: React.FC = () => {
 
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
-		if (!recipe) return;
+		const fullRecipe = { ...recipe, instructions, diet, ingredient: ingredients };
+		if (!fullRecipe) return;
 
 		try {
-			setRecipe((prev) => ({ ...prev, ingredients: ingredients }));
-			const recipeResponse = await recipeApi.create(recipe);
+			console.log("Creating recipe", fullRecipe);
+			const recipeResponse = await recipeApi.create(fullRecipe);
+			console.log("Recipe created", recipeResponse);
 			if (!recipeResponse) return;
 			if (image) {
 				const formData = new FormData();
@@ -57,7 +61,7 @@ const RecipeSubmitPage: React.FC = () => {
 		<div className="max-w-3xl mx-auto p-6">
 			<h1 className="text-3xl font-bold mb-6">Submit a Recipe</h1>
 
-			<form className="flex flex-col gap-8" onSubmit={void handleSubmit}>
+			<form className="flex flex-col gap-8" onSubmit={handleSubmit}>
 				<ImageInput setImage={setImage} />
 				<div>
 					<label htmlFor="title" className="block text-lg font-semibold mb-1">
@@ -86,13 +90,13 @@ const RecipeSubmitPage: React.FC = () => {
 						placeholder="Write a short description..."
 					/>
 				</div>
-				<DietTypeInput recipe={recipe} setRecipe={setRecipe} />
+				<DietsEditor dietList={diet} onChange={setDiet} />
 				<IngredientsInput
 					items={ingredients}
 					onAdd={onIngredientsAdd}
 					onDelete={onIngredientsDelete}
 				/>
-				<RecipeSteps recipe={recipe} setRecipe={setRecipe} />
+				<InstructionsEditor instructions={instructions} onChange={setInstructions} />
 
 				<GenericButton type="submit">Submit Recipe</GenericButton>
 			</form>

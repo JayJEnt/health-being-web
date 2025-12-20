@@ -68,9 +68,7 @@ export default function IngredientsList({
 							className={styles.deleteButton}
 							aria-busy={deletingIndex === index}
 							aria-label={`Delete ${it.name}`}
-						>
-							×
-						</GenericButton>
+						/>
 					</div>
 				))}
 			</div>

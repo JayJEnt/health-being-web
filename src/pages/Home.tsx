@@ -27,9 +27,9 @@ const Home: React.FC = () => {
 			<div className="w-full xl:w-1/2">
 				<h1
 					className="
-          text-2xl sm:text-3xl lg:text-5xl font-semibold
-          text-light-main-text dark:text-dark-main-text
-        "
+						text-2xl sm:text-3xl lg:text-5xl font-semibold
+						text-light-main-text dark:text-dark-main-text
+					"
 				>
 					Welcome, {user ? `${user.name.charAt(0).toUpperCase()}${user.name.slice(1)}!` : ""}
 				</h1>

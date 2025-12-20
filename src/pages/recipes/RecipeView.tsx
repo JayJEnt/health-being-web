@@ -14,7 +14,7 @@ type Props = {
 	handleEdit?: () => void;
 };
 
-const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked, handleEdit }) => {
+const RecipeView: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked, handleEdit }) => {
 	const { user } = useAuth();
 	const likeRecipe = async () => {
 		const requestData: RecipeFavouriteCreate = { title: recipe.title };
@@ -128,4 +128,4 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
 		</div>
 	);
 };
-export default RecipeOverview;
+export default RecipeView;

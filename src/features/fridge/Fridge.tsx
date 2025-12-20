@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
 import { ingredientRefrigeratorApi } from "../../shared/api/endpoints/user_role/ingredient_refrigerator";
-import { IngredientsAddForm } from "../../shared/components/Ingredients/IngredientAddForm";
-import IngredientsList from "../../shared/components/Ingredients/IngredientsList";
+import { IngredientsAddForm } from "../../shared/components/Ingredient/IngredientAddForm";
+import IngredientsList from "../../shared/components/Ingredient/IngredientsList";
 import type { IngredientQuantity } from "../../shared/models/ingredient";
 import type {
 	IngredientRefrigeratorCreate,

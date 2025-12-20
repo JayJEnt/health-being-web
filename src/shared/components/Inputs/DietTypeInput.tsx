@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useState } from "react";
-import type { RecipeEditPayload } from "../../../pages/Recipe";
+import type { RecipeEditPayload } from "../../../pages/recipes/Recipe";
 import { dietApi } from "../../api/endpoints/public/diet";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { DietResponse } from "../../models/diet";
