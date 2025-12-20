@@ -136,39 +136,50 @@ const RecipesSearch: React.FC = () => {
 	}, [displayedRecipes, loadMore, phrase]);
 
 	return (
-		<main>
+		<div className="flex flex-col md:flex-row min-h-full">
 			{user && (
-				<header className="sticky top-0 z-10 w-full bg-white py-6 shadow-md">
-					{/* Deep search filters */}
-					<div className="flex flex-col gap-4">
-						<div className="px-8">
-							<div className="mx-auto max-w-4xl rounded-lg border border-gray-200 bg-gray-50 p-4">
-								<h3 className="mb-3 text-sm font-semibold text-gray-700">Advanced Filters</h3>
-								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-									{(Object.keys(filterLabels) as Array<keyof RecipeFilter>).map((filterKey) => (
-										<label
-											key={filterKey}
-											className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
-										>
-											<input
-												type="checkbox"
-												checked={filters[filterKey] ?? false}
-												onChange={(e) =>
-													setFilters((prev) => ({ ...prev, [filterKey]: e.target.checked }))
-												}
-												className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-											/>
-											<span>{filterLabels[filterKey]}</span>
-										</label>
-									))}
-								</div>
+				<aside className="w-full md:w-64 flex-shrink-0 border-r border-gray-200 bg-white p-6">
+					<div className="sticky top-24 flex h-[calc(100vh-8rem)] flex-col">
+						<div className="flex-1">
+							<h3 className="mb-4 text-lg font-semibold text-gray-800">Advanced Filters</h3>
+							<div className="flex flex-col gap-3">
+								{(Object.keys(filterLabels) as Array<keyof RecipeFilter>).map((filterKey) => (
+									<label
+										key={filterKey}
+										className="flex cursor-pointer items-center gap-3 rounded-lg p-2 transition-colors hover:bg-gray-50"
+									>
+										<input
+											type="checkbox"
+											checked={filters[filterKey] ?? false}
+											onChange={(e) =>
+												setFilters((prev) => ({ ...prev, [filterKey]: e.target.checked }))
+											}
+											className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+										/>
+										<span className="text-sm text-gray-700">{filterLabels[filterKey]}</span>
+									</label>
+								))}
 							</div>
 						</div>
+						<div className="mt-6 border-t border-gray-100 pt-4">
+							<GenericButton
+								onClick={() => {
+									const resetFilters = {} as RecipeFilter;
+									(Object.keys(filterLabels) as Array<keyof RecipeFilter>).forEach((key) => {
+										resetFilters[key] = false;
+									});
+									setFilters(resetFilters);
+								}}
+								className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+							>
+								Clear All Filters
+							</GenericButton>
+						</div>
 					</div>
-				</header>
+				</aside>
 			)}
 
-			<section className="container mx-auto px-4">
+			<section className="flex-1 px-4 py-6 md:px-8">
 				{/* Loading */}
 				{loading && <LoadingSpinner>Fetching recipes...</LoadingSpinner>}
 
@@ -198,7 +209,7 @@ const RecipesSearch: React.FC = () => {
 					<>
 						<ul
 							aria-label="Recipe grid"
-							className="mx-auto mt-8 grid max-w-7xl grid-cols-3 gap-6 p-4"
+							className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
 						>
 							{displayedRecipes.map((recipe, index) => (
 								<li key={`${recipe.id}-${index}`}>
@@ -219,7 +230,7 @@ const RecipesSearch: React.FC = () => {
 					</>
 				)}
 			</section>
-		</main>
+		</div>
 	);
 };
 
