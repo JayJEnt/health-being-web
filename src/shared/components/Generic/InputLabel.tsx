@@ -1,30 +1,47 @@
 import type React from "react";
 
+type LabelVariant = "sm" | "md" | "lg";
+
 type Props = {
 	id: string;
 	label: string;
-	divClassName?: string;
-	labelStyles?: string;
-	inputBaseStyles?: string;
+
+	containerClassName?: string;
+	labelClassName?: string;
+
+	labelVariant?: LabelVariant;
 } & React.InputHTMLAttributes<HTMLInputElement>;
+
+const labelVariantClasses: Record<LabelVariant, string> = {
+	sm: "text-sm font-medium",
+	md: "text-base font-semibold",
+	lg: "text-lg font-semibold",
+};
+
+const defaultInputClasses =
+	"w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500";
 
 const GenericInputLabel: React.FC<Props> = ({
 	id,
 	label,
 	type = "text",
-	className = "",
-	divClassName = "flex flex-col mb-4",
-	labelStyles = "block text-sm font-medium text-gray-700",
-	inputBaseStyles = "w-full px-3 py-2 border rounded-md",
+
+	containerClassName = "flex flex-col gap-1 mb-4",
+	labelClassName = "text-gray-700",
+	labelVariant = "md",
+
+	className,
 	...rest
 }) => {
-	const inputClasses = `${inputBaseStyles} ${className}`;
+	const inputClasses = className ?? defaultInputClasses;
+	const labelClasses = `${labelVariantClasses[labelVariant]} ${labelClassName}`;
 
 	return (
-		<div className={divClassName}>
-			<label htmlFor={id} className={labelStyles}>
+		<div className={containerClassName}>
+			<label htmlFor={id} className={labelClasses}>
 				{label}
 			</label>
+
 			<input id={id} type={type} className={inputClasses} {...rest} />
 		</div>
 	);

@@ -5,6 +5,7 @@ import RecipeSteps from "../features/recipe/RecipeSteps";
 import { imagesApi } from "../shared/api/endpoints/user_role/images";
 import { recipeApi } from "../shared/api/endpoints/user_role/recipe";
 import GenericButton from "../shared/components/Generic/Button";
+import GenericInputLabel from "../shared/components/Generic/InputLabel";
 import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
 import ImageInput from "../shared/components/Inputs/ImageInput";
 import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
@@ -20,6 +21,7 @@ const RecipeSubmitPage: React.FC = () => {
 		ingredient: [],
 		category: "Snack",
 	});
+
 	const [ingredients, setIngredients] = useState<IngredientQuantity[]>([]);
 	const [image, setImage] = useState<File | null>(null);
 
@@ -33,18 +35,16 @@ const RecipeSubmitPage: React.FC = () => {
 
 	async function handleSubmit(e: React.FormEvent) {
 		e.preventDefault();
-		if (!recipe) return;
 
 		try {
-			setRecipe((prev) => ({ ...prev, ingredients: ingredients }));
-			const recipeResponse = await recipeApi.create(recipe);
+			const payload = { ...recipe, ingredient: ingredients };
+			const recipeResponse = await recipeApi.create(payload);
 			if (!recipeResponse) return;
+
 			if (image) {
 				const formData = new FormData();
 				formData.append("file", image);
-
-				const imageResponse = await imagesApi.upload(String(recipeResponse.id), formData);
-				console.log("Image uploaded", imageResponse);
+				await imagesApi.upload(String(recipeResponse.id), formData);
 			}
 
 			console.log("Recipe uploaded", recipeResponse);
@@ -59,22 +59,18 @@ const RecipeSubmitPage: React.FC = () => {
 
 			<form className="flex flex-col gap-8" onSubmit={void handleSubmit}>
 				<ImageInput setImage={setImage} />
-				<div>
-					<label htmlFor="title" className="block text-lg font-semibold mb-1">
-						Recipe Title
-					</label>
-					<input
-						id="title"
-						type="text"
-						value={recipe.title}
-						onChange={(e) => setRecipe({ ...recipe, title: e.target.value })}
-						className="w-full border rounded px-3 py-2"
-						placeholder="e.g. Pasta Carbonara"
-					/>
-				</div>
-
-				<div>
-					<label htmlFor="description" className="block text-lg font-semibold mb-1">
+				<GenericInputLabel
+					id="title"
+					label="Recipe Title"
+					labelVariant="lg"
+					value={recipe.title}
+					onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+						setRecipe({ ...recipe, title: e.target.value })
+					}
+					placeholder="e.g. Pasta Carbonara"
+				/>
+				<div className="flex flex-col gap-1">
+					<label htmlFor="description" className="text-lg font-semibold text-gray-700">
 						Description
 					</label>
 					<textarea
