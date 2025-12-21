@@ -1,6 +1,6 @@
 import { settings } from "../../../config";
+import type { IngredientCreate, IngredientResponse } from "../../../models/ingredient";
 import { api } from "../../client";
-import type { IngredientCreate, IngredientResponse } from "../../models/ingredient";
 
 export const ingredientAdminApi = {
 	create: (data: IngredientCreate) =>

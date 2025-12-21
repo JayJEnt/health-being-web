@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
-import { useSaveTokenFromQueryToLocalStorage } from "../../shared/hooks/token";
+import GenericButton from "../../shared/components/Generic/Button";
+import { useSaveQueryTokenToStorage } from "../../shared/hooks/useQueryToken";
 
 const EmailCallbackPage: React.FC = () => {
 	const [email, setEmail] = useState<string>("");
 	const [error, setError] = useState<string>("");
 	const [message, setMessage] = useState<string>("");
-	useSaveTokenFromQueryToLocalStorage();
+	useSaveQueryTokenToStorage();
 
 	useEffect(() => {
 		oauth2Api
@@ -51,13 +52,9 @@ const EmailCallbackPage: React.FC = () => {
 							onChange={(e) => setEmail(e.target.value)}
 							className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
 						/>
-						<button
-							type="submit"
-							className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
-							onClick={handleSubmit}
-						>
+						<GenericButton type="submit" onClick={() => handleSubmit}>
 							Send new authentication link
-						</button>
+						</GenericButton>
 					</form>
 				) : (
 					<p className="text-green-500 text-sm text-center">{message}</p>

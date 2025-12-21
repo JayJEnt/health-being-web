@@ -1,9 +1,10 @@
 import type { Dispatch, SetStateAction } from "react";
 
 import { recipeFavouriteApi } from "../../shared/api/endpoints/user_role/recipe_favourite";
-import type { RecipeResponse } from "../../shared/api/models/recipe";
-import type { RecipeFavouriteCreate } from "../../shared/api/models/recipe_favourite";
+import GenericButton from "../../shared/components/Generic/Button";
 import { useAuth } from "../../shared/hooks/useAuth";
+import type { RecipeResponse } from "../../shared/models/recipe";
+import type { RecipeFavouriteCreate } from "../../shared/models/recipe_favourite";
 
 type Props = {
 	recipe: RecipeResponse;
@@ -54,25 +55,17 @@ const RecipeOverview: React.FC<Props> = ({ recipe, imageUrl, isLiked, setIsLiked
 						<h1 className="text-3xl font-bold">{recipe.title}</h1>
 						<div>
 							{handleEdit && (
-								<button
-									type="button"
-									onClick={handleEdit}
-									className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-								>
+								<GenericButton type="button" onClick={handleEdit}>
 									Edit
-								</button>
+								</GenericButton>
 							)}
 							{user && user.id !== recipe.author_id && (
-								<button
-									type="button"
-									className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-									onClick={toggleLiked}
-								>
+								<GenericButton type="button" onClick={toggleLiked}>
 									<span className={isLiked ? "text-red-600" : "text-white"}>
 										{isLiked ? "❤️" : "🤍"}
 									</span>
 									Like
-								</button>
+								</GenericButton>
 							)}
 						</div>
 					</div>

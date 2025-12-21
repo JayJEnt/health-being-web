@@ -1,10 +1,11 @@
 import { useCallback, useId, useMemo } from "react";
 
 import { ingredientApi } from "../../api/endpoints/public/ingredient";
-import type { MeasureUnit } from "../../api/models/enum_utils";
-import { MeasureUnit as MU } from "../../api/models/enum_utils";
-import type { Ingredient } from "../../api/models/ingredient";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
+import type { MeasureUnit } from "../../models/enum_utils";
+import { MeasureUnit as MU } from "../../models/enum_utils";
+import type { Ingredient } from "../../models/ingredient";
+import GenericButton from "../Generic/Button";
 
 export type IngredientSelection = {
 	ingredient: Ingredient | null;
@@ -100,14 +101,14 @@ export default function IngredientPicker({
 							className={`${baseInputClasses} pr-16`}
 						/>
 						{value.ingredient && (
-							<button
+							<GenericButton
 								type="button"
 								onClick={clear}
 								disabled={disabled}
 								className="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-medium text-blue-700 hover:underline"
 							>
 								Change
-							</button>
+							</GenericButton>
 						)}
 					</div>
 				</div>
@@ -161,14 +162,14 @@ export default function IngredientPicker({
 						)}
 
 						{results.map((ing) => (
-							<button
+							<GenericButton
 								key={ing.name}
 								type="button"
 								onClick={() => onSelect(ing)}
 								className="block w-full text-left px-3 py-2 text-sm hover:bg-slate-100"
 							>
 								{ing.name}
-							</button>
+							</GenericButton>
 						))}
 					</div>
 				)}
@@ -191,13 +192,13 @@ export default function IngredientPicker({
 					}`}
 				/>
 				{value.ingredient && (
-					<button
+					<GenericButton
 						type="button"
 						onClick={clear}
 						className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-blue-700 hover:underline"
 					>
 						Change
-					</button>
+					</GenericButton>
 				)}
 			</div>
 
@@ -236,14 +237,14 @@ export default function IngredientPicker({
 					)}
 
 					{results.map((ing) => (
-						<button
+						<GenericButton
 							key={ing.name}
 							type="button"
 							onClick={() => onSelect(ing)}
 							className="block w-full text-left px-3 py-2 hover:bg-gray-100"
 						>
 							{ing.name}
-						</button>
+						</GenericButton>
 					))}
 				</div>
 			)}

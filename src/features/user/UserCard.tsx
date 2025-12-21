@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { api } from "../../shared/api/client";
-import type { User } from "../../shared/api/models/user";
+import GenericButton from "../../shared/components/Generic/Button";
+import type { User } from "../../shared/models/user";
 
 type Props = {
 	user: User;
@@ -63,20 +64,20 @@ const UserCard: React.FC<Props> = ({ user, deleteHandler }) => {
 						placeholder="New Password (optional)"
 					/>
 					<div className="flex gap-2">
-						<button
+						<GenericButton
 							type="button"
 							className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
 							onClick={void handleSave}
 						>
 							Save
-						</button>
-						<button
+						</GenericButton>
+						<GenericButton
 							type="button"
 							className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
 							onClick={handleCancel}
 						>
 							Cancel
-						</button>
+						</GenericButton>
 					</div>
 				</>
 			) : (
@@ -86,20 +87,20 @@ const UserCard: React.FC<Props> = ({ user, deleteHandler }) => {
 					<div className="text-sm text-gray-600">ID: {user.id}</div>
 					<div className="text-sm text-gray-600">Role: {user.role}</div>
 					<div className="flex gap-4">
-						<button
+						<GenericButton
 							type="button"
 							className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mt-2"
 							onClick={() => setIsEditing(true)}
 						>
 							Edit
-						</button>
-						<button
+						</GenericButton>
+						<GenericButton
 							type="button"
 							className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 mt-2"
 							onClick={() => deleteHandler(user)}
 						>
 							Delete
-						</button>
+						</GenericButton>
 					</div>
 				</>
 			)}

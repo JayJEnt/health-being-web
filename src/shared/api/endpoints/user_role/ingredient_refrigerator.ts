@@ -1,11 +1,11 @@
 import { settings } from "../../../config";
-import { api } from "../../client";
 import type {
 	IngredientRefrigeratorCreate,
 	IngredientRefrigeratorCreateResponse,
 	IngredientRefrigeratorDelete,
 	IngredientRefrigeratorResponse,
-} from "../../models/ingredient_refrigerator";
+} from "../../../models/ingredient_refrigerator";
+import { api } from "../../client";
 
 export const ingredientRefrigeratorApi = {
 	getById: (ingredient_id: number) =>

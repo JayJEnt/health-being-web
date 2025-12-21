@@ -1,7 +1,7 @@
 import { settings } from "../../../config";
+import type { RecipeFilter } from "../../../models/filters";
+import type { RecipeCreate, RecipeOverview, RecipeResponse } from "../../../models/recipe";
 import { api } from "../../client";
-import type { RecipeFilter } from "../../models/filters";
-import type { RecipeCreate, RecipeOverview, RecipeResponse } from "../../models/recipe";
 
 export const recipeApi = {
 	create: (data: RecipeCreate) => api.post<RecipeResponse>(`${settings.RECIPE_ENDPOINT}`, data),

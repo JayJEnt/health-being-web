@@ -22,6 +22,8 @@ class Settings {
 	RECIPES_PAGE_SIZE: number = 18;
 
 	AUTH_TOKEN_KEY: string = "app.auth.token";
+
+	RECAPTCHA_SITE_KEY: string = "6LdCLCssAAAAAHYepOo2_A624uBFWafaLLVvpGLu";
 }
 
 class LocalSettings extends Settings {

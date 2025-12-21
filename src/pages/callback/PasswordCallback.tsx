@@ -4,7 +4,8 @@ import checkPasswordStrength from "../../features/register_password/checkPasswor
 import RegisterPassword from "../../features/register_password/RegisterPassword";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
-import { useSaveTokenFromQueryToLocalStorage } from "../../shared/hooks/token";
+import GenericButton from "../../shared/components/Generic/Button";
+import { useSaveQueryTokenToStorage } from "../../shared/hooks/useQueryToken";
 
 const PasswordCallbackPage: React.FC = () => {
 	const [password, setPassword] = useState<string>("");
@@ -12,7 +13,7 @@ const PasswordCallbackPage: React.FC = () => {
 	const [passwordStrength, setPasswordStrength] = useState<string>("");
 	const [error, setError] = useState<string>("");
 	const [message, setMessage] = useState<string>("");
-	useSaveTokenFromQueryToLocalStorage();
+	useSaveQueryTokenToStorage();
 
 	const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = e.target.value;
@@ -71,15 +72,10 @@ const PasswordCallbackPage: React.FC = () => {
 					{error ? (
 						<p className="text-red-500 text-sm text-center">{error}</p>
 					) : (
-						(message ?? <p className="text-green-500 text-sm text-center">{message}</p>)
+						<p className="text-green-500 text-sm text-center">{message}</p>
 					)}
 
-					<button
-						type="submit"
-						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
-					>
-						Set Password
-					</button>
+					<GenericButton type="submit">Set Password</GenericButton>
 				</form>
 			</div>
 		</div>

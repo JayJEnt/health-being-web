@@ -4,11 +4,12 @@ import RecipeSteps from "../features/recipe/RecipeSteps";
 
 import { imagesApi } from "../shared/api/endpoints/user_role/images";
 import { recipeApi } from "../shared/api/endpoints/user_role/recipe";
-import type { IngredientQuantity } from "../shared/api/models/ingredient";
-import type { RecipeCreate } from "../shared/api/models/recipe";
+import GenericButton from "../shared/components/Generic/Button";
 import DietTypeInput from "../shared/components/Inputs/DietTypeInput";
 import ImageInput from "../shared/components/Inputs/ImageInput";
 import IngredientsInput from "../shared/components/Inputs/IngredientsInput";
+import type { IngredientQuantity } from "../shared/models/ingredient";
+import type { RecipeCreate } from "../shared/models/recipe";
 
 const RecipeSubmitPage: React.FC = () => {
 	const [recipe, setRecipe] = useState<RecipeCreate>({
@@ -93,12 +94,7 @@ const RecipeSubmitPage: React.FC = () => {
 				/>
 				<RecipeSteps recipe={recipe} setRecipe={setRecipe} />
 
-				<button
-					type="submit"
-					className="bg-blue-700 text-white font-semibold py-3 px-6 rounded hover:bg-blue-800 self-start"
-				>
-					Submit Recipe
-				</button>
+				<GenericButton type="submit">Submit Recipe</GenericButton>
 			</form>
 		</div>
 	);

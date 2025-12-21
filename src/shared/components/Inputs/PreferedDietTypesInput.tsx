@@ -3,9 +3,10 @@ import { useCallback, useState } from "react";
 
 import { dietApi } from "../../api/endpoints/public/diet";
 import { dietFavouriteApi } from "../../api/endpoints/user_role/diet_favourite";
-import type { DietResponse } from "../../api/models/diet";
-import type { DietFavouriteCreate, DietFavouriteResponse } from "../../api/models/diet_favourite";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
+import type { DietResponse } from "../../models/diet";
+import type { DietFavouriteCreate, DietFavouriteResponse } from "../../models/diet_favourite";
+import GenericButton from "../Generic/Button";
 
 type Props = {
 	preferedDietTypes: DietFavouriteResponse[];
@@ -60,13 +61,13 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
 							className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-medium dark:bg-purple-800 dark:text-purple-100 shadow"
 						>
 							{dietType.name}
-							<button
+							<GenericButton
 								type="button"
 								onClick={() => void removePreferedDietType(dietType.diet_id)}
 								className="ml-2 text-purple-600 hover:text-purple-800 dark:text-purple-200 dark:hover:text-white font-bold"
 							>
 								×
-							</button>
+							</GenericButton>
 						</span>
 					))}
 				</div>
@@ -83,13 +84,13 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
 				{loading && <div>Ładowanie…</div>}
 				{error && <div className="text-red-600">{error.message}</div>}
 				{!loading && !error && data && (
-					<button
+					<GenericButton
 						type="button"
 						onClick={() => void addPreferedDietType(data)}
 						className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
 					>
 						Add {data.name}
-					</button>
+					</GenericButton>
 				)}
 			</div>
 		</div>

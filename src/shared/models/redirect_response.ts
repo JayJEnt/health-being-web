@@ -1,3 +1,3 @@
 export interface RedirectResponse {
-  url: string;
+	url: string;
 }

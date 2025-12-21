@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
+import GenericButton from "../../shared/components/Generic/Button";
 
 const ForgotPasswordPage: React.FC = () => {
 	const [email, setEmail] = useState<string>("");
@@ -50,15 +51,10 @@ const ForgotPasswordPage: React.FC = () => {
 					{error ? (
 						<p className="text-red-500 text-sm text-center">{error}</p>
 					) : (
-						(message ?? <p className="text-green-500 text-sm text-center">{message}</p>)
+						<p className="text-green-500 text-sm text-center">{message}</p>
 					)}
 
-					<button
-						type="submit"
-						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
-					>
-						Send Reset Link
-					</button>
+					<GenericButton type="submit">Send Reset Link</GenericButton>
 				</form>
 			</div>
 		</div>

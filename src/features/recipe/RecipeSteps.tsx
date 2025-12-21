@@ -1,7 +1,8 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import type { RecipeEditPayload } from "../../pages/Recipe";
-import type { RecipeCreate } from "../../shared/api/models/recipe";
+import GenericButton from "../../shared/components/Generic/Button";
+import type { RecipeCreate } from "../../shared/models/recipe";
 
 type Props<T extends RecipeCreate | RecipeEditPayload> = {
 	recipe: T;
@@ -50,7 +51,7 @@ const RecipeSteps = <T extends RecipeCreate | RecipeEditPayload>({
 							<span className="flex-1">
 								{index + 1}. {step}
 							</span>
-							<button
+							<GenericButton
 								type="button"
 								onClick={() => deleteStep(index)}
 								className="shrink-0 bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 text-xs"
@@ -58,7 +59,7 @@ const RecipeSteps = <T extends RecipeCreate | RecipeEditPayload>({
 								title="Delete step"
 							>
 								Delete
-							</button>
+							</GenericButton>
 						</li>
 					))}
 				</ol>
@@ -71,13 +72,13 @@ const RecipeSteps = <T extends RecipeCreate | RecipeEditPayload>({
 						onChange={(e) => setNewStep(e.target.value)}
 						className="flex-1 border rounded px-3 py-2"
 					/>
-					<button
+					<GenericButton
 						type="button"
 						onClick={addStep}
 						className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
 					>
 						Add
-					</button>
+					</GenericButton>
 				</div>
 			</div>
 		);

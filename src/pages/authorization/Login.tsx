@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
 import { GoogleIcon } from "../../shared/assets/GoogleIcon";
+import GenericButton from "../../shared/components/Generic/Button";
 import { useAuth } from "../../shared/hooks/useAuth";
 
 const LoginPage: React.FC = () => {
@@ -33,10 +34,11 @@ const LoginPage: React.FC = () => {
 			return;
 		}
 
-		const ok = await login({ email, password });
-		if (ok) {
+		try {
+			await login({ email, password });
 			void navigate("/");
-		} else {
+		} catch (err) {
+			console.error("Login failed", err);
 			setError("Login failed. Check your credentials.");
 		}
 	};
@@ -65,12 +67,7 @@ const LoginPage: React.FC = () => {
 					<Link to="/register">Don't have an account yet?</Link>
 					<Link to="/forgot_password">Forgot your password?</Link>
 					{error && <p className="text-red-500 text-sm text-center">{error}</p>}
-					<button
-						type="submit"
-						className="bg-blue-700 hover:bg-blue-600 text-white py-2 rounded-xl transition"
-					>
-						Login
-					</button>
+					<GenericButton type="submit">Login</GenericButton>
 
 					<div className="relative my-4">
 						<div className="absolute inset-0 flex items-center">
@@ -81,14 +78,14 @@ const LoginPage: React.FC = () => {
 						</div>
 					</div>
 
-					<button
+					<GenericButton
 						type="button"
 						onClick={() => void handleGoogleLogin()}
 						className="flex items-center justify-center gap-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition"
 					>
 						<GoogleIcon className="w-5 h-5" />
 						<span>Sign in with Google</span>
-					</button>
+					</GenericButton>
 				</form>
 			</div>
 		</div>
