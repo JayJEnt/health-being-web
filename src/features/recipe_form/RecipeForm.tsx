@@ -2,10 +2,9 @@ import { useState } from "react";
 
 import DietEditForm from "../../features/recipe_form/components/DietEditor";
 import InstructionEditForm from "../../features/recipe_form/components/InstructionsEditor";
+import IngredientEditForm from "./components/IngredientEditor";
 import GenericButton from "../../shared/components/Generic/Button";
 import ImageInput from "../../shared/components/Inputs/ImageInput";
-import IngredientEditForm from "../../features/recipe_form//components/IngredientEditor";
-import IngredientsInput from "../../shared/components/Inputs/IngredientsInput";
 
 import { imagesApi } from "../../shared/api/endpoints/user_role/images";
 import { recipeApi } from "../../shared/api/endpoints/user_role/recipe";
@@ -15,7 +14,7 @@ import type { IngredientQuantity } from "../../shared/models/ingredient";
 // import type { RecipeCreate } from "../../shared/models/recipe"; instead use EMPTY_EDIT
 import type { Category } from "../../shared/models/enum_utils";
 
-const RecipeSubmitPage: React.FC = () => {
+const RecipeEditForm: React.FC = () => {
 	// Use Empty Recipe Object as Initial State => already used in View Page
 	const recipe = {
 		title: "",
@@ -112,4 +111,4 @@ const RecipeSubmitPage: React.FC = () => {
 	);
 };
 
-export default RecipeSubmitPage;
+export default RecipeEditForm;

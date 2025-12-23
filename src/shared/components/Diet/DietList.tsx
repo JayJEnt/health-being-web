@@ -2,14 +2,14 @@ import type { DietCreate } from "../../models/diet";
 import GenericButton from "../Generic/Button";
 
 type DietListProps = {
-	diets: DietCreate[];
+	dietList: DietCreate[];
 	onRemove: (index: number) => void;
 };
 
-const DietList: React.FC<DietListProps> = ({ diets, onRemove }) => {
+const DietList: React.FC<DietListProps> = ({ dietList, onRemove }) => {
 	return (
 		<div className="flex flex-wrap gap-2">
-			{diets.map((diet, index) => (
+			{dietList.map((diet, index) => (
 				<span
 					key={diet.name}
 					className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm"

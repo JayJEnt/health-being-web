@@ -3,17 +3,17 @@ import DietSearchInput from "../../../shared/components/Diet/DietSearchInput";
 
 import type { DietCreate } from "../../../shared/models/diet";
 
-type DietsEditorProps = {
+type DietEditFormProps = {
 	dietList: DietCreate[];
 	onChange: (dietList: DietCreate[]) => void;
 };
 
-const DietsEditor = ({ dietList, onChange }: DietsEditorProps) => {
-	const addDietType = (diet: DietCreate) => {
+const DietEditForm: React.FC<DietEditFormProps> = ({ dietList, onChange }) => {
+	const addDiet = (diet: DietCreate) => {
 		onChange([...dietList, diet]);
 	};
 
-	const removeDietType = (index: number) => {
+	const removeDiet = (index: number) => {
 		onChange(dietList.filter((_, i) => i !== index));
 	};
 
@@ -21,13 +21,13 @@ const DietsEditor = ({ dietList, onChange }: DietsEditorProps) => {
 		<div>
 			<h2 className="text-xl font-semibold mb-2">Diets</h2>
 
-			<DietList diets={dietList} onRemove={removeDietType} />
+			<DietList dietList={dietList} onRemove={removeDiet} />
 
 			<div className="mt-3">
-				<DietSearchInput onSelect={addDietType} />
+				<DietSearchInput onSelect={addDiet} />
 			</div>
 		</div>
 	);
 };
 
-export default DietsEditor;
+export default DietEditForm;

@@ -14,6 +14,7 @@ import RecipeView from "./RecipeView";
 
 export type RecipeEditPayload = Omit<RecipeResponse, "id">;
 
+// This should be moved to models
 const EMPTY_EDIT: RecipeEditPayload = {
 	title: "",
 	author_id: 0,

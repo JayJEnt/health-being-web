@@ -2,23 +2,23 @@ import { useState } from "react";
 
 import GenericButton from "../../../shared/components/Generic/Button";
 
-type InstructionsEditorProps = {
-	instructions: string[];
+type InstructionsEditFormProps = {
+	instructionList: string[];
 	onChange: (instructions: string[]) => void;
 };
 
-const InstructionsEditor: React.FC<InstructionsEditorProps> = ({ instructions, onChange }) => {
+const InstructionEditForm: React.FC<InstructionsEditFormProps> = ({ instructionList, onChange }) => {
 	const [newInstruction, setNewInstruction] = useState<string>("");
 
 	const addInstruction = () => {
 		if (!newInstruction.trim()) return;
 
-		onChange([...instructions, newInstruction]);
+		onChange([...instructionList, newInstruction]);
 		setNewInstruction("");
 	};
 
 	const deleteInstruction = (index: number) => {
-		onChange(instructions.filter((_, i) => i !== index));
+		onChange(instructionList.filter((_, i) => i !== index));
 	};
 
 	return (
@@ -26,7 +26,7 @@ const InstructionsEditor: React.FC<InstructionsEditorProps> = ({ instructions, o
 			<h2 className="text-xl font-semibold mb-2">Instructions</h2>
 
 			<ol className="list-decimal list-inside space-y-1 mb-3 text-sm">
-				{instructions.map((instruction, index) => (
+				{instructionList.map((instruction, index) => (
 					<li
 						key={`${index}-${instruction.slice(0, 40)}`}
 						className="flex items-start justify-between gap-3"
@@ -55,4 +55,4 @@ const InstructionsEditor: React.FC<InstructionsEditorProps> = ({ instructions, o
 	);
 };
 
-export default InstructionsEditor;
+export default InstructionEditForm;
