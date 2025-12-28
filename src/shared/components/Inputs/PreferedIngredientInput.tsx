@@ -10,7 +10,8 @@ import type {
 	IngredientPreferenceCreate,
 	IngredientPreferenceResponse,
 } from "../../models/ingredient_preference";
-import GenericButton from "../Generic/Button";
+import GenericButton from "../Buttons/Button";
+import CancelButton from "../Buttons/CancelButton";
 
 type Props = {
 	preferedIngredients: IngredientPreferenceResponse[];
@@ -82,8 +83,7 @@ const PreferedIngredientInput: React.FC<Props> = ({
 							<span className="mr-2">
 								{ingredient.name} <span className="italic text-xs">({ingredient.preference})</span>
 							</span>
-							<GenericButton
-								type="cancel"
+							<CancelButton
 								onClick={() => void removePreferedIngredient(ingredient.ingredient_id)}
 							/>
 						</span>
@@ -114,7 +114,6 @@ const PreferedIngredientInput: React.FC<Props> = ({
 				{error && <div className="text-red-600">{error.message}</div>}
 				{!loading && !error && data && (
 					<GenericButton
-						type="button"
 						onClick={() => void addPreferedIngredient(data, preference)}
 						className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
 					>

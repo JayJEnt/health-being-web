@@ -6,7 +6,8 @@ import { dietFavouriteApi } from "../../api/endpoints/user_role/diet_favourite";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { DietResponse } from "../../models/diet";
 import type { DietFavouriteCreate, DietFavouriteResponse } from "../../models/diet_favourite";
-import GenericButton from "../Generic/Button";
+import GenericButton from "../Buttons/Button";
+import CancelButton from "../Buttons/CancelButton";
 
 type Props = {
 	preferedDietTypes: DietFavouriteResponse[];
@@ -61,10 +62,7 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
 							className="inline-flex items-center px-3 py-1 rounded-full bg-purple-100 text-purple-800 text-sm font-medium dark:bg-purple-800 dark:text-purple-100 shadow"
 						>
 							{dietType.name}
-							<GenericButton
-								type="cancel"
-								onClick={() => void removePreferedDietType(dietType.diet_id)}
-							/>
+							<CancelButton onClick={() => void removePreferedDietType(dietType.diet_id)} />
 						</span>
 					))}
 				</div>
@@ -82,7 +80,6 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
 				{error && <div className="text-red-600">{error.message}</div>}
 				{!loading && !error && data && (
 					<GenericButton
-						type="button"
 						onClick={() => void addPreferedDietType(data)}
 						className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
 					>

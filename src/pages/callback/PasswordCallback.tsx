@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import checkPasswordStrength from "../../features/register_password/checkPasswordStrength";
-import RegisterPassword from "../../features/register_password/RegisterPassword";
+import checkPasswordStrength from "../../features/registerPassword/checkPasswordStrength";
+import RegisterPassword from "../../features/registerPassword/RegisterPassword";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
-import GenericButton from "../../shared/components/Generic/Button";
+import SubmitButton from "../../shared/components/Buttons/SubmitButton";
 import { useSaveQueryTokenToStorage } from "../../shared/hooks/useQueryToken";
 
 const PasswordCallbackPage: React.FC = () => {
@@ -75,7 +75,7 @@ const PasswordCallbackPage: React.FC = () => {
 						<p className="text-green-500 text-sm text-center">{message}</p>
 					)}
 
-					<GenericButton type="submit">Set Password</GenericButton>
+					<SubmitButton>Set Password</SubmitButton>
 				</form>
 			</div>
 		</div>

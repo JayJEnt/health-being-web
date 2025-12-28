@@ -4,8 +4,8 @@ import { useParams } from "react-router-dom";
 
 import { recipeApi } from "../shared/api/endpoints/public/recipe";
 import { recipeApi as recipeApiUser } from "../shared/api/endpoints/user_role/recipe";
-import GenericButton from "../shared/components/Generic/Button";
-import LoadingComponent from "../shared/components/Loading/LoadingComponent";
+import GenericButton from "../shared/components/Buttons/Button";
+import LoadingSpinner from "../shared/components/Loading/LoadingSpinner";
 import { settings } from "../shared/config";
 import { useAuth } from "../shared/hooks/useAuth";
 import type { RecipeFilter, RecipeOverview } from "../shared/models/recipe";
@@ -169,14 +169,13 @@ const RecipesSearch: React.FC = () => {
 
 			<section className="container mx-auto px-4">
 				{/* Loading */}
-				{loading && <LoadingComponent>Fetching recipes...</LoadingComponent>}
+				{loading && <LoadingSpinner>Fetching recipes...</LoadingSpinner>}
 
 				{/* Error */}
 				{error && (
 					<div className="py-8 text-center">
 						<p className="mb-4 text-red-600">{error}</p>
 						<GenericButton
-							type="button"
 							onClick={loadRecipes}
 							className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors
                          hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
@@ -235,7 +234,7 @@ const RecipesSearch: React.FC = () => {
 						</ul>
 
 						{/* Loading */}
-						{loadingMore && <LoadingComponent>Fetching recipes...</LoadingComponent>}
+						{loadingMore && <LoadingSpinner>Fetching recipes...</LoadingSpinner>}
 
 						{/* Sentinel element for infinite scroll */}
 						<div ref={sentinelRef} className="h-20 w-full" aria-hidden="true" />

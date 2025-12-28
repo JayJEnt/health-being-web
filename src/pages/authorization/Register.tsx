@@ -2,12 +2,12 @@ import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Link } from "react-router-dom";
 
-import checkPasswordStrength from "../../features/register_password/checkPasswordStrength";
-import RegisterPassword from "../../features/register_password/RegisterPassword";
+import checkPasswordStrength from "../../features/registerPassword/checkPasswordStrength";
+import RegisterPassword from "../../features/registerPassword/RegisterPassword";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
 
-import GenericButton from "../../shared/components/Generic/Button";
+import SubmitButton from "../../shared/components/Buttons/SubmitButton";
 import { settings } from "../../shared/config";
 import type { UserCreate } from "../../shared/models/user";
 
@@ -98,7 +98,7 @@ const RegisterPage: React.FC = () => {
 
 					{error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-					<GenericButton type="submit">Register</GenericButton>
+					<SubmitButton>Register</SubmitButton>
 				</form>
 			</div>
 		</div>

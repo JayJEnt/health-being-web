@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { dietFavouriteApi } from "../shared/api/endpoints/user_role/diet_favourite";
 import { ingredientPreferenceApi } from "../shared/api/endpoints/user_role/ingredient_preference";
 import { userOwnerApi } from "../shared/api/endpoints/user_role/user";
-import GenericButton from "../shared/components/Generic/Button";
+import SubmitButton from "../shared/components/Buttons/SubmitButton";
 import PreferedDietTypesInput from "../shared/components/Inputs/PreferedDietTypesInput";
 import PreferedIngredientInput from "../shared/components/Inputs/PreferedIngredientInput";
 import { useAuth } from "../shared/hooks/useAuth";
@@ -164,7 +164,7 @@ const UserProfile: React.FC = () => {
 			</div>
 
 			<div>
-				<GenericButton type="submit">Save Settings</GenericButton>
+				<SubmitButton>Save Settings</SubmitButton>
 			</div>
 		</form>
 	);

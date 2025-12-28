@@ -38,3 +38,12 @@ export interface RecipeFilter {
 	only_followed_authors?: boolean;
 	only_owned_ingredients?: boolean;
 }
+
+export const EMPTY_RECIPE: RecipeCreate = {
+	title: "",
+	description: "",
+	instructions: [],
+	diet: [],
+	ingredient: [],
+	category: "Snack",
+};
