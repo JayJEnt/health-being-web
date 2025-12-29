@@ -4,6 +4,7 @@ import CancelButton from "../../../../shared/components/Buttons/CancelButton";
 
 import IngredientSearchInput from "../../../../shared/components/SearchInputs/IngredientSearchInput";
 import type { MeasureUnit } from "../../../../shared/models/enum_utils";
+import { MeasureUnit as MeasureUnitValue } from "../../../../shared/models/enum_utils";
 import type { IngredientQuantity } from "../../../../shared/models/ingredient";
 import IngredientEditorList from "../Lists/IngredientEditorList";
 import AmountSelect from "../Selects/AmountSelect";
@@ -17,7 +18,7 @@ type IngredientEditFormProps = {
 const IngredientEditForm: React.FC<IngredientEditFormProps> = ({ ingredientList, onChange }) => {
 	const [ingredientName, setIngredientName] = useState<string>("");
 	const [amount, setAmount] = useState<number>(0);
-	const [measureUnit, setMeasureUnit] = useState<MeasureUnit>("");
+	const [measureUnit, setMeasureUnit] = useState<MeasureUnit>(MeasureUnitValue.unit);
 
 	const resetStates = () => {
 		setIngredientName("");
@@ -51,10 +52,10 @@ const IngredientEditForm: React.FC<IngredientEditFormProps> = ({ ingredientList,
 								Selected ingredient
 							</label>
 
-							<span className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
+							<div className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm bg-white shadow-[0_1px_2px_rgba(15,23,42,.15)] focus:outline-none focus:ring-1 focus:ring-black focus:border-black disabled:bg-slate-100">
 								{ingredientName}
 								<CancelButton onClick={() => resetStates()} />
-							</span>
+							</div>
 						</div>
 						<div className="grid grid-cols-3 items-center gap-4">
 							<AmountSelect amount={amount} onSelect={setAmount} />

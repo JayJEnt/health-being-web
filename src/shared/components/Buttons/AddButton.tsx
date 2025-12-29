@@ -9,7 +9,7 @@ const AddButton: React.FC<Props> = ({ onClick = () => {}, className = "", disabl
 		<button
 			type="button"
 			onClick={onClick}
-			className={`bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 ${className}`}
+			className={`bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:bg-slate-100 ${className}`}
 			disabled={disabled}
 		>
 			Add

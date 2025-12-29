@@ -3,10 +3,6 @@ type Props = {
 	children?: React.ReactNode;
 	className?: string;
 	disabled?: boolean;
-	// "aria-label"?: string;
-	// "aria-busy"?: boolean | "true" | "false";
-	// title?: string;
-	// key?: string;
 };
 
 const GenericButton: React.FC<Props> = ({
@@ -14,7 +10,6 @@ const GenericButton: React.FC<Props> = ({
 	children,
 	className = "",
 	disabled = false,
-	// ...rest
 }) => {
 	return (
 		<button
@@ -22,7 +17,6 @@ const GenericButton: React.FC<Props> = ({
 			onClick={onClick}
 			className={`text-black ${className}`}
 			disabled={disabled}
-			// {...rest}
 		>
 			{children}
 		</button>

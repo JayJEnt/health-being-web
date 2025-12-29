@@ -15,6 +15,7 @@ const AmountSelect: React.FC<AmountSelectProps> = ({ amount, onSelect }) => {
 				placeholder="e.g. 500"
 				value={Number.isFinite(amount) ? amount : 0}
 				onChange={(e) => onSelect(Number(e.target.value))}
+				className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm bg-white shadow-[0_1px_2px_rgba(15,23,42,.15)] focus:outline-none focus:ring-1 focus:ring-black focus:border-black disabled:bg-slate-100"
 			/>
 		</div>
 	);

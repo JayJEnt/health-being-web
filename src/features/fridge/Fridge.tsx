@@ -6,8 +6,8 @@ import type {
 	IngredientRefrigeratorCreate,
 	IngredientRefrigeratorResponse,
 } from "../../shared/models/ingredient_refrigerator";
-import { IngredientsAddForm } from "./components/FridgeAddForm";
-import IngredientsList from "./components/FridgeList";
+import RefrigeEditForm from "./components/FridgeAddForm";
+import FridgeList from "./components/FridgeList";
 
 const Fridge: React.FC = () => {
 	const [productsList, setProductsList] = useState<IngredientRefrigeratorResponse[]>([]);
@@ -26,7 +26,7 @@ const Fridge: React.FC = () => {
 
 	const onAdd = async (ingredient: IngredientQuantity) => {
 		const payload: IngredientRefrigeratorCreate = {
-			name: ingredient.name.trim(),
+			name: ingredient.name,
 			amount: ingredient.amount,
 			measure_unit: ingredient.measure_unit,
 		};
@@ -100,12 +100,7 @@ const Fridge: React.FC = () => {
 						{/* OVERLAY WITH LIST ON TOP OF THE CHAMBER */}
 						<div className="absolute inset-[6%]  z-40 flex items-start justify-center px-2">
 							<div className="w-full max-h-full overflow-y-auto">
-								<IngredientsList
-									items={productsList}
-									onDelete={onDelete}
-									title="In fridge"
-									variant={"fridge"}
-								/>
+								<FridgeList ingredientList={productsList} onRemove={onDelete} />
 							</div>
 						</div>
 					</div>
@@ -156,7 +151,7 @@ const Fridge: React.FC = () => {
 					{/* OVERLAY WITH FORM ON THE DOOR */}
 					<div className="absolute inset-[14%] sm:inset-[12%] md:inset-[11%] z-40 flex items-start justify-center px-3">
 						<div className="w-full max-h-full overflow-y-auto">
-							<IngredientsAddForm onAdd={onAdd} variant={"fridge"} />
+							<RefrigeEditForm onChange={onAdd} />
 						</div>
 					</div>
 				</div>

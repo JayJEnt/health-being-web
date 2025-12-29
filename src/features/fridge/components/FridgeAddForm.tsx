@@ -1,116 +1,94 @@
 import { useMemo, useState } from "react";
-
-import { ApiError } from "../../../shared/api/client";
+import AddButton from "../../../shared/components/Buttons/AddButton";
+import CancelButton from "../../../shared/components/Buttons/CancelButton";
+import IngredientSearchInput from "../../../shared/components/SearchInputs/IngredientSearchInput";
 import type { MeasureUnit } from "../../../shared/models/enum_utils";
-import { MeasureUnit as MU } from "../../../shared/models/enum_utils";
+import { MeasureUnit as MeasureUnitValue } from "../../../shared/models/enum_utils";
 import type { IngredientQuantity } from "../../../shared/models/ingredient";
-import IngredientPicker, { type IngredientSelection } from "./FridgePicker";
+import AmountSelect from "../../recipeEditForm/components/Selects/AmountSelect";
+import MeasureUnitSelect from "../../recipeEditForm/components/Selects/MeasureUnitSelect";
 
-type Variant = "default" | "fridge";
-
-type VariantStyles = {
-	wrapper: string;
-	title?: string;
-	form: string;
-	button: string;
+type RefrigeAddFormProps = {
+	onChange: (ingredient: IngredientQuantity) => void;
 };
 
-const VARIANT_STYLES: Record<Variant, VariantStyles> = {
-	default: {
-		wrapper: "",
-		title: undefined,
-		form: "flex flex-col gap-3",
-		button:
-			"mt-2 px-4 py-2 rounded text-white bg-green-600 hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed",
-	},
-	fridge: {
-		wrapper: "",
-		title: "text-sm sm:text-base font-semibold mb-4 text-center text-slate-800",
-		form: "flex flex-col gap-3",
-		button:
-			"mt-2 w-full px-4 py-2.5 rounded-md text-sm sm:text-base font-medium text-white bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed shadow-[0_2px_4px_rgba(16,185,129,.4)]",
-	},
-};
-
-type IngredientsAddFormProps = {
-	onAdd: (row: IngredientQuantity) => void | Promise<void>;
-	onError?: (msg: string | null) => void;
-	variant?: Variant;
-	className?: string;
-};
-
-export function IngredientsAddForm({
-	onAdd,
-	onError,
-	variant = "default",
-	className = "",
-}: IngredientsAddFormProps) {
-	const [selection, setSelection] = useState<IngredientSelection>({
-		ingredient: null,
-		name: "",
-		amount: 0,
-		measure_unit: MU.unit as MeasureUnit,
-	});
+const RefrigeAddForm: React.FC<RefrigeAddFormProps> = ({ onChange }) => {
+	const [ingredientName, setIngredientName] = useState<string>("");
+	const [amount, setAmount] = useState<number>(0);
+	const [measureUnit, setMeasureUnit] = useState<MeasureUnit>(MeasureUnitValue.unit);
 
 	const [adding, setAdding] = useState(false);
-
 	const canAdd = useMemo(
-		() => !!selection.ingredient && Number.isFinite(selection.amount) && selection.amount > 0,
-		[selection.ingredient, selection.amount],
+		() => !!ingredientName && Number.isFinite(amount) && amount > 0,
+		[ingredientName, amount],
 	);
 
-	const handleAdd = async (): Promise<void> => {
+	const resetStates = () => {
+		setIngredientName("");
+		setAmount(0);
+		setMeasureUnit("");
+	};
+
+	const addIngredient = (ingredient: IngredientQuantity) => {
 		if (!canAdd || adding) return;
 
 		setAdding(true);
-		onError?.(null);
+		onChange(ingredient);
 
-		const row: IngredientQuantity = {
-			name: selection.name.trim(),
-			amount: selection.amount,
-			measure_unit: selection.measure_unit,
-		};
-
-		try {
-			await onAdd(row);
-			setSelection({
-				ingredient: null,
-				name: "",
-				amount: 0,
-				measure_unit: MU.unit as MeasureUnit,
-			});
-		} catch (err: unknown) {
-			const msg = err instanceof ApiError ? err.message : "Unexpected error";
-			onError?.(msg);
-		} finally {
-			setAdding(false);
-		}
+		resetStates();
+		setAdding(false);
 	};
 
-	const styles = VARIANT_STYLES[variant];
-
 	return (
-		<div className={`${styles.wrapper} ${className}`}>
-			{styles.title && <h3 className={styles.title}>Add New Ingredient</h3>}
+		<div>
+			<h3 className="text-sm sm:text-base font-semibold mb-4 text-center text-slate-800">
+				Add New Ingredient
+			</h3>
 
-			<div className={styles.form}>
-				<IngredientPicker
-					value={selection}
-					onChange={setSelection}
-					disabled={adding}
-					variant={variant}
-				/>
+			<div className="flex flex-col gap-3">
+				{ingredientName ? (
+					<div>
+						<label
+							className="text-xs sm:text-sm font-medium text-slate-700"
+							htmlFor="selected-ingredient"
+						>
+							Selected ingredient
+						</label>
 
-				<button
-					type="button"
+						<div className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm bg-white shadow-[0_1px_2px_rgba(15,23,42,.15)] focus:outline-none focus:ring-1 focus:ring-black focus:border-black disabled:bg-slate-100">
+							{ingredientName}
+							<CancelButton onClick={() => resetStates()} />
+						</div>
+					</div>
+				) : (
+					<div>
+						<label
+							className="text-xs sm:text-sm font-medium text-slate-700"
+							htmlFor="search-ingredient"
+						>
+							Search ingredient
+						</label>
+
+						<IngredientSearchInput onSelect={setIngredientName} />
+					</div>
+				)}
+
+				<div className="grid grid-cols-2 items-center gap-4">
+					<AmountSelect amount={amount} onSelect={setAmount} />
+
+					<MeasureUnitSelect
+						value={{ measureUnit: measureUnit }}
+						onSelect={(e) => setMeasureUnit(e.target.value as MeasureUnit)}
+					/>
+				</div>
+
+				<AddButton
 					disabled={!canAdd || adding}
-					onClick={() => void handleAdd()}
-					className={styles.button}
-					aria-busy={adding}
-				>
-					{adding ? "Adding…" : "Add Ingredient"}
-				</button>
+					onClick={() => addIngredient({ name: ingredientName, amount, measure_unit: measureUnit })}
+				/>
 			</div>
 		</div>
 	);
-}
+};
+
+export default RefrigeAddForm;

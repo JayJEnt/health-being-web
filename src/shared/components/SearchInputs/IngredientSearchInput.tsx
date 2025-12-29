@@ -33,7 +33,7 @@ const IngredientSearchInput: React.FC<IngredientSearchInputProps> = ({ onSelect 
 				placeholder="Search ingredients..."
 				value={query}
 				onChange={(e) => setQuery(e.target.value)}
-				className="w-full border rounded px-3 py-2"
+				className="w-full border border-slate-300 rounded-md px-3 py-2 text-sm bg-white shadow-[0_1px_2px_rgba(15,23,42,.15)] focus:outline-none focus:ring-1 focus:ring-black focus:border-black disabled:bg-slate-100"
 			/>
 
 			{loading && <LoadingSpinner />}
