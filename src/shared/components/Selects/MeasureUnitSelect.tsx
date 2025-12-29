@@ -1,7 +1,4 @@
-import {
-	MeasureUnit,
-	type MeasureUnit as MeasureUnitType,
-} from "../../../../shared/models/enum_utils";
+import { MeasureUnit, type MeasureUnit as MeasureUnitType } from "../../models/enum_utils";
 
 type MeasureUnitSelectProps = {
 	value: { measureUnit: MeasureUnitType };

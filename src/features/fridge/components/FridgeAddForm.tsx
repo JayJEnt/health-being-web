@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import AddButton from "../../../shared/components/Buttons/AddButton";
 import CancelButton from "../../../shared/components/Buttons/CancelButton";
 import IngredientSearchInput from "../../../shared/components/SearchInputs/IngredientSearchInput";
+import AmountSelect from "../../../shared/components/Selects/AmountSelect";
+import MeasureUnitSelect from "../../../shared/components/Selects/MeasureUnitSelect";
 import type { MeasureUnit } from "../../../shared/models/enum_utils";
 import { MeasureUnit as MeasureUnitValue } from "../../../shared/models/enum_utils";
 import type { IngredientQuantity } from "../../../shared/models/ingredient";
-import AmountSelect from "../../recipeEditForm/components/Selects/AmountSelect";
-import MeasureUnitSelect from "../../recipeEditForm/components/Selects/MeasureUnitSelect";
 
 type RefrigeAddFormProps = {
 	onChange: (ingredient: IngredientQuantity) => void;

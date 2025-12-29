@@ -3,12 +3,12 @@ import AddButton from "../../../../shared/components/Buttons/AddButton";
 import CancelButton from "../../../../shared/components/Buttons/CancelButton";
 
 import IngredientSearchInput from "../../../../shared/components/SearchInputs/IngredientSearchInput";
+import AmountSelect from "../../../../shared/components/Selects/AmountSelect";
+import MeasureUnitSelect from "../../../../shared/components/Selects/MeasureUnitSelect";
 import type { MeasureUnit } from "../../../../shared/models/enum_utils";
 import { MeasureUnit as MeasureUnitValue } from "../../../../shared/models/enum_utils";
 import type { IngredientQuantity } from "../../../../shared/models/ingredient";
 import IngredientEditorList from "../Lists/IngredientEditorList";
-import AmountSelect from "../Selects/AmountSelect";
-import MeasureUnitSelect from "../Selects/MeasureUnitSelect";
 
 type IngredientEditFormProps = {
 	ingredientList: IngredientQuantity[];
