@@ -1,7 +1,9 @@
 import type { RecipeResponse } from "../../shared/models/recipe";
+import CategoryList from "./components/CategoryList";
 import DietList from "./components/DietList";
 import IngredientList from "./components/IngredientList";
 import InstructionList from "./components/InstructionList";
+import MicronutrientsList from "./components/MicronutrientsList";
 
 type Props = {
 	recipe: RecipeResponse;
@@ -25,9 +27,11 @@ const RecipeView: React.FC<Props> = ({ recipe, imageUrl }) => {
 					<p className="text-gray-700 dark:text-gray-300 leading-relaxed">{recipe.description}</p>
 
 					<DietList dietList={recipe.diet}></DietList>
+					<CategoryList categoryList={recipe.category}></CategoryList>
 					<InstructionList instructionList={recipe.instructions}></InstructionList>
 				</div>
 
+				<MicronutrientsList micronutrientsList={recipe.micronutrients}></MicronutrientsList>
 				<IngredientList ingredientList={recipe.ingredient} />
 			</div>
 		</div>

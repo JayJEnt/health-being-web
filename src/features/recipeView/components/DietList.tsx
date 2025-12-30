@@ -5,7 +5,7 @@ type DietListProps = {
 };
 
 const DietList: React.FC<DietListProps> = ({ dietList }) => {
-	if (!dietList) return;
+	if (!dietList || dietList?.length < 1) return;
 	return (
 		<div>
 			<h2 className="text-xl font-semibold mb-2">Diets</h2>

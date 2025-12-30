@@ -7,6 +7,7 @@ import type { DietCreate } from "../../shared/models/diet";
 import type { Category } from "../../shared/models/enum_utils";
 import type { IngredientQuantity } from "../../shared/models/ingredient";
 import { EMPTY_RECIPE, type RecipeCreate, type RecipeResponse } from "../../shared/models/recipe";
+import CategoryEditForm from "./components/Editors/CategoryEditor";
 import DietEditForm from "./components/Editors/DietEditor";
 import IngredientEditForm from "./components/Editors/IngredientEditor";
 import InstructionEditForm from "./components/Editors/InstructionsEditor";
@@ -23,8 +24,7 @@ const RecipeEditForm: React.FC = () => {
 	const [instructions, setInstructions] = useState<string[]>([]);
 	const [diet, setDiet] = useState<DietCreate[]>([]);
 	const [ingredient, setIngredient] = useState<IngredientQuantity[]>([]);
-	const [category, setCategory] = useState<Category>("BBQ"); // need to adjust backend for multiple categories
-	// const [category, setCategory] = useState<Category[]>([]);
+	const [category, setCategory] = useState<Category[]>([]);
 
 	async function uploadImage(image: File, recipeId: number) {
 		const formData = new FormData();
@@ -66,6 +66,7 @@ const RecipeEditForm: React.FC = () => {
 			<TitleInput title={title} onChange={setTitle} />
 			<DescriptionInput description={description} onChange={setDescription} />
 			<DietEditForm dietList={diet} onChange={setDiet} />
+			<CategoryEditForm categoryList={category} onChange={setCategory} />
 			<IngredientEditForm ingredientList={ingredient} onChange={setIngredient} />
 			<InstructionEditForm instructionList={instructions} onChange={setInstructions} />
 
