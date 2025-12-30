@@ -1,6 +1,8 @@
 import type { PropsWithChildren } from "react";
+
 import LoginPage from "../pages/authorization/Login";
-import LoadingComponent from "../shared/components/Loading/LoadingComponent";
+
+import LoadingSpinner from "../shared/components/Loading/LoadingSpinner";
 import { useAuth } from "../shared/hooks/useAuth";
 import type { User } from "../shared/models/user";
 
@@ -12,7 +14,7 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
 	const { user } = useAuth();
 
 	if (user === undefined) {
-		return <LoadingComponent />;
+		return <LoadingSpinner />;
 	}
 
 	if (!user) {

@@ -7,9 +7,9 @@ export interface RecipeCreate {
 	title: string;
 	description: string;
 	instructions: string[];
-	diet?: DietCreate[] | null;
+	diet: DietCreate[];
 	ingredient: IngredientQuantity[];
-	category: Category;
+	category: Category[];
 }
 
 export interface RecipeOverview {
@@ -21,13 +21,13 @@ export interface Recipe extends RecipeOverview {
 	author_id: number;
 	description: string;
 	instructions: string[];
-	category: Category;
+	category: Category[];
 }
 
 export interface RecipeResponse extends Recipe {
-	diet?: DietCreate[] | null;
+	diet: DietCreate[];
 	ingredient: IngredientQuantity[];
-	micronutrients?: MicronutrientsTotal | null;
+	micronutrients: MicronutrientsTotal;
 }
 
 export interface RecipeFilter {
@@ -38,3 +38,12 @@ export interface RecipeFilter {
 	only_followed_authors?: boolean;
 	only_owned_ingredients?: boolean;
 }
+
+export const EMPTY_RECIPE: RecipeCreate = {
+	title: "",
+	description: "",
+	instructions: [],
+	diet: [],
+	ingredient: [],
+	category: [],
+};

@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
 import { GoogleIcon } from "../../shared/assets/GoogleIcon";
-import GenericButton from "../../shared/components/Generic/Button";
+import GenericButton from "../../shared/components/Buttons/Button";
+import SubmitButton from "../../shared/components/Buttons/SubmitButton";
 import { useAuth } from "../../shared/hooks/useAuth";
 
 const LoginPage: React.FC = () => {
@@ -67,7 +68,7 @@ const LoginPage: React.FC = () => {
 					<Link to="/register">Don't have an account yet?</Link>
 					<Link to="/forgot_password">Forgot your password?</Link>
 					{error && <p className="text-red-500 text-sm text-center">{error}</p>}
-					<GenericButton type="submit">Login</GenericButton>
+					<SubmitButton>Login</SubmitButton>
 
 					<div className="relative my-4">
 						<div className="absolute inset-0 flex items-center">
@@ -79,7 +80,6 @@ const LoginPage: React.FC = () => {
 					</div>
 
 					<GenericButton
-						type="button"
 						onClick={() => void handleGoogleLogin()}
 						className="flex items-center justify-center gap-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition"
 					>

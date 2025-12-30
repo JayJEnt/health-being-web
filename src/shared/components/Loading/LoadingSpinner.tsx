@@ -4,7 +4,7 @@ interface LoadingProps {
 	children?: React.ReactNode;
 }
 
-const LoadingComponent: React.FC<LoadingProps> = ({ children }) => {
+const LoadingSpinner: React.FC<LoadingProps> = ({ children }) => {
 	return (
 		<div className="py-8 text-center">
 			<div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
@@ -13,4 +13,4 @@ const LoadingComponent: React.FC<LoadingProps> = ({ children }) => {
 	);
 };
 
-export default LoadingComponent;
+export default LoadingSpinner;

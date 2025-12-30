@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import NavigationBar from "./features/navigation_bar/NavigationBar.tsx";
+import NavigationBar from "./features/navigationBar/NavigationBar.tsx";
 import AdminRoutes from "./routers/Admin.tsx";
 import ProtectedRoute from "./routers/ProtectedRoute.tsx";
 import PublicRoutes from "./routers/Public.tsx";

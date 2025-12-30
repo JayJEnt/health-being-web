@@ -6,7 +6,7 @@ import {
 	UserIcon,
 	UserPlusIcon,
 } from "../../../shared/assets/icons";
-import GenericButton from "../../../shared/components/Generic/Button";
+import GenericButton from "../../../shared/components/Buttons/Button";
 import NavButton from "./NavButton";
 
 interface UserDropdownProps {
@@ -29,7 +29,6 @@ const UserDropdown: React.FC<UserDropdownProps> = ({
 	return (
 		<div className="relative">
 			<GenericButton
-				type="button"
 				onClick={toggle}
 				className="flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
 			>

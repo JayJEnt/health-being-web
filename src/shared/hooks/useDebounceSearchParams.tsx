@@ -19,7 +19,7 @@ export function useDebouncedSearch<T>({
 	query,
 	fetcher,
 	delay = 300,
-	minLength = 2,
+	minLength = 1,
 	enabled = true,
 }: UseDebouncedSearchParams<T>): UseDebouncedSearchResult<T> {
 	const [data, setData] = useState<T | null>(null);

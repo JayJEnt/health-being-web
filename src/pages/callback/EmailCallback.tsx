@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { oauth2Api } from "../../shared/api/endpoints/public/oauth2";
-import GenericButton from "../../shared/components/Generic/Button";
+import SubmitButton from "../../shared/components/Buttons/SubmitButton";
 import { useSaveQueryTokenToStorage } from "../../shared/hooks/useQueryToken";
 
 const EmailCallbackPage: React.FC = () => {
@@ -52,9 +52,7 @@ const EmailCallbackPage: React.FC = () => {
 							onChange={(e) => setEmail(e.target.value)}
 							className="px-4 py-2 rounded border focus:outline-none focus:ring w-full bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white"
 						/>
-						<GenericButton type="submit" onClick={() => handleSubmit}>
-							Send new authentication link
-						</GenericButton>
+						<SubmitButton>Send new authentication link</SubmitButton>
 					</form>
 				) : (
 					<p className="text-green-500 text-sm text-center">{message}</p>

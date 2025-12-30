@@ -1,8 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline"; //Imported Icons
 import { useState } from "react";
 
-import HomeCarouselTile from "./HomeCarouselTile"; //Carousel tile Component
-import TilesArray from "./TilesArray.ts"; //Static possible tiles to display imported from file
+import HomeCarouselTile from "./components/HomeCarouselTile.tsx"; //Carousel tile Component
+import TilesArray from "./components/TilesArray.ts"; //Static possible tiles to display imported from file
 
 const HomeCarousel: React.FC = () => {
 	const [currentTile, setCurrentTile] = useState(0); //CurrentTile variable to determine which tiles to display

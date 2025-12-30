@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { api } from "../../shared/api/client";
-import GenericButton from "../../shared/components/Generic/Button";
+import GenericButton from "../../shared/components/Buttons/Button";
 import type { User } from "../../shared/models/user";
 
 type Props = {
@@ -65,14 +65,12 @@ const UserCard: React.FC<Props> = ({ user, deleteHandler }) => {
 					/>
 					<div className="flex gap-2">
 						<GenericButton
-							type="button"
 							className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
 							onClick={void handleSave}
 						>
 							Save
 						</GenericButton>
 						<GenericButton
-							type="button"
 							className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
 							onClick={handleCancel}
 						>
@@ -88,14 +86,12 @@ const UserCard: React.FC<Props> = ({ user, deleteHandler }) => {
 					<div className="text-sm text-gray-600">Role: {user.role}</div>
 					<div className="flex gap-4">
 						<GenericButton
-							type="button"
 							className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mt-2"
 							onClick={() => setIsEditing(true)}
 						>
 							Edit
 						</GenericButton>
 						<GenericButton
-							type="button"
 							className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 mt-2"
 							onClick={() => deleteHandler(user)}
 						>

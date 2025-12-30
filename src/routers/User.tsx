@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 
-import RecipeSubmitPage from "../pages/RecipeSubmit.tsx";
+import RecipeSubmitPage from "../pages/recipes/RecipeSubmit.tsx";
 import UserProfile from "../pages/UserProfile.tsx";
 
 function UserRoutes() {

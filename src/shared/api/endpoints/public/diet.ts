@@ -6,6 +6,9 @@ export const dietApi = {
 	getByName: (name: string, signal?: AbortSignal) =>
 		api.get<DietResponse>(`${settings.DIET_ENDPOINT}`, { name }, { signal }),
 
+	getByPhrase: (phrase: string, signal?: AbortSignal) =>
+		api.get<DietResponse[]>(`${settings.DIET_ENDPOINT}`, { phrase }, { signal }),
+
 	getById: (diet_id: number) => api.get<DietResponse>(`${settings.DIET_ENDPOINT}`, { diet_id }),
 
 	getAll: () => api.get<DietResponse[]>(`${settings.DIET_ENDPOINT}`),

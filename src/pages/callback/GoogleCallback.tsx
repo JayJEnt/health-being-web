@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getTokenFromStorage } from "../../shared/authentication/handleToken";
-import GenericButton from "../../shared/components/Generic/Button";
+import SubmitButton from "../../shared/components/Buttons/SubmitButton";
 import { useSaveQueryTokenToStorage } from "../../shared/hooks/useQueryToken";
 
 const GoogleCallbackPage: React.FC = () => {
@@ -28,15 +28,14 @@ const GoogleCallbackPage: React.FC = () => {
 					<div className="text-green-500 mb-4">{message}</div>
 				)}
 
-				<GenericButton
+				<SubmitButton
 					className="mx-auto"
-					type="submit"
 					onClick={() => {
 						window.location.href = "/";
 					}}
 				>
 					Go to Home
-				</GenericButton>
+				</SubmitButton>
 			</div>
 		</div>
 	);
