@@ -19,6 +19,8 @@ class Settings {
 	USER_OWNER_ENDPOINT: string = "/user/owner";
 	VITAMIN_ENDPOINT: string = "/vitamin";
 
+	RECIPE_IMAGES_BASE_URL: string = "https://health-being-recipe-images.s3.eu-north-1.amazonaws.com";
+
 	RECIPES_PAGE_SIZE: number = 18;
 
 	AUTH_TOKEN_KEY: string = "app.auth.token";

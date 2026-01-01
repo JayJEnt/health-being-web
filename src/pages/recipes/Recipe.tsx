@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import RecipeView from "../../features/recipeView/RecipeView";
-import { imagesApi } from "../../shared/api/endpoints/public/images";
 import { recipeApi } from "../../shared/api/endpoints/public/recipe";
-import placeholderImage from "../../shared/assets/defaultFood.jpg";
 import LoadingSpinner from "../../shared/components/Loading/LoadingSpinner";
+import { settings } from "../../shared/config";
 import type { RecipeResponse } from "../../shared/models/recipe";
 
 const RecipePage: React.FC = () => {
 	const { id } = useParams();
 	const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
-	const [imageUrl, setImageUrl] = useState<string | null>(null);
+	const imageUrl = `${settings.RECIPE_IMAGES_BASE_URL}/img_${id}`;
 
 	useEffect(() => {
 		if (!id) return;
@@ -28,32 +27,8 @@ const RecipePage: React.FC = () => {
 		void fetchRecipe();
 	}, [id]);
 
-	useEffect(() => {
-		if (!id) return;
-
-		let objectUrlToRevoke: string | null = null;
-
-		const fetchImageUrl = async () => {
-			try {
-				const fetchedImage = await imagesApi.download(id);
-
-				const url = URL.createObjectURL(fetchedImage);
-				objectUrlToRevoke = url;
-				setImageUrl(url);
-			} catch (err) {
-				console.error("Couldn't fetch image URL:", err);
-			}
-		};
-
-		void fetchImageUrl();
-
-		return () => {
-			if (objectUrlToRevoke) URL.revokeObjectURL(objectUrlToRevoke);
-		};
-	}, [id]);
-
 	if (!recipe) return <LoadingSpinner />;
-	return <RecipeView recipe={recipe} imageUrl={imageUrl || placeholderImage} />;
+	return <RecipeView recipe={recipe} imageUrl={imageUrl} />;
 };
 
 export default RecipePage;

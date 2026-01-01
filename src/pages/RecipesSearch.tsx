@@ -6,6 +6,7 @@ import { recipeApi } from "../shared/api/endpoints/public/recipe";
 import { recipeApi as recipeApiUser } from "../shared/api/endpoints/user_role/recipe";
 import GenericButton from "../shared/components/Buttons/Button";
 import LoadingSpinner from "../shared/components/Loading/LoadingSpinner";
+import RecipeOverviewCard from "../shared/components/RecipeOverview/RecipeOverview";
 import { settings } from "../shared/config";
 import { useAuth } from "../shared/hooks/useAuth";
 import type { RecipeFilter, RecipeOverview } from "../shared/models/recipe";
@@ -200,35 +201,12 @@ const RecipesSearch: React.FC = () => {
 							className="mx-auto mt-8 grid max-w-7xl grid-cols-3 gap-6 p-4"
 						>
 							{displayedRecipes.map((recipe, index) => (
-								<li
-									key={`${recipe.id}-${index}`}
-									className="group relative aspect-square cursor-pointer overflow-hidden rounded-xl
-										transition-all duration-300 hover:scale-[1.02] hover:shadow-lg
-										animate-fade-in"
-									style={{
-										animationDelay: `${(index % (isLoopingMode ? results.length : settings.RECIPES_PAGE_SIZE)) * 50}ms`,
-									}}
-									aria-labelledby={`title-${recipe.id}-${index}`}
-								>
-									<img
-										src={`/api/recipes/${recipe.id}/image`}
-										alt={recipe.title}
-										className="h-full w-full rounded-xl object-cover"
-										loading="lazy"
+								<li key={`${recipe.id}-${index}`}>
+									<RecipeOverviewCard
+										title={recipe.title}
+										description={recipe.description}
+										image={`${settings.RECIPE_IMAGES_BASE_URL}/img_${recipe.id}`}
 									/>
-									<div
-										className="absolute inset-0 flex flex-col justify-end bg-gradient-to-b from-transparent
-										via-black/60 to-black/90 p-6 text-white opacity-0 transition-all duration-300
-										group-hover:opacity-100"
-									>
-										<h2
-											id={`title-${recipe.id}-${index}`}
-											className="mb-2 translate-y-5 text-xl font-semibold opacity-0 transition-all duration-300
-											group-hover:translate-y-0 group-hover:opacity-100"
-										>
-											{recipe.title}
-										</h2>
-									</div>
 								</li>
 							))}
 						</ul>
