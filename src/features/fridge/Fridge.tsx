@@ -5,12 +5,15 @@ import type {
 	IngredientRefrigeratorCreate,
 	IngredientRefrigeratorResponse,
 } from "../../shared/models/ingredient_refrigerator";
-import fridgeImage from "./assets/fridge.jpg";
+import fridge0 from "./assets/fridge_0.jpg";
+import fridge1 from "./assets/fridge_1.jpg";
+import fridge2 from "./assets/fridge_2.jpg";
 import RefrigeEditForm from "./components/FridgeAddForm";
 import FridgeList from "./components/FridgeList";
 
 const Fridge: React.FC = () => {
 	const [productsList, setProductsList] = useState<IngredientRefrigeratorResponse[]>([]);
+	const [fridgeImage, setFridgeImage] = useState<string>(fridge0);
 
 	useEffect(() => {
 		async function fetchProductsList() {
@@ -23,6 +26,13 @@ const Fridge: React.FC = () => {
 		}
 		void fetchProductsList();
 	}, []);
+
+	useEffect(() => {
+		const len = productsList.length;
+		if (len >= 10) setFridgeImage(fridge2);
+		else if (len >= 5) setFridgeImage(fridge1);
+		else setFridgeImage(fridge0);
+	}, [productsList]);
 
 	const onAdd = async (ingredient: IngredientQuantity) => {
 		const payload: IngredientRefrigeratorCreate = {
