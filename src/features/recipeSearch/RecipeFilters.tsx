@@ -1,5 +1,5 @@
 import type React from "react";
-import GenericButton from "../../shared/components/Generic/Button";
+import GenericButton from "../../shared/components/Buttons/Button";
 import type { RecipeFilter } from "../../shared/models/recipe";
 
 export const filterLabels: Record<keyof RecipeFilter, string> = {

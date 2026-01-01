@@ -2,7 +2,7 @@ import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import RecipeFilters, { filterLabels } from "../features/recipe/RecipeFilters";
+import RecipeFilters, { filterLabels } from "../features/recipeSearch/RecipeFilters";
 import { recipeApi } from "../shared/api/endpoints/public/recipe";
 import { recipeApi as recipeApiUser } from "../shared/api/endpoints/user_role/recipe";
 import GenericButton from "../shared/components/Buttons/Button";
