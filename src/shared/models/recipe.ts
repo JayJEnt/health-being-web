@@ -15,11 +15,11 @@ export interface RecipeCreate {
 export interface RecipeOverview {
 	id: number;
 	title: string;
+	description: string;
 }
 
 export interface Recipe extends RecipeOverview {
 	author_id: number;
-	description: string;
 	instructions: string[];
 	category: Category[];
 }
