@@ -7,9 +7,15 @@ export type RecipeOverviewCardProps = {
 	title: string;
 	description: string;
 	image: string;
+	onClick?: () => void; // Potentialy it could be always navigating to itself TBC
 };
 
-const RecipeOverviewCard: React.FC<RecipeOverviewCardProps> = ({ title, description, image }) => {
+const RecipeOverviewCard: React.FC<RecipeOverviewCardProps> = ({
+	title,
+	description,
+	image,
+	onClick,
+}) => {
 	const [bgImage, setBgImage] = useState<string>(placeholderImage);
 
 	useEffect(() => {
@@ -21,8 +27,10 @@ const RecipeOverviewCard: React.FC<RecipeOverviewCardProps> = ({ title, descript
 	}, [image]);
 
 	return (
-		<motion.div
-			className="relative overflow-hidden rounded-2xl shadow-lg group"
+		<motion.button
+			type="button"
+			onClick={onClick}
+			className="relative w-full text-left overflow-hidden rounded-2xl shadow-lg group"
 			initial="rest"
 			whileHover="hover"
 			animate="rest"
@@ -59,7 +67,7 @@ const RecipeOverviewCard: React.FC<RecipeOverviewCardProps> = ({ title, descript
 					</motion.p>
 				</motion.div>
 			</div>
-		</motion.div>
+		</motion.button>
 	);
 };
 

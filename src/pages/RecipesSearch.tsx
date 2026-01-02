@@ -1,6 +1,6 @@
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { recipeApi } from "../shared/api/endpoints/public/recipe";
 import { recipeApi as recipeApiUser } from "../shared/api/endpoints/user_role/recipe";
@@ -24,6 +24,7 @@ const RecipesSearch: React.FC = () => {
 	const [error, setError] = useState<string | null>(null);
 	const sentinelRef = useRef<HTMLDivElement>(null);
 	const isLoadingRef = useRef(false);
+	const navigate = useNavigate();
 
 	const filterLabels: Record<keyof RecipeFilter, string> = {
 		allergies_off: "Exclude allergies",
@@ -206,6 +207,7 @@ const RecipesSearch: React.FC = () => {
 										title={recipe.title}
 										description={recipe.description}
 										image={`${settings.RECIPE_IMAGES_BASE_URL}/img_${recipe.id}`}
+										onClick={() => navigate(`/recipe/${recipe.id}`)}
 									/>
 								</li>
 							))}
