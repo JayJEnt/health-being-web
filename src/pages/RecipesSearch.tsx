@@ -2,6 +2,7 @@ import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+import RecipeFilters, { filterLabels } from "../features/recipeSearch/RecipeFilters";
 import { recipeApi } from "../shared/api/endpoints/public/recipe";
 import { recipeApi as recipeApiUser } from "../shared/api/endpoints/user_role/recipe";
 import GenericButton from "../shared/components/Buttons/Button";
@@ -25,15 +26,6 @@ const RecipesSearch: React.FC = () => {
 	const sentinelRef = useRef<HTMLDivElement>(null);
 	const isLoadingRef = useRef(false);
 	const navigate = useNavigate();
-
-	const filterLabels: Record<keyof RecipeFilter, string> = {
-		allergies_off: "Exclude allergies",
-		dislike_off: "Exclude dislikes",
-		only_favourite_ingredients: "Favourite ingredients",
-		only_favourite_diets: "Favourite diets",
-		only_followed_authors: "Followed authors",
-		only_owned_ingredients: "Owned ingredients",
-	};
 
 	const [filters, setFilters] = useState<RecipeFilter>(() => {
 		const initial = {} as RecipeFilter;
@@ -137,39 +129,14 @@ const RecipesSearch: React.FC = () => {
 	}, [displayedRecipes, loadMore, phrase]);
 
 	return (
-		<main>
+		<div className="flex flex-col md:flex-row min-h-full">
 			{user && (
-				<header className="sticky top-0 z-10 w-full bg-white py-6 shadow-md">
-					{/* Deep search filters */}
-					<div className="flex flex-col gap-4">
-						<div className="px-8">
-							<div className="mx-auto max-w-4xl rounded-lg border border-gray-200 bg-gray-50 p-4">
-								<h3 className="mb-3 text-sm font-semibold text-gray-700">Advanced Filters</h3>
-								<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-									{(Object.keys(filterLabels) as Array<keyof RecipeFilter>).map((filterKey) => (
-										<label
-											key={filterKey}
-											className="flex cursor-pointer items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
-										>
-											<input
-												type="checkbox"
-												checked={filters[filterKey] ?? false}
-												onChange={(e) =>
-													setFilters((prev) => ({ ...prev, [filterKey]: e.target.checked }))
-												}
-												className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-											/>
-											<span>{filterLabels[filterKey]}</span>
-										</label>
-									))}
-								</div>
-							</div>
-						</div>
-					</div>
-				</header>
+				<aside className="w-full md:w-64 flex-shrink-0 border-r border-gray-200 bg-white p-6">
+					<RecipeFilters filters={filters} setFilters={setFilters} />
+				</aside>
 			)}
 
-			<section className="container mx-auto px-4">
+			<section className="flex-1 px-4 py-6 md:px-8">
 				{/* Loading */}
 				{loading && <LoadingSpinner>Fetching recipes...</LoadingSpinner>}
 
@@ -199,7 +166,7 @@ const RecipesSearch: React.FC = () => {
 					<>
 						<ul
 							aria-label="Recipe grid"
-							className="mx-auto mt-8 grid max-w-7xl grid-cols-3 gap-6 p-4"
+							className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
 						>
 							{displayedRecipes.map((recipe, index) => (
 								<li key={`${recipe.id}-${index}`}>
@@ -221,7 +188,7 @@ const RecipesSearch: React.FC = () => {
 					</>
 				)}
 			</section>
-		</main>
+		</div>
 	);
 };
 
