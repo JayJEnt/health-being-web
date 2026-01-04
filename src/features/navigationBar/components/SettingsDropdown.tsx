@@ -23,7 +23,7 @@ const SettingsDropdown: React.FC<Props> = ({ isOpen, toggle, close }) => {
 
 			{isOpen && (
 				<div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg flex flex-col py-2 z-50">
-					<NavButton icon={Cog6ToothIcon} label="Settings" to="/settings" onClick={close} />
+					<NavButton icon={Cog6ToothIcon} label="Settings" to="/user/settings" onClick={close} />
 				</div>
 			)}
 		</div>
