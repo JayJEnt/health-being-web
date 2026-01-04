@@ -1,11 +1,10 @@
-import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { recipeApi } from "../shared/api/endpoints/public/recipe";
 import { recipeApi as recipeApiUser } from "../shared/api/endpoints/user_role/recipe";
-import GenericButton from "../shared/components/Buttons/Button";
-import LoadingSpinner from "../shared/components/Loading/LoadingSpinner";
+import { AsyncState } from "../shared/components/AsyncState/AsyncState";
+import { LoadingSpinner } from "../shared/components/Loading/LoadingSpinner";
 import RecipeOverviewCard from "../shared/components/RecipeOverview/RecipeOverview";
 import { settings } from "../shared/config";
 import { useAuth } from "../shared/hooks/useAuth";
@@ -16,12 +15,12 @@ const RecipesSearch: React.FC = () => {
 	const { phrase } = useParams();
 	const [results, setResults] = useState<RecipeOverview[]>([]);
 	const [displayedRecipes, setDisplayedRecipes] = useState<RecipeOverview[]>([]);
-	const [page, setPage] = useState(1);
-	const [hasMore, setHasMore] = useState(true);
-	const [isLoopingMode, setIsLoopingMode] = useState(false);
-	const [loading, setLoading] = useState(false);
+	const [page, setPage] = useState<number>(1);
+	const [hasMore, setHasMore] = useState<boolean>(true);
+	const [isLoopingMode, setIsLoopingMode] = useState<boolean>(false);
+	const [loading, setLoading] = useState<boolean>(false);
 	const [loadingMore, setLoadingMore] = useState(false);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<Error | null>(null);
 	const sentinelRef = useRef<HTMLDivElement>(null);
 	const isLoadingRef = useRef(false);
 	const navigate = useNavigate();
@@ -68,7 +67,11 @@ const RecipesSearch: React.FC = () => {
 				}
 			} catch (err) {
 				console.error("Failed to load recipes", err);
-				setError("Failed to load recipes. Please try again later.");
+				if (err instanceof Error) {
+					setError(err);
+				} else {
+					setError(new Error("Unknown error, please try again later."));
+				}
 			} finally {
 				setLoading(false);
 			}
@@ -170,56 +173,30 @@ const RecipesSearch: React.FC = () => {
 			)}
 
 			<section className="container mx-auto px-4">
-				{/* Loading */}
-				{loading && <LoadingSpinner>Fetching recipes...</LoadingSpinner>}
+				<AsyncState isLoading={loading} hasNoResults={results.length === 0} error={error}>
+					{/* Results */}
+					<ul
+						aria-label="Recipe grid"
+						className="mx-auto mt-8 grid max-w-7xl grid-cols-3 gap-6 p-4"
+					>
+						{displayedRecipes.map((recipe, index) => (
+							<li key={`${recipe.id}-${index}`}>
+								<RecipeOverviewCard
+									title={recipe.title}
+									description={recipe.description}
+									image={`${settings.RECIPE_IMAGES_BASE_URL}/img_${recipe.id}`}
+									onClick={() => navigate(`/recipe/${recipe.id}`)}
+								/>
+							</li>
+						))}
+					</ul>
 
-				{/* Error */}
-				{error && (
-					<div className="py-8 text-center">
-						<p className="mb-4 text-red-600">{error}</p>
-						<GenericButton
-							onClick={loadRecipes}
-							className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white transition-colors
-                         hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-						>
-							Try again
-						</GenericButton>
-					</div>
-				)}
+					{/* Loading more*/}
+					{loadingMore && <LoadingSpinner />}
 
-				{/* No results */}
-				{!loading && !error && results.length === 0 && (
-					<div className="py-8 text-center text-gray-600">
-						<p>No recipes found matching your search criteria</p>
-					</div>
-				)}
-
-				{/* Display found recipes */}
-				{!loading && !error && displayedRecipes.length > 0 && (
-					<>
-						<ul
-							aria-label="Recipe grid"
-							className="mx-auto mt-8 grid max-w-7xl grid-cols-3 gap-6 p-4"
-						>
-							{displayedRecipes.map((recipe, index) => (
-								<li key={`${recipe.id}-${index}`}>
-									<RecipeOverviewCard
-										title={recipe.title}
-										description={recipe.description}
-										image={`${settings.RECIPE_IMAGES_BASE_URL}/img_${recipe.id}`}
-										onClick={() => navigate(`/recipe/${recipe.id}`)}
-									/>
-								</li>
-							))}
-						</ul>
-
-						{/* Loading */}
-						{loadingMore && <LoadingSpinner>Fetching recipes...</LoadingSpinner>}
-
-						{/* Sentinel element for infinite scroll */}
-						<div ref={sentinelRef} className="h-20 w-full" aria-hidden="true" />
-					</>
-				)}
+					{/* Sentinel element for infinite scroll */}
+					<div ref={sentinelRef} className="h-20 w-full" aria-hidden="true" />
+				</AsyncState>
 			</section>
 		</main>
 	);

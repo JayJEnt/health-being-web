@@ -1,34 +1,26 @@
-import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import { useParams } from "react-router-dom";
 import RecipeView from "../../features/recipeView/RecipeView";
 import { recipeApi } from "../../shared/api/endpoints/public/recipe";
-import LoadingSpinner from "../../shared/components/Loading/LoadingSpinner";
+import { AsyncState } from "../../shared/components/AsyncState/AsyncState";
 import { settings } from "../../shared/config";
+import { useAsync } from "../../shared/hooks/useAsync";
 import type { RecipeResponse } from "../../shared/models/recipe";
 
 const RecipePage: React.FC = () => {
 	const { id } = useParams();
-	const [recipe, setRecipe] = useState<RecipeResponse | null>(null);
-	const imageUrl = `${settings.RECIPE_IMAGES_BASE_URL}/img_${id}`;
+	const safeId = id || ""; // TODO: Handle it more gracefully
+	const imageUrl = `${settings.RECIPE_IMAGES_BASE_URL}/img_${safeId}`;
 
-	useEffect(() => {
-		if (!id) return;
+	const fetchRecipe = useCallback(() => recipeApi.getById(safeId), [safeId]);
 
-		const fetchRecipe = async () => {
-			try {
-				const fetchedRecipe = await recipeApi.getById(id);
+	const { data: recipe, loading, error } = useAsync<RecipeResponse>(fetchRecipe);
 
-				setRecipe(fetchedRecipe);
-			} catch (err) {
-				console.error("Couldn't fetch recipe:", err);
-			}
-		};
-
-		void fetchRecipe();
-	}, [id]);
-
-	if (!recipe) return <LoadingSpinner />;
-	return <RecipeView recipe={recipe} imageUrl={imageUrl} />;
+	return (
+		<AsyncState isLoading={loading} hasNoResults={!recipe} error={error}>
+			{recipe && <RecipeView recipe={recipe} imageUrl={imageUrl} />}
+		</AsyncState>
+	);
 };
 
 export default RecipePage;

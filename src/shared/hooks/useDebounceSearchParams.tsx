@@ -5,14 +5,14 @@ type UseDebouncedSearchParams<T> = {
 	fetcher: (q: string, signal: AbortSignal) => Promise<T>;
 	delay?: number;
 	minLength?: number;
-	enabled?: boolean;
+	enabled?: boolean; // Do we need that?
 };
 
 type UseDebouncedSearchResult<T> = {
 	data: T | null;
 	loading: boolean;
 	error: Error | null;
-	reset: () => void;
+	reset: () => void; // Do we need that?
 };
 
 export function useDebouncedSearch<T>({
