@@ -6,6 +6,7 @@ import { dietFavouriteApi } from "../../api/endpoints/user_role/diet_favourite";
 import { useDebouncedSearch } from "../../hooks/useDebounceSearchParams";
 import type { DietResponse } from "../../models/diet";
 import type { DietFavouriteCreate, DietFavouriteResponse } from "../../models/diet_favourite";
+import { AsyncState } from "../AsyncState/AsyncState";
 import GenericButton from "../Buttons/Button";
 import CancelButton from "../Buttons/CancelButton";
 
@@ -51,6 +52,7 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
 			console.error("Error removing ingredient:", err);
 		}
 	};
+
 	return (
 		<div>
 			Prefred Diet Types
@@ -76,16 +78,16 @@ const PreferedDietTypesInput: React.FC<Props> = ({ preferedDietTypes, setPrefere
 				/>
 			</div>
 			<div className="mt-2 text-sm">
-				{loading && <div>Ładowanie…</div>}
-				{error && <div className="text-red-600">{error.message}</div>}
-				{!loading && !error && data && (
-					<GenericButton
-						onClick={() => void addPreferedDietType(data)}
-						className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
-					>
-						Add {data.name}
-					</GenericButton>
-				)}
+				<AsyncState isLoading={loading} hasNoResults={!data} error={error}>
+					{data && (
+						<GenericButton
+							onClick={() => void addPreferedDietType(data)}
+							className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+						>
+							Add {data.name}
+						</GenericButton>
+					)}
+				</AsyncState>
 			</div>
 		</div>
 	);

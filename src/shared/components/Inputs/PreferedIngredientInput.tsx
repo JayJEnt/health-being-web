@@ -10,6 +10,7 @@ import type {
 	IngredientPreferenceCreate,
 	IngredientPreferenceResponse,
 } from "../../models/ingredient_preference";
+import { AsyncState } from "../AsyncState/AsyncState";
 import GenericButton from "../Buttons/Button";
 import CancelButton from "../Buttons/CancelButton";
 
@@ -23,7 +24,6 @@ const PreferedIngredientInput: React.FC<Props> = ({
 	setPreferedIngredients,
 }) => {
 	const [query, setQuery] = useState("");
-
 	const [preference, setPreference] = useState<Preference>(PreferenceValues.like);
 	const options = Object.values(PreferenceValues);
 
@@ -110,16 +110,16 @@ const PreferedIngredientInput: React.FC<Props> = ({
 				</select>
 			</div>
 			<div className="mt-2 text-sm">
-				{loading && <div>Loading...</div>}
-				{error && <div className="text-red-600">{error.message}</div>}
-				{!loading && !error && data && (
-					<GenericButton
-						onClick={() => void addPreferedIngredient(data, preference)}
-						className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
-					>
-						Add {data.name}
-					</GenericButton>
-				)}
+				<AsyncState isLoading={loading} hasNoResults={!data} error={error}>
+					{data && (
+						<GenericButton
+							onClick={() => void addPreferedIngredient(data, preference)}
+							className="mt-2 px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700"
+						>
+							Add {data.name}
+						</GenericButton>
+					)}
+				</AsyncState>
 			</div>
 		</div>
 	);

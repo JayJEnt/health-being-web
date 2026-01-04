@@ -2,7 +2,7 @@ import type { PropsWithChildren } from "react";
 
 import LoginPage from "../pages/authorization/Login";
 
-import LoadingSpinner from "../shared/components/Loading/LoadingSpinner";
+import { LoadingSpinner } from "../shared/components/Loading/LoadingSpinner";
 import { useAuth } from "../shared/hooks/useAuth";
 import type { User } from "../shared/models/user";
 
